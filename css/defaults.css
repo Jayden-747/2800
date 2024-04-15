@@ -13,3 +13,11 @@ body {
   position: absolute;
   bottom: 0;
 }
+
+button {
+  all: unset;
+  background-color: rgb(42, 42, 42);
+  padding: 8px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
