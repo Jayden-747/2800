@@ -13,7 +13,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- IMPORTS -->
-
     <!-- jquery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <!-- font awsome -->
@@ -28,19 +27,32 @@
   </head>
 
   <body>
-    <div id="navbar-placeholder"></div>
+    <div id="top-navbar-placeholder"></div>
 
     <div class="hero-container">
-      <div id="hero"></div>
+      <div id="hero">
+        <h1>APP NAME</h1>
+        <span
+          >This is where we say what we do, and the have the ability to scroll
+          down to see more.</span
+        >
+      </div>
       <div id="buttons">
         <button id="login">Login</button>
         <button id="sign-up">Sign-Up</button>
       </div>
+      <span id="chevron" class="fa-solid fa-chevron-down"></span>
+    </div>
+
+    <div>
+      <!-- TODO update id when section made -->
+      <div id="section"></div>
     </div>
 
     <footer></footer>
+    <div id="bottom-navbar-placeholder"></div>
     <!-- SCRIPTS -->
-    <script type="module" src="./js/modules/module.js"></script>
+    <script type="module" src="./js/modules/navigations.js"></script>
     <script type="module" src="./js/defaults.js"></script>
     <script type="module" src="./js/landing/event-listeners.js"></script>
   </body>
