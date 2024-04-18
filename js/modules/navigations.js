@@ -8,16 +8,23 @@ export function loadNavbars() {
 
 /**
  * Changes the site to the given file path
- * @param page The file path of the page to go to
+ * @param buttonID The element ID to add the event listener to
+ * @param page The path to the page to change to
  */
-export function changePage(page) {
-  window.location = page;
+export function changePage(buttonID, page) {
+  document.getElementById(buttonID).addEventListener("click", () => {
+    window.location = page;
+  });
 }
 
 /**
  * Scrolls the page to the top of a div
- * @param section The div id you want to scroll to
+ * @param buttonID The element ID to add the event listener to
+ * @param section The element ID to scroll to on click
  */
-export function scrollTo(section) {
-  document.getElementById(section).scrollIntoView({ behavior: "smooth" });
+export function scrollTo(buttonID, section) {
+  document.getElementById(buttonID).addEventListener("click", () => {
+    document.getElementById(section).scrollIntoView({ behavior: "smooth" });
+    console.log("click");
+  });
 }
