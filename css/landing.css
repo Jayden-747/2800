@@ -10,7 +10,6 @@
 #hero {
   width: 80%;
   height: 30%;
-  border-radius: 5px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -22,14 +21,18 @@
   gap: 10vw;
 }
 
-#section {
-  height: 1000px;
-  background-color: rgb(84, 22, 22);
-}
-
 .fa-chevron-up {
   font-size: x-large;
   margin-bottom: 10px;
   margin-top: 200px;
   cursor: pointer;
+}
+
+#hi {
+  height: 500px;
+  background-color: rgb(39, 39, 39);
+}
+
+.hello {
+  margin-top: 20px;
 }
