@@ -1,9 +1,14 @@
 body {
-  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  font-family: sans-serif;
   color: white;
   margin: 0;
   padding: 0;
   background-color: rgb(16, 19, 31);
+}
+
+.light-mode {
+  background-color: rgb(228, 228, 228);
+  color: black;
 }
 
 a {

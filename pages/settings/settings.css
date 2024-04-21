@@ -1,0 +1,117 @@
+/* Holds the contents of the whole page */
+#settings-container {
+  width: 100%;
+  height: fit-content;
+  margin-top: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Each section includes the header and all the options below */
+.setting-section {
+  width: 80%;
+  max-width: 1000px;
+  height: fit-content;
+  margin-top: 20px;
+  padding: 16px 20px 0 20px;
+  border-radius: 4px;
+}
+
+/* Section header */
+.setting-header {
+  width: 100%;
+  height: fit-content;
+  font-size: x-large;
+  padding: 0 10px;
+  margin-bottom: 10px;
+}
+
+/* Each setting within a section */
+.setting {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 12px;
+
+  /* background-color: rgb(24, 24, 24); */
+  border-bottom: solid 1px rgba(61, 61, 61, 0.582);
+}
+
+/* Makes first setting in each section have rounded top corners */
+.setting:nth-child(2) {
+  border-radius: 4px 4px 0 0;
+}
+
+/* Makes sure the last setting has rounded bottom corners and no bottom border*/
+.setting:last-child {
+  border-radius: 0 0 4px 4px;
+  border: none;
+}
+
+/* #region ROUNDED SWITCH STYLE  */
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 21px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 15px;
+  width: 15px;
+  left: 4px;
+  bottom: 3px;
+  background-color: white;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background-color: #2196f3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196f3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(18px);
+  -ms-transform: translateX(18px);
+  transform: translateX(18px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+/* #endregion */

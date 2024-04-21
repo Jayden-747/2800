@@ -12,6 +12,7 @@
   justify-content: end;
 }
 
+/* All contents of the hero */
 #hero {
   width: 80%;
   height: 30%;
@@ -21,6 +22,7 @@
   text-align: center;
 }
 
+/* Text below the header in hero */
 #hero-description {
   font-family: DaysOne;
 }
@@ -37,6 +39,7 @@
   cursor: pointer;
 }
 
+/* Each section on the page */
 .use-case {
   display: inline-block;
   height: fit-content;
