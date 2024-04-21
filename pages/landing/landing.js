@@ -1,4 +1,4 @@
-import { changePage, scrollTo } from "/modules/navigations.js";
+import { changePage, scrollTo } from "../../modules/navigations.js";
 
 /* Adds on click to login button */
 //TODO update path

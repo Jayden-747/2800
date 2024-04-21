@@ -23,15 +23,45 @@
 
     <!-- STYLE SHEETS -->
     <link rel="stylesheet" href="/pages/universal/universal.css" />
+    <link rel="stylesheet" href="/pages/settings/settings.css" />
   </head>
 
   <body>
     <div id="top-navbar-placeholder"></div>
 
+    <div id="settings-container">
+      <div class="setting-section">
+        <div class="setting-header">Profile</div>
+        <div class="setting">Setting</div>
+        <div class="setting">Setting</div>
+        <div class="setting">Setting</div>
+        <div class="setting">Setting</div>
+        <div class="setting">Setting</div>
+        <div class="setting">Setting</div>
+      </div>
+      <div class="setting-section">
+        <div class="setting-header">Display</div>
+        <div class="setting">
+          <span>Dark Mode</span>
+          <label class="switch">
+            <input id="dark-mode" type="checkbox" />
+            <span class="slider round"></span>
+          </label>
+        </div>
+        <div class="setting">Setting</div>
+        <div class="setting">Setting</div>
+        <div class="setting">Setting</div>
+        <div class="setting">Setting</div>
+        <div class="setting">Setting</div>
+      </div>
+    </div>
+
     <footer></footer>
     <div id="bottom-navbar-placeholder"></div>
     <!-- SCRIPTS -->
     <script type="module" src="/modules/navigations.js"></script>
+    <script type="module" src="/modules/customizations.js"></script>
+    <script type="module" src="settings.js"></script>
     <script type="module" src="/pages/universal/universal.js"></script>
   </body>
 </html>
