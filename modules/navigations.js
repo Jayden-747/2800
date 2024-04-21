@@ -2,8 +2,10 @@
  * Load the navbar onto the page
  */
 export function loadNavbars() {
-  $("#bottom-navbar-placeholder").load("./html/bottom-navbar.html");
-  $("#top-navbar-placeholder").load("./html/top-navbar.html");
+  $("#bottom-navbar-placeholder").load(
+    "/components/bottom-navbar/bottom-navbar.html"
+  );
+  $("#top-navbar-placeholder").load("/components/top-navbar/top-navbar.html");
 }
 
 /**

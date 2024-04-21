@@ -1,4 +1,4 @@
-import { changePage, scrollTo } from "../modules/navigations.js";
+import { changePage, scrollTo } from "/modules/navigations.js";
 
 /* Adds on click to login button */
 //TODO update path
@@ -10,4 +10,4 @@ changePage("sign-up", "./template.html");
 
 /* Adds click to chevron to scroll to
    the first section */
-scrollTo("chevron", "section");
+scrollTo("chevron", "first-use-case");

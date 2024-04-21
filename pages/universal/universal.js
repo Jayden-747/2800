@@ -1,4 +1,4 @@
-import { loadNavbars } from "./modules/navigations.js";
+import { loadNavbars } from "../../modules/navigations.js";
 
 $(document).ready(loadNavbars());
 
