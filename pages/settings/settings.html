@@ -22,7 +22,7 @@
     />
 
     <!-- STYLE SHEETS -->
-    <link rel="stylesheet" href="/pages/universal/universal.css" />
+    <link rel="stylesheet" href="../universal.css" />
     <link rel="stylesheet" href="/pages/settings/settings.css" />
   </head>
 
@@ -32,12 +32,18 @@
     <div id="settings-container">
       <div class="setting-section">
         <div class="setting-header">Profile</div>
-        <div class="setting">Setting</div>
-        <div class="setting">Setting</div>
-        <div class="setting">Setting</div>
-        <div class="setting">Setting</div>
-        <div class="setting">Setting</div>
-        <div class="setting">Setting</div>
+        <div class="setting">
+          <span>Name</span>
+          <span>firstName lastName</span>
+        </div>
+        <div class="setting">
+          <span>User Name</span>
+          <span>username</span>
+        </div>
+        <div class="setting">
+          <span>Email</span>
+          <span id="email">email@email.com</span>
+        </div>
       </div>
       <div class="setting-section">
         <div class="setting-header">Display</div>
@@ -48,11 +54,6 @@
             <span class="slider round"></span>
           </label>
         </div>
-        <div class="setting">Setting</div>
-        <div class="setting">Setting</div>
-        <div class="setting">Setting</div>
-        <div class="setting">Setting</div>
-        <div class="setting">Setting</div>
       </div>
     </div>
 
@@ -62,6 +63,6 @@
     <script type="module" src="/modules/navigations.js"></script>
     <script type="module" src="/modules/customizations.js"></script>
     <script type="module" src="settings.js"></script>
-    <script type="module" src="/pages/universal/universal.js"></script>
+    <script type="module" src="../universal.js"></script>
   </body>
 </html>

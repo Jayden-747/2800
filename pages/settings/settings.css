@@ -14,9 +14,8 @@
   width: 80%;
   max-width: 1000px;
   height: fit-content;
-  margin-top: 20px;
+  margin-top: 30px;
   padding: 16px 20px 0 20px;
-  border-radius: 4px;
 }
 
 /* Section header */
@@ -25,15 +24,17 @@
   height: fit-content;
   font-size: x-large;
   padding: 0 10px;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 /* Each setting within a section */
 .setting {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 12px;
+  padding: 20px 12px;
+  gap: 10px;
 
   /* background-color: rgb(24, 24, 24); */
   border-bottom: solid 1px rgba(61, 61, 61, 0.582);
@@ -48,6 +49,12 @@
 .setting:last-child {
   border-radius: 0 0 4px 4px;
   border: none;
+}
+
+#email {
+  margin-left: 20px;
+  max-width: 100%;
+  word-wrap: break-word;
 }
 
 /* #region ROUNDED SWITCH STYLE  */
