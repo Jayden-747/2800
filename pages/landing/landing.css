@@ -10,6 +10,11 @@
   flex-direction: column;
   align-items: center;
   justify-content: end;
+  background-color: rgb(75, 37, 44);
+  background-image: url("../../assets/img/AdobeStock_752570868.jpeg");
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
 }
 
 /* All contents of the hero */
@@ -24,7 +29,7 @@
 
 /* Text below the header in hero */
 #hero-description {
-  font-family: DaysOne;
+  /* font-family: DaysOne; */
 }
 
 #buttons {
@@ -48,19 +53,18 @@
 
 .use-case-header {
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
-  color: rgb(255, 255, 255);
   margin-top: 50px;
   font-size: 45px;
-  padding-left: 40px;
+  padding-left: 10px;
   padding-right: 10px;
+  text-shadow: -7px 10px 0px rgba(0, 0, 0, 0.459);
 }
 
 .use-case-description {
-  margin-top: 30px;
-  padding-left: 40px;
+  margin-top: 10px;
+  padding-left: 10px;
   padding-right: 10px;
   font-family: DaysOne;
-  color: rgb(224, 224, 224);
 }
 
 .use-case-photo {
