@@ -15,16 +15,16 @@
   max-width: 1000px;
   height: fit-content;
   margin-top: 30px;
-  padding: 16px 20px 0 20px;
+  padding: 16px 4% 0 4%;
 }
 
 /* Section header */
 .setting-header {
   width: 100%;
   height: fit-content;
-  font-size: x-large;
-  padding: 0 10px;
-  margin-bottom: 20px;
+  font-size: 30px;
+  padding-bottom: 10px;
+  border-bottom: solid 1px;
 }
 
 /* Each setting within a section */

@@ -14,7 +14,7 @@ export function loadNavbars() {
  * @param page The path to the page to change to
  */
 export function changePage(buttonID, page) {
-  document.getElementById(buttonID).addEventListener("click", () => {
+  $(buttonID).on("click", () => {
     window.location = page;
   });
 }
@@ -25,8 +25,13 @@ export function changePage(buttonID, page) {
  * @param section The element ID to scroll to on click
  */
 export function scrollTo(buttonID, section) {
-  document.getElementById(buttonID).addEventListener("click", () => {
-    document.getElementById(section).scrollIntoView({ behavior: "smooth" });
+  $(buttonID).on("click", () => {
+    $("html, body").animate(
+      {
+        scrollTop: $(section).offset().top,
+      },
+      500
+    );
     console.log("click");
   });
 }

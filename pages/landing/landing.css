@@ -11,7 +11,7 @@
   align-items: center;
   justify-content: end;
   background-color: rgb(75, 37, 44);
-  background-image: url("../../assets/img/AdobeStock_752570868.jpeg");
+  /* background-image: url("../../assets/img/AdobeStock_752570868.jpeg"); */
   background-position: center;
   background-size: cover;
   background-attachment: fixed;
@@ -27,18 +27,13 @@
   text-align: center;
 }
 
-/* Text below the header in hero */
-#hero-description {
-  /* font-family: DaysOne; */
-}
-
 #buttons {
   display: flex;
   gap: 10vw;
 }
 
-.fa-chevron-up {
-  font-size: x-large;
+#chevron {
+  font-size: xx-large;
   margin-bottom: 10px;
   margin-top: 200px;
   cursor: pointer;
