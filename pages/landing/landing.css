@@ -11,7 +11,7 @@
   align-items: center;
   justify-content: end;
   background-color: rgb(75, 37, 44);
-  /* background-image: url("../../assets/img/AdobeStock_752570868.jpeg"); */
+  background-image: url("../../assets/img/AdobeStock_752570868.jpeg");
   background-position: center;
   background-size: cover;
   background-attachment: fixed;
@@ -25,6 +25,7 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
+  color: black;
 }
 
 #buttons {
@@ -53,6 +54,10 @@
   padding-left: 10px;
   padding-right: 10px;
   text-shadow: -7px 10px 0px rgba(0, 0, 0, 0.459);
+}
+
+.use-case-header-light-mode {
+  text-shadow: -7px 10px 0px rgba(0, 0, 0, 0.144);
 }
 
 .use-case-description {

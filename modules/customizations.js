@@ -26,5 +26,6 @@ export function isChecked(element, className) {
 export function checkDarkMode() {
   if (localStorage.getItem("#dark-mode") === "false") {
     $("body").addClass("light-mode");
+    $(".use-case-header").addClass("use-case-header-light-mode");
   }
 }
