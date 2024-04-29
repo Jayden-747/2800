@@ -13,6 +13,7 @@ const port = 4000;
 // EXPRESS STATIC PATHS
 app.use("/img", express.static("./assets/img"));
 app.use("/font", express.static("./assets/font"));
+app.use("/components", express.static("./components"));
 app.use("/pages", express.static("./pages"));
 app.use("/modules", express.static("./modules"));
 app.use("/landing", express.static("./pages/landing"));
