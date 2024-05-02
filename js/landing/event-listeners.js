@@ -10,4 +10,4 @@ changePage("sign-up", "./template.html");
 
 /* Adds click to chevron to scroll to
    the first section */
-scrollTo("chevron", "section");
+scrollTo("chevron", "hi");
