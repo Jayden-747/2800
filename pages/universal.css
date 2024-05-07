@@ -3,13 +3,17 @@
   src: url("/font/Lexend/Lexend-VariableFont_wght.ttf");
 }
 
+@font-face {
+  font-family: Lobster;
+  src: url("/font/Lobster/Lobster-Regular.ttf");
+}
+
 body {
   font-family: sans-serif;
   color: white;
   margin: 0;
   padding: 0;
   background-color: rgb(27, 27, 27);
-  font-family: Lexend;
 }
 
 .light-mode {

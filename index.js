@@ -6,7 +6,7 @@ app.use(express.json());
 const fs = require("fs");
 
 // DECLARATIONS
-const port = 4000;
+const port = process.env.PORT || 4000;
 
 // SERVER
 
@@ -31,5 +31,5 @@ app.get("/settings", (req, res) => {
 
 // PORT
 app.listen(port, () => {
-  console.log("app listening on port 4000");
+  console.log(`app listening on port ${port}`);
 });
