@@ -1,0 +1,50 @@
+<%- include("../templates/header") %>
+<link rel="stylesheet" href="/settings/settings.css" />
+</head>
+
+<body>
+  <!-- NAVBAR TOP -->
+  <div id="top-navbar-placeholder"></div>
+
+  <div id="settings-container">
+    <!-- PROFILE SETTINGS -->
+    <div class="setting-section">
+      <div class="setting-header">Profile</div>
+      <div class="setting">
+        <span>Name</span>
+        <span>firstName lastName</span>
+      </div>
+      <div class="setting">
+        <span>User Name</span>
+        <span>username</span>
+      </div>
+      <div class="setting">
+        <span>Email</span>
+        <span id="email">email@email.com</span>
+      </div>
+    </div>
+
+    <!-- DISPLAY SETTINGS -->
+    <div class="setting-section">
+      <div class="setting-header">Display</div>
+      <div class="setting">
+        <span>Dark Mode</span>
+        <label class="switch">
+          <input id="dark-mode" type="checkbox" checked="true" />
+          <span class="slider round"></span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <footer></footer>
+
+  <!-- NAVBAR BOTTOM -->
+  <div id="bottom-navbar-placeholder"></div>
+
+  <!-- SCRIPTS -->
+  <script type="module" src="/modules/navigations.js"></script>
+  <script type="module" src="/modules/customizations.js"></script>
+  <script type="module" src="/settings/settings.js"></script>
+  <script type="module" src="/pages/universal.js"></script>
+  <%- include("../templates/footer") %>

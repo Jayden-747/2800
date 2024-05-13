@@ -1,0 +1,54 @@
+<%- include("../templates/header") %>
+<link rel="stylesheet" href="landing/landing.css" />
+</head>
+
+<body>
+
+  <!-- NAVBAR TOP -->
+  <div id="top-navbar-placeholder"></div>
+
+  <!-- HERO ELEMENTS -->
+  <div class="hero-container">
+    <div id="hero">
+      <h1>WeFarm</h1>
+      <span id="hero-description">This is where we say what we do, and the have the ability to scroll
+        down to see more.</span>
+    </div>
+    <div id="buttons">
+      <a class="btn btn-primary" href="/signup">Sign-Up</a>
+      <a class="btn btn-secondary" href="/login">Login</a>
+    </div>
+    <span id="chevron" class="material-symbols-rounded">expand_less</span>
+  </div>
+
+  <!-- SECTIONS -->
+
+  <!-- FIRST SECTION -->
+  <div id="first-use-case" class="use-case">
+    <div class="use-case-header">PRIVACY</div>
+    <div class="use-case-description">Through The Use Of Passwords</div>
+    <img class="use-case-photo" src="/img/Screenshot_1.png" />
+  </div>
+
+  <!-- SECOND SECTION -->
+  <div class="use-case">
+    <div class="use-case-header">SAVE PROGRESS</div>
+    <div class="use-case-description">With The Click Of A Button</div>
+    <img class="use-case-photo" src="/img/Screenshot_1.png" />
+  </div>
+
+  <!-- THIRD SECTION -->
+  <div class="use-case">
+    <div class="use-case-header">THIS IS THE THING WE DO</div>
+    <div class="use-case-description">
+      This Is The Explanation For The Thing We Make
+    </div>
+    <img class="use-case-photo" src="/img/Screenshot_1.png" />
+  </div>
+
+  <!-- SCRIPTS -->
+  <script type="module" src="/modules/navigations.js"></script>
+  <script type="module" src="/pages/universal.js"></script>
+  <script type="module" src="/landing/landing.js"></script>
+
+  <%- include("../templates/footer") %>
