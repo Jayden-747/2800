@@ -5,21 +5,45 @@
 <body>
   <!-- NAVBAR TOP -->
   <div id="top-navbar-placeholder"></div>
+  <h2>Choose a garden</h2>
   <div id="gardens">
-    <h2>Choose a garden</h2>
-    <div class="gardenGroup">garden 1</div>
-    <div class="gardenGroup">garden 2</div>
-    <div class="gardenGroup">garden 3</div>
-    <div class="gardenGroup">garden 4</div>
+    <% for(let i=0; i < 3; i++) { %>
+    <div class="gardenGroup">
+      <div class="garden-inner">Garden <%= [i] %></div>
+    </div>
+    <% } %>
+   
   </div>
   <div id="posts">
     <h2>Posts from all garden</h2>
-    <!-- BOOTSTRAP EXAMPLE USED FOR POSTS -->
+    <!-- BOOTSTRAP USED FOR POSTS -->
+    <% for(let i=0; i < 5; i++) { %>
+    <div class="container">
+      <div class="cardcontainer">
+          <div class="photo">
+              <img src="/img/plant.jpg">
+          </div>
+          <div class="content">
+              <p class="txt4"></p>
+              <p class="txt5">My Plants! (title)</p>
+              <span id="comment" class="material-symbols-rounded">comment</span>
+              <span id="heart" class="material-symbols-rounded">favorite</span>
+              <p class="txt2">caption</p>
+          </div>
+          <div class="footer">
+              <p>
+                <a class="waves-effect waves-light btn" href="#">Read More</a><a id="hearts"><span class="like"><i class="fab fa-gratipay"></i># Likes</span></a>
+              </p>
+              <p class="txt3"><i class="far fa-clock"></i>Date/time posted 
+              <span class="comments"><i class="fas fa-comments"></i>45 Comments</span></p>
+          </div>
+      </div>
+    </div>
+    <% } %>
 
-    <div>post 1</div>
-    <div>post 2</div>
-    <div>post 3</div>
-    <div>post 4</div>
+
+
+
   </div>
   <footer></footer>
 
