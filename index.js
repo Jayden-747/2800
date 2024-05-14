@@ -32,6 +32,19 @@ app.get("/settings", (req, res) => {
   res.render("settings/settings");
 });
 
+//COMUNITY PAGE
+
+app.get("/community", (req, res) => {
+  res.render("community/community");
+});
+
+
+// LOGOUT ROUTE that destroys session document in database
+app.get("/logout", (req, res) => {
+  req.session.destroy();
+  res.redirect("/");
+});
+
 // PORT
 app.listen(port, () => {
   console.log(`app listening on port ${port}`);
