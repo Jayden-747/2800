@@ -20,12 +20,17 @@ app.use("/components", express.static("./components"));
 app.use("/views", express.static("./views"));
 app.use("/modules", express.static("./modules"));
 app.use("/landing", express.static("./views/landing"));
+app.use("/home", express.static("./views/home"));
 app.use("/community", express.static("./views/community"));
 app.use("/settings", express.static("./views/settings"));
 
 // LANDING PAGE
 app.get("/", (req, res) => {
   res.render("landing/landing");
+});
+
+app.get("/home", (req, res) => {
+  res.render("home/home");
 });
 
 // SETTINGS PAGE
