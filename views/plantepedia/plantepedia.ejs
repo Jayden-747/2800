@@ -8,14 +8,13 @@
   <h1>Plantipedia (FAQ)</h1>
 
   <% let i; %>
-
   <ol>
     <!-- 'facts' variable will come from index.js (it will be the array of facts from mongoDB) -->
     <% for (i=0; i < facts.length; i++) {%>
     <!-- note to self: may have to fix path -->
     <%- include('/facts.ejs', {fact: facts[i]}) %>
     <% } %>
-  </ol> 
+  </ol>
 
   <!-- NAVBAR BOTTOM -->
   <%- include("../templates/bottom-navbar") %>
