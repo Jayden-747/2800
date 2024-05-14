@@ -1,3 +1,8 @@
+@font-face {
+  font-family: Ubuntu;
+  src: url("/font/Ubuntu/Ubuntu-Regular.ttf");
+}
+
 /* Holds the contents of the whole page */
 #settings-container {
   width: 100%;
@@ -22,9 +27,11 @@
 .setting-header {
   width: 100%;
   height: fit-content;
-  font-size: 30px;
+  font-size: 25px;
   padding-bottom: 10px;
   border-bottom: solid 1px rgba(189, 189, 189, 0.582);
+
+  font-family: Ubuntu;
 }
 
 /* Each setting within a section */

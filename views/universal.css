@@ -4,13 +4,18 @@
 }
 
 @font-face {
+  font-family: Roboto;
+  src: url("/font/Roboto/Roboto-Regular.ttf");
+}
+
+@font-face {
   font-family: Lobster;
   src: url("/font/Lobster/Lobster-Regular.ttf");
 }
 
 body {
-  font-family: sans-serif;
-  color: white;
+  font-family: Roboto;
+  color: rgb(216, 216, 216);
   margin: 0;
   padding: 0;
   background-color: rgb(27, 27, 27);
@@ -23,6 +28,7 @@ body {
 
 a {
   all: unset;
+  cursor: pointer;
 }
 
 #top-navbar {
@@ -35,11 +41,14 @@ a {
   background-color: rgba(0, 0, 0, 0.158);
   position: fixed;
   top: 0;
+  z-index: 1;
 
   display: flex;
   align-items: end;
 
   padding: 5px 10%;
+
+  transition: right ease 0.3s;
 }
 
 #bottom-navbar {
@@ -49,11 +58,58 @@ a {
 
   position: fixed;
   bottom: 0;
+  right: 0;
+  z-index: 1;
 
   display: flex;
   justify-content: space-between;
 
   padding: 0 10%;
+
+  transition: right ease 0.3s;
+}
+
+#hamburger {
+  width: 0;
+  height: 100%;
+
+  background-color: rgb(27, 27, 27);
+
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+
+  box-shadow: none;
+
+  transition: width ease 0.3s, box-shadow ease 0.3s;
+
+  overflow: hidden;
+}
+
+#hamburger-links {
+  height: fit-content;
+
+  transition: none;
+
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  top: 20%;
+}
+
+.hamburger-link {
+  width: 80%;
+
+  padding: 20px 10%;
+}
+
+#hamburger-close {
+  position: absolute;
+  bottom: 20px;
+  right: 25%;
+
+  cursor: pointer;
 }
 
 .nav-button {
