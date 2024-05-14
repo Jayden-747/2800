@@ -35,6 +35,7 @@ const plantSummaryCollection = database.db(mongodb_database_plantepedia).collect
 const plantDetailsCollection = database.db(mongodb_database_plantepedia).collection('plantDetails');
 
 
+
 app.use(express.urlencoded({extended: false}));
 
 //mongo store
