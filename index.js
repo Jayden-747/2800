@@ -20,6 +20,7 @@ app.use("/components", express.static("./components"));
 app.use("/views", express.static("./views"));
 app.use("/modules", express.static("./modules"));
 app.use("/landing", express.static("./views/landing"));
+app.use("/community", express.static("./views/community"));
 app.use("/settings", express.static("./views/settings"));
 
 // LANDING PAGE
@@ -33,11 +34,9 @@ app.get("/settings", (req, res) => {
 });
 
 //COMUNITY PAGE
-
 app.get("/community", (req, res) => {
   res.render("community/community");
 });
-
 
 // LOGOUT ROUTE that destroys session document in database
 app.get("/logout", (req, res) => {

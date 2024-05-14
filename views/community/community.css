@@ -1,6 +1,7 @@
-.gardens {
-    font-size: 50px;
+#gardens {
+  font-size: 50px;
 }
-#gardenGroup{
-    font-size: 30px;
+
+.gardenGroup {
+  font-size: 30px;
 }
