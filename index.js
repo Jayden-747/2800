@@ -21,6 +21,7 @@ app.use("/views", express.static("./views"));
 app.use("/modules", express.static("./modules"));
 app.use("/landing", express.static("./views/landing"));
 app.use("/settings", express.static("./views/settings"));
+app.use("/plantepedia", express.static("./views/plantepedia"));
 
 // LANDING PAGE
 app.get("/", (req, res) => {
@@ -31,6 +32,11 @@ app.get("/", (req, res) => {
 app.get("/settings", (req, res) => {
   res.render("settings/settings");
 });
+
+// PLANTEPEDIA PAGE
+app.get("/plantepedia", (req, res) => {
+  res.render("plantepedia/plantepedia");
+})
 
 // PORT
 app.listen(port, () => {
