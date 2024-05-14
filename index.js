@@ -72,6 +72,7 @@ app.use("/community", express.static("./views/community"));
 app.use("/settings", express.static("./views/settings"));
 app.use("/signup", express.static("./views/signup"));
 app.use("/login", express.static("./views/login"));
+app.use("/plantepedia", express.static("./views/plantepedia"));
 
 // LANDING PAGE
 app.get("/", (req, res) => {
@@ -200,6 +201,11 @@ app.post("/login/reset", async (req, res) => {
 // SETTINGS PAGE
 app.get("/settings", (req, res) => {
   res.render("settings/settings");
+});
+
+// PLANTEPEDIA PAGE
+app.get("/plantepedia", async (req, res) => {
+  res.render("plantepedia/plantepedia");
 });
 
 //COMUNITY PAGE
