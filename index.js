@@ -40,9 +40,10 @@ app.get("/settings", (req, res) => {
 });
 
 // PLANTEPEDIA PAGE
-app.get("/plantepedia", (req, res) => {
+app.get("/plantepedia", async (req, res) => {
   res.render("plantepedia/plantepedia");
-})
+});
+
 //COMUNITY PAGE
 app.get("/community", (req, res) => {
   res.render("community/community");
