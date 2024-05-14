@@ -1,8 +1,9 @@
-import { loadNavbars } from "../modules/navigations.js";
 import { checkDarkMode } from "../modules/customizations.js";
-
-// Load the navbars onto the page
-$(document).ready(loadNavbars());
+import { openHamburger, closeHamburger } from "../modules/navigations.js";
 
 // Apply dark mode
 checkDarkMode();
+
+openHamburger();
+
+closeHamburger();
