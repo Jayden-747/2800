@@ -20,12 +20,18 @@ app.use("/components", express.static("./components"));
 app.use("/views", express.static("./views"));
 app.use("/modules", express.static("./modules"));
 app.use("/landing", express.static("./views/landing"));
+app.use("/home", express.static("./views/home"));
+app.use("/community", express.static("./views/community"));
 app.use("/settings", express.static("./views/settings"));
 app.use("/plantepedia", express.static("./views/plantepedia"));
 
 // LANDING PAGE
 app.get("/", (req, res) => {
   res.render("landing/landing");
+});
+
+app.get("/home", (req, res) => {
+  res.render("home/home");
 });
 
 // SETTINGS PAGE
@@ -37,6 +43,16 @@ app.get("/settings", (req, res) => {
 app.get("/plantepedia", (req, res) => {
   res.render("plantepedia/plantepedia");
 })
+//COMUNITY PAGE
+app.get("/community", (req, res) => {
+  res.render("community/community");
+});
+
+// LOGOUT ROUTE that destroys session document in database
+app.get("/logout", (req, res) => {
+  req.session.destroy();
+  res.redirect("/");
+});
 
 // PORT
 app.listen(port, () => {
