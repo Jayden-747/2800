@@ -54,6 +54,16 @@ const saltRounds = 12;
 //Expiration for cookie
 const expireTime = 1 * 60 * 60 * 1000;
 
+//session
+app.use(
+  session({
+    secret: node_session_secret,
+    store: mongoStore,
+    saveUninitialized: false,
+    resave: true,
+  })
+);
+
 // Express static paths
 app.use("/img", express.static("./assets/img"));
 app.use("/font", express.static("./assets/font"));
@@ -68,16 +78,24 @@ app.use("/signup", express.static("./views/signup"));
 app.use("/login", express.static("./views/login"));
 app.use("/plantepedia", express.static("./views/plantepedia"));
 app.use("/plantepediaSummary", express.static("./views/plantepedia/summary"));
+app.use("/profile", express.static("./views/profile"));
 
-//session
-app.use(
-  session({
-    secret: node_session_secret,
-    store: mongoStore,
-    saveUninitialized: false,
-    resave: true,
-  })
-);
+// TODO: create middleware - makes sure user is logged in otherwise gets redirected to login page (implement for every route)
+
+// Returns true if user is in a valid session, otherwise false
+function isValidSession(req) {
+  return req.session.authenticated;
+}
+
+// Middleware for validating a session
+function sessionValidation(req, res, next) {
+  if (isValidSession(req)) {
+    next();
+  }
+  else {
+    res.redirect('/login');
+  }
+}
 
 // LANDING PAGE
 app.get("/", (req, res) => {
@@ -212,6 +230,34 @@ app.post("/login/reset", async (req, res) => {
 // SETTINGS PAGE
 app.get("/settings", (req, res) => {
   res.render("settings/settings");
+});
+
+// PROFILE PAGE
+app.use("/profile", sessionValidation);
+app.get("/profile", async (req, res) => {
+
+  var username = req.session.username;
+  var name = req.session.name;
+  var email = req.session.email;
+
+  const result = await userCollection.findOne({ email: email }, {projection : {username: 1, name: 1, email: 1} });
+
+  res.render("profile/profile", {user: result});
+
+});
+
+// PROFILE PAGE
+app.use("/profile", sessionValidation);
+app.get("/profile", async (req, res) => {
+
+  var username = req.session.username;
+  var name = req.session.name;
+  var email = req.session.email;
+
+  const result = await userCollection.findOne({ email: email }, {projection : {username: 1, name: 1, email: 1} });
+
+  res.render("profile/profile", {user: result});
+
 });
 
 // PLANTEPEDIA SUMMARY PAGE
