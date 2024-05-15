@@ -4,7 +4,8 @@
 
 <body>
   <!-- NAVBAR TOP -->
-  <div id="top-navbar-placeholder"></div>
+  <%- include("../templates/top-navbar", {pageName: "Settings"}) %>
+  <%- include("../templates/hamburger") %>
 
   <div id="settings-container">
     <!-- PROFILE SETTINGS -->
@@ -40,11 +41,11 @@
   <footer></footer>
 
   <!-- NAVBAR BOTTOM -->
-  <div id="bottom-navbar-placeholder"></div>
+  <%- include("../templates/bottom-navbar") %>
 
   <!-- SCRIPTS -->
   <script type="module" src="/modules/navigations.js"></script>
   <script type="module" src="/modules/customizations.js"></script>
   <script type="module" src="/settings/settings.js"></script>
-  <script type="module" src="/pages/universal.js"></script>
+  <script type="module" src="/views/universal.js"></script>
   <%- include("../templates/footer") %>

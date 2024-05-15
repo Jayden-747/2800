@@ -3,13 +3,14 @@
 
 <body>
   <!-- NAVBAR TOP -->
-  <div id="top-navbar-placeholder"></div>
+  <%- include("../templates/top-navbar") %>
+  <%- include("../templates/hamburger") %>
 
-  <footer></footer>
+
 
   <!-- NAVBAR BOTTOM -->
-  <div id="bottom-navbar-placeholder"></div>
+  <%- include("../templates/bottom-navbar") %>
   <!-- SCRIPTS -->
   <script type="module" src="/modules/navigations.js"></script>
-  <script type="module" src="/pages/universal.js"></script>
+  <script type="module" src="/views/universal.js"></script>
   <%- include("../templates/footer") %>
