@@ -319,7 +319,7 @@ res.redirect("/photos")
 })
 
 app.get("/photos", async (req, res) => {
-  const result = await database.db(mongodb_database).collection('posts').find({filename: "DisneyNight"}).project({filename: 1, data: 1}).toArray();
+  const result = await database.db(mongodb_database).collection('posts').find({filename: "car"}).project({filename: 1, data: 1}).toArray();
 
   //imageData from chatgpt
   const imageData = Buffer.from(result[0].data.buffer).toString('base64');
@@ -333,7 +333,7 @@ app.get("/photos", async (req, res) => {
   
   
   
-  res.render("newPost/newPost", {filename: result[0].filename, imgData: imageData});
+  res.render("newPost/newPost", {filename: result[0].filename, imageData: imageData});
 
 })
 
