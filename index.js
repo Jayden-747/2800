@@ -76,6 +76,7 @@ app.use("/modules", express.static("./modules"));
 app.use("/landing", express.static("./views/landing"));
 app.use("/home", express.static("./views/home"));
 app.use("/community", express.static("./views/community"));
+app.use("/newPost", express.static("./views/newPost"));
 app.use("/settings", express.static("./views/settings"));
 app.use("/signup", express.static("./views/signup"));
 app.use("/login", express.static("./views/login"));

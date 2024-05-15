@@ -26,28 +26,6 @@ export function scrollTo(buttonID, section) {
   });
 }
 
-<<<<<<< HEAD
-// export function image() {
-//   var urlData;
-// document.querySelector("#photo").addEventListener("change", function () { 
-//     const reader = new FileReader();
-
-//     reader.addEventListener("load", () => { 
-//         console.log(reader.result);
-//         urlData = reader.result;
-        
-        
-//     });
- 
-//         reader.readAsDataURL(this.files[0]);
-
-
-    
-
-//   });
-
-// }
-=======
 /**
  * Opens the hamburger menu upon clicking the hamburger icon on the bottom navbar
  */
@@ -72,4 +50,3 @@ export function closeHamburger() {
     $("#top-navbar").css({ right: "0" });
   });
 }
->>>>>>> 05edecce454b94e482ade6d7ea933f5ea795e576
