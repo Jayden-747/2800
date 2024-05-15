@@ -155,6 +155,8 @@ app.post("/signup/submitUser", async (req, res) => {
   req.session.email = result[0].email;
   req.session.cookie.maxAge = expireTime;
   res.redirect("/");
+  console.log(username);
+  console.log(email);
 });
 
 //LOGIN PAGE
@@ -289,14 +291,41 @@ app.get("/plantepediaSummary", async (req, res) => {
 // });
 
 // COMUNITY PAGE
-app.get("/community", (req, res) => {
-  res.render("community/community", { pageName: "Community" });
+app.get("/community", async(req, res) => {
+  const result = await database.db(mongodb_database).collection('posts').find({garden: "garden 2"}).toArray();
+  
+  var posts = [];
+  var descss = [];
+  var user = [];
+  for (let i = 0; i < result.length; i++){
+    const descrip = result[i].desc;
+    descss.push(descrip);
+
+    const usern = result[i].username;
+    user.push(usern);
+
+
+    const imageData = Buffer.from(result[i].data.buffer).toString('base64');
+    posts.push(imageData);
+  }
+  
+
+
+
+  res.render("community/community", { pageName: "Community", result: result, posts: posts, desc: descss, username: user});
 });
 
 
 
 app.get("/newPost", async (req, res) => {
-  res.render("newPost/newPost");
+  
+  const result = await database.db(mongodb_database).collection('posts').find({garden: "garden 2"}).project({filename: 1, data: 1}).toArray();
+
+  //imageData from chatgpt
+  const imageData = Buffer.from(result[0].data.buffer).toString('base64');
+  
+
+  res.render("newPost/newPost", {filename: result[0].filename, imageData: imageData});
 })
 
 //Adding a post to community page
@@ -304,8 +333,10 @@ app.post("/newPost/posts", upload.single("photo"), async (req, res) => {
 var key = req.body.keyword;
 var desc = req.body.description;
 var garden = req.body.garden;
+var username = req.session.username;
 const photoData = {
   name: req.file.originalname,
+  username: username,
   desc: desc,
   garden: garden,
   filename: key,
@@ -314,29 +345,9 @@ const photoData = {
 
 await database.db(mongodb_database).collection('posts').insertOne(photoData);
 
-res.redirect("/photos")
+res.redirect("/community")
   
 })
-
-app.get("/photos", async (req, res) => {
-  const result = await database.db(mongodb_database).collection('posts').find({filename: "car"}).project({filename: 1, data: 1}).toArray();
-
-  //imageData from chatgpt
-  const imageData = Buffer.from(result[0].data.buffer).toString('base64');
-  
-  // const html = `
-  // <h2>hellooooo</h2>
-  // <h3>${result[0].filename}</h3>
-  // <img src="data:image/jpeg;base64,${imageData}" height="300" width="300" alt="my Image"">
-  // `;
-  
-  
-  
-  
-  res.render("newPost/newPost", {filename: result[0].filename, imageData: imageData});
-
-})
-
 
 
 
