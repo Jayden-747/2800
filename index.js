@@ -145,8 +145,14 @@ app.get("/login", async (req, res) => {
 app.post("/login/logging", async (req, res) => {
   var email = req.body.email;
   var password = req.body.password;
-  const schema = Joi.string().max(255).required();
-	const validationResult = schema.validate(email);
+
+  const schema = Joi.object({
+    email: Joi.string().email().max(255).required(),
+    password: Joi.string().max(20).required(),
+  });
+
+const validationResult = schema.validate({ email, password });
+
 	if (validationResult.error != null) {
 	   console.log(validationResult.error);
 	   res.redirect("/login");
@@ -157,6 +163,7 @@ app.post("/login/logging", async (req, res) => {
 
   if (result.length != 1) {
     res.redirect("/login");
+    console.log("no email")
     return;
   }
 
