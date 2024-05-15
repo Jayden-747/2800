@@ -1,0 +1,55 @@
+<%- include("../templates/header") %>
+<link rel="stylesheet" href="/newPost/newPost.css" />
+</head>
+
+<body>
+
+    <div>
+        <h2>New Post</h2>
+        
+        <form action="posts" method="post" enctype="multipart/form-data">
+          <input type="file" id="photo" name="photo">
+          <input type="text" name="keyword" placeholder="photo">
+          <input type="text" name="description" placeholder="desc">
+          <input type="text" name="garden" placeholder="name">
+          <button type="submit">Submit</button>
+        </form>
+      </div>
+      
+
+      
+ 
+      
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <!-- NAVBAR BOTTOM -->
+  <%- include("../templates/bottom-navbar") %>
+
+  <!-- SCRIPTS -->
+  <script type="module" src="/modules/navigations.js"></script>
+  <script type="module" src="/views/universal.js"></script>
+  <script type="module" src="community.js"></script>
+  <%- include("../templates/footer") %>
