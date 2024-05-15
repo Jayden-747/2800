@@ -7,6 +7,9 @@ const MongoStore = require("connect-mongo");
 const bcrypt = require("bcrypt");
 const Joi = require("joi");
 const app = express();
+const multer = require("multer")
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 app.use(express.json());
 app.set("view engine", "ejs");
 
@@ -54,6 +57,16 @@ const saltRounds = 12;
 //Expiration for cookie
 const expireTime = 1 * 60 * 60 * 1000;
 
+//session
+app.use(
+  session({
+    secret: node_session_secret,
+    store: mongoStore,
+    saveUninitialized: false,
+    resave: true,
+  })
+);
+
 // Express static paths
 app.use("/img", express.static("./assets/img"));
 app.use("/font", express.static("./assets/font"));
@@ -68,26 +81,33 @@ app.use("/signup", express.static("./views/signup"));
 app.use("/login", express.static("./views/login"));
 app.use("/plantepedia", express.static("./views/plantepedia"));
 app.use("/plantepediaSummary", express.static("./views/plantepedia/summary"));
+app.use("/profile", express.static("./views/profile"));
 
-//session
-app.use(
-  session({
-    secret: node_session_secret,
-    store: mongoStore,
-    saveUninitialized: false,
-    resave: true,
-  })
-);
+// TODO: create middleware - makes sure user is logged in otherwise gets redirected to login page (implement for every route)
+
+// Returns true if user is in a valid session, otherwise false
+function isValidSession(req) {
+  return req.session.authenticated;
+}
+
+// Middleware for validating a session
+function sessionValidation(req, res, next) {
+  if (isValidSession(req)) {
+    next();
+  }
+  else {
+    res.redirect('/login');
+  }
+}
 
 // LANDING PAGE
 app.get("/", (req, res) => {
-  if(req.session.authenticated){
+  if (req.session.authenticated) {
     res.render("home/home");
   } else {
     res.render("landing/landing");
   }
 });
-
 
 // SIGNUP PAGE
 app.get("/signup", async (req, res) => {
@@ -108,7 +128,7 @@ app.post("/signup/submitUser", async (req, res) => {
     password: Joi.string().max(20).required(),
   });
 
-  const validationResult = schema.validate({ name, username, password , email});
+  const validationResult = schema.validate({ name, username, password, email });
   if (validationResult.error != null) {
     console.log(validationResult.error);
     res.redirect("/signup");
@@ -151,19 +171,21 @@ app.post("/login/logging", async (req, res) => {
     password: Joi.string().max(20).required(),
   });
 
-const validationResult = schema.validate({ email, password });
+  const validationResult = schema.validate({ email, password });
 
-	if (validationResult.error != null) {
-	   console.log(validationResult.error);
-	   res.redirect("/login");
-	   return;
-	}
-  const result = await userCollection.find({email: email}).project({email: 1, password: 1, _id: 1, username: 1}).toArray();
-
+  if (validationResult.error != null) {
+    console.log(validationResult.error);
+    res.redirect("/login");
+    return;
+  }
+  const result = await userCollection
+    .find({ email: email })
+    .project({ email: 1, password: 1, _id: 1, username: 1 })
+    .toArray();
 
   if (result.length != 1) {
     res.redirect("/login");
-    console.log("no email")
+    console.log("no email");
     return;
   }
 
@@ -214,6 +236,34 @@ app.get("/settings", (req, res) => {
   res.render("settings/settings");
 });
 
+// PROFILE PAGE
+app.use("/profile", sessionValidation);
+app.get("/profile", async (req, res) => {
+
+  var username = req.session.username;
+  var name = req.session.name;
+  var email = req.session.email;
+
+  const result = await userCollection.findOne({ email: email }, {projection : {username: 1, name: 1, email: 1} });
+
+  res.render("profile/profile", {user: result});
+
+});
+
+// PROFILE PAGE
+app.use("/profile", sessionValidation);
+app.get("/profile", async (req, res) => {
+
+  var username = req.session.username;
+  var name = req.session.name;
+  var email = req.session.email;
+
+  const result = await userCollection.findOne({ email: email }, {projection : {username: 1, name: 1, email: 1} });
+
+  res.render("profile/profile", {user: result});
+
+});
+
 // PLANTEPEDIA SUMMARY PAGE
 app.get("/plantepediaSummary", async (req, res) => {
   // TODO Need to Image column later
@@ -239,8 +289,47 @@ app.get("/plantepediaDetail", async (req, res) => {
 
 // COMUNITY PAGE
 app.get("/community", (req, res) => {
-  res.render("community/community");
+  res.render("community/community", { pageName: "Community" });
 });
+
+
+//Adding a post to community page
+app.post("/community/posts", upload.single("photo"), async (req, res) => {
+var key = req.body.keyword;
+const photoData = {
+  name: req.file.originalname,
+  filename: key,
+  data: req.file.buffer
+}
+
+await database.db(mongodb_database).collection('posts').insertOne(photoData);
+
+res.send("photo uploaded successfully")
+  
+})
+
+app.get("/photos", async (req, res) => {
+  const result = await database.db(mongodb_database).collection('posts').find({filename: "DisneyNight"}).project({filename: 1, data: 1}).toArray();
+
+  //imageData from chatgpt
+  const imageData = Buffer.from(result[0].data.buffer).toString('base64');
+  
+  const html = `
+  <h2>hellooooo</h2>
+  <h3>${result[0].filename}</h3>
+  <img src="data:image/jpeg;base64,${imageData}" height="300" width="300" alt="my Image"">
+  `;
+  
+  
+  
+  res.send(html);
+
+})
+
+
+
+
+
 
 // LOGOUT ROUTE
 // Destroys session in database

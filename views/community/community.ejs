@@ -4,7 +4,9 @@
 
 <body>
   <!-- NAVBAR TOP -->
-  <div id="top-navbar-placeholder"></div>
+  <%- include("../templates/top-navbar") %>
+  <%- include("../templates/hamburger") %>
+
   <h2>Choose a garden</h2>
   <div id="gardens">
     <% for(let i=0; i < 3; i++) { %>
@@ -12,47 +14,61 @@
       <div class="garden-inner">Garden <%= [i] %></div>
     </div>
     <% } %>
-
   </div>
+
   <div id="posts">
     <h2>Posts from all garden</h2>
-
     <!-- BOOTSTRAP USED FOR POSTS -->
     <% for(let i=0; i < 5; i++) { %>
     <div class="container">
-      <div class="cardcontainer">
-        <div class="photo">
-          <img src="/img/plant.jpg">
-        </div>
-        <div class="content">
-          <p class="txt4"></p>
-          <p class="txt5">My Plants! (title)</p>
-          <span id="comment" class="material-symbols-rounded">comment</span>
-          <span id="heart" class="material-symbols-rounded">favorite</span>
-          <p class="txt2">caption</p>
-        </div>
-        <div class="footer">
-          <p>
-            <a class="waves-effect waves-light btn" href="#">Read More</a><a id="hearts"><span class="like"><i class="fab fa-gratipay"></i># Likes</span></a>
-          </p>
-          <p class="txt3"><i class="far fa-clock"></i>Date/time posted
-            <span class="comments"><i class="fas fa-comments"></i>45 Comments</span>
-          </p>
-        </div>
+      <div class="username-container">
+        <span><b class="username">Username</b></span>
+      </div>
+      <img class="post-img" src="/img/plant.jpg">
+      <div class="post-actions">
+        <span class="material-icons-round">
+          favorite_border
+        </span>
+        <span class="material-icons-round">
+          chat_bubble_outline
+        </span>
+      </div>
+      <div class="description">
+        <aside class="likes"><small>#</small><small>&nbsp;Likes</small></aside>
+        <span><b class="username">Username&nbsp;</b></span>
+        <span id="description">This is the description to a photo posted to a garden for all to see</span>
+        <aside class="comments"><small>view all comments</small></aside>
+        <aside class="date"><small>21/12/24</small></aside>
       </div>
     </div>
     <% } %>
-
-
-
-
   </div>
-  <footer></footer>
+
+  <div>
+    <h2>New Post</h2>
+    
+    <form action="posts" method="post" enctype="multipart/form-data">
+      <input type="file" id="photo" name="photo">
+      <input type="text" name="keyword" placeholder="photo">
+      <input type="text" name="description" placeholder="desc">
+      <input type="text" name="garden" placeholder="name">
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+  
+  
+
+
+
+
+
+
 
   <!-- NAVBAR BOTTOM -->
-  <div id="bottom-navbar-placeholder"></div>
+  <%- include("../templates/bottom-navbar") %>
+
   <!-- SCRIPTS -->
   <script type="module" src="/modules/navigations.js"></script>
   <script type="module" src="/views/universal.js"></script>
-  <!-- <script type="module" src="/community.js"></script> -->
+  <script type="module" src="community.js"></script>
   <%- include("../templates/footer") %>

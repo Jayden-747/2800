@@ -4,7 +4,7 @@
   padding: 10px;
 }
 
-#banner{
+#banner {
   width: 300px;
 }
 
@@ -21,149 +21,85 @@
   margin: 10px;
 }
 
-.garden-inner{
-height: 45px;
-background: linear-gradient(#2b29298f, #0f0f0f);
-border-bottom-left-radius: 0.5em;
-border-bottom-right-radius: 0.5em;
-position: absolute;
-width: 100%;
-bottom: 0;
-padding-left: 20px;
-padding-top: 9px;
+.garden-inner {
+  height: 45px;
+  background: linear-gradient(#2b29298f, #0f0f0f);
+  border-bottom-left-radius: 0.5em;
+  border-bottom-right-radius: 0.5em;
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  padding-left: 20px;
+  padding-top: 9px;
 }
-/* BOOTSTRAP CSS FOUND ON THE INTERNET THAT I CUSTOMIZED */
-body{
-  margin: 0;
-  padding: 0;
-  font-family: 'roboto' , sans-serif;
-  
+
+#posts {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-h2{
+
+h2 {
   text-align: center;
   color: white;
 }
-.container{
-  padding: 30px;
-}
-.cardcontainer{
-  width: 400px;
-  height: 525px;
-  background-color: white;
-  margin-left: auto;
-  margin-right: auto;
-  transition: 0.3s;
-  border-radius: 0.5em;
-}
-.cardcontainer:hover{
-  box-shadow: 0 0 45px gray;
-}
-.photo{
-  height: 300px;
+
+.container {
   width: 100%;
-  border-radius: 0.5em;
-}
-.photo img{
-  height: 100%;
-  width: 100%;
-  border-radius: 0.5em;
-}
-.txt1{
-  margin: auto;
-  text-align: center;
-  font-size: 17px;
-}
-.content{
-  width: 80%;
-  height: 100px;
-  margin-left: auto;
-  margin-right: auto;
-  position: relative;
-  top: -33px;
+
+  padding: 0;
+  margin: 0;
 }
 
-.txt4{
-  font-size:27px;
-  position: relative;
-  top: 33px;
+.username-container {
+  height: 50px;
+
+  padding-left: 10px;
+
+  display: flex;
+  align-items: center;
 }
-.txt5{
-  position: relative;
-  top: 25px;
-  color: #E74C3C;
-  font-size: 23px;
+
+.username {
+  font-family: Ubuntu;
 }
-.txt2{
-  position: relative;
-  top: 13px;
-  color: black;
+
+.post-img {
+  width: 100%;
 }
-.cardcontainer:hover > .photo{
-  height: 200px;
-  animation: move1 0.5s ease both;
+
+.post-actions {
+  height: 40px;
+
+  padding-left: 10px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
-@keyframes move1{
-  0%{height: 300px}
-  100%{height: 200px}
+
+.description {
+  width: 100%;
+
+  font-family: Roboto;
+  padding: 0 10px;
+
+  word-break: break-all;
 }
-.cardcontainer:hover > .content{
-  height: 200px;
+
+.comments {
+  margin-top: 10px;
 }
-.footer{
-  width: 80%;
-  height: 100px;
-  margin-left: auto;
-  margin-right: auto;
-  background-color: white;
-  position: relative;
-  top: -15px;
+
+small {
+  color: rgba(187, 187, 187, 0.685);
 }
-.btn{
-  position: relative;
-  top: 20px;
+
+.likes {
+  margin-bottom: 6px;
 }
-#heart{
-  cursor: pointer;
-  color: #333333;
-  font-size: 30px;
-  position: relative;
-  float: right;
-  bottom: 20px;
-}
-#comment{
-  cursor: pointer;
-  color: #333333;
-  font-size: 30px;
-  position: relative;
-  float: right;
-  bottom: 20px;
-  left: 10px;
-}
-.like{
-  float: right;
+
+.date {
+  margin-top: 10px;
   font-size: 14px;
-  position: relative;
-  top: 50px;
-  color: gray;
-  cursor: pointer;
-}
-.fa-gratipay{
-  margin-right: 10px;
-  transition: 0.5s;
-}
-.fa-gratipay:hover{
-  color: #E74C3C;
-}
-.txt3{
-  color: gray;
-  position: relative;
-  top: 18px;
-  font-size: 14px;
-}
-.comments{
-  float: right;
-  cursor: pointer;
-}
-.fa-clock, .fa-comments{
-  margin-right: 7px;
 }
