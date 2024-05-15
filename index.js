@@ -77,7 +77,7 @@ app.use("/community", express.static("./views/community"));
 app.use("/settings", express.static("./views/settings"));
 app.use("/signup", express.static("./views/signup"));
 app.use("/login", express.static("./views/login"));
-app.use("/plantepedia", express.static("./views/plantepedia"));
+app.use("/plantepediaSummary", express.static("./views/plantepedia/summary"));
 
 // LANDING PAGE
 app.get("/", (req, res) => {
@@ -206,12 +206,20 @@ app.get("/settings", (req, res) => {
   res.render("settings/settings");
 });
 
-// PLANTEPEDIA PAGE
-app.get("/plantepedia", async (req, res) => {
-  res.render("plantepedia/plantepedia");
+// PLANTEPEDIA Summary PAGE
+app.get("/plantepediaSummary", async (req, res) => {
+  // TODO Need to Image column later
+  const result = await plantSummaryCollection.find().project({plant_name: 1, summary: 1, type: 1, season: 1, difficulty: 1, nutrition: 1}).toArray();
+  res.render("plantepedia/summary/plantepedia", {summaries: result});
 });
 
-//COMUNITY PAGE
+// TODO Need to add plantepediaDetail page 
+// // PLANTEPEDIA Plant's Detail PAGE
+// app.get("/plantepediaDetail", async (req, res) => {
+//   res.render("")
+// });
+
+// COMUNITY PAGE
 app.get("/community", (req, res) => {
   res.render("community/community");
 });

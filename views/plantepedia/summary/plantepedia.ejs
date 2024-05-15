@@ -1,0 +1,21 @@
+<%- include("../../templates/header") %>
+<link rel="stylesheet" href="/plantepedia/plantepedia.css" />
+</head>
+
+<body>
+  <!-- NAVBAR TOP -->
+  <%- include("../../templates/top-navbar", {pageName: "Plantepedia"}) %>
+
+  <% let i; %>
+  <ol>
+    <!-- 'facts' variable will come from index.js (it will be the array of facts from mongoDB) -->
+    <% for (i=0; i < summaries.length; i++) {%>
+    <%- include('./summary', {plant: summaries[i]}) %>
+    <% } %>
+  </ol>
+
+  <!-- NAVBAR BOTTOM -->
+  <%- include("../../templates/bottom-navbar") %>
+</body>
+
+<%- include("../../templates/footer") %>
