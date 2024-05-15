@@ -233,9 +233,9 @@ app.get("/plantepediaSummary", async (req, res) => {
 
 // TODO Need to add plantepediaDetail page
 // PLANTEPEDIA Plant's Detail PAGE
-// app.get("/plantepediaDetail", async (req, res) => {
-//   res.render("")
-// });
+app.get("/plantepediaDetail", async (req, res) => {
+  res.render("plantpedia/plantDetail/",)
+});
 
 // COMUNITY PAGE
 app.get("/community", (req, res) => {
