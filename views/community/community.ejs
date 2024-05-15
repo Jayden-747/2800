@@ -23,10 +23,30 @@
   </div>
   <footer></footer>
 
+  <div>
+    <h2>New Post</h2>
+    
+    <form action="posts" method="post" enctype="multipart/form-data">
+      <input type="file" id="photo" name="photo">
+      <input type="text" name="keyword" placeholder="photo">
+      <input type="text" name="description" placeholder="desc">
+      <input type="text" name="garden" placeholder="name">
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+  
+  
+
+
+
+
+
+
+
   <!-- NAVBAR BOTTOM -->
   <div id="bottom-navbar-placeholder"></div>
   <!-- SCRIPTS -->
   <script type="module" src="/modules/navigations.js"></script>
   <script type="module" src="/views/universal.js"></script>
-  <!-- <script type="module" src="/community.js"></script> -->
+  <script type="module" src="community.js"></script>
   <%- include("../templates/footer") %>

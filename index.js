@@ -7,7 +7,12 @@ const MongoStore = require('connect-mongo');
 const bcrypt = require('bcrypt');
 const Joi = require("joi");
 const app = express();
+const multer = require("multer")
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 app.use(express.json());
+
+
 
 const fs = require("fs");
 
@@ -29,6 +34,8 @@ const node_session_secret = process.env.NODE_SESSION_SECRET;
 //mongodb database
 
 var { database } = require('./databaseConnection');
+
+
 
 const userCollection = database.db(mongodb_database).collection('users');
 
@@ -141,7 +148,7 @@ app.post("/login/logging", async (req, res) => {
   var email = req.body.email;
   var password = req.body.password;
 
-  const schema = Joi.string().max(20).required();
+  const schema = Joi.string().max(255).required();
 	const validationResult = schema.validate(email);
 	if (validationResult.error != null) {
 	   console.log(validationResult.error);
@@ -212,6 +219,45 @@ app.get("/plantepedia", async (req, res) => {
 app.get("/community", (req, res) => {
   res.render("community/community");
 });
+
+
+//Adding a post to community page
+app.post("/community/posts", upload.single("photo"), async (req, res) => {
+var key = req.body.keyword;
+const photoData = {
+  name: req.file.originalname,
+  filename: key,
+  data: req.file.buffer
+}
+
+await database.db(mongodb_database).collection('posts').insertOne(photoData);
+
+res.send("photo uploaded successfully")
+  
+})
+
+app.get("/photos", async (req, res) => {
+  const result = await database.db(mongodb_database).collection('posts').find({filename: "DisneyNight"}).project({filename: 1, data: 1}).toArray();
+
+  //imageData from chatgpt
+  const imageData = Buffer.from(result[0].data.buffer).toString('base64');
+  
+  const html = `
+  <h2>hellooooo</h2>
+  <h3>${result[0].filename}</h3>
+  <img src="data:image/jpeg;base64,${imageData}" height="300" width="300" alt="my Image"">
+  `;
+  
+  
+  
+  res.send(html);
+
+})
+
+
+
+
+
 
 // LOGOUT ROUTE that destroys session document in database
 app.get("/logout", (req, res) => {

@@ -25,3 +25,24 @@ export function scrollTo(buttonID, section) {
     console.log("click");
   });
 }
+
+// export function image() {
+//   var urlData;
+// document.querySelector("#photo").addEventListener("change", function () { 
+//     const reader = new FileReader();
+
+//     reader.addEventListener("load", () => { 
+//         console.log(reader.result);
+//         urlData = reader.result;
+        
+        
+//     });
+ 
+//         reader.readAsDataURL(this.files[0]);
+
+
+    
+
+//   });
+
+// }
