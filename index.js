@@ -78,6 +78,24 @@ app.use("/settings", express.static("./views/settings"));
 app.use("/signup", express.static("./views/signup"));
 app.use("/login", express.static("./views/login"));
 app.use("/plantepediaSummary", express.static("./views/plantepedia/summary"));
+app.use("/profile", express.static("./views/profile"));
+
+// TODO: create middleware - makes sure user is logged in otherwise gets redirected to login page (implement for every route)
+
+// Returns true if user is in a valid session, otherwise false
+function isValidSession(req) {
+  return req.session.authenticated;
+}
+
+// Middleware for validating a session
+function sessionValidation(req, res, next) {
+  if (isValidSession(req)) {
+    next();
+  }
+  else {
+    res.redirect('/login');
+  }
+}
 
 // LANDING PAGE
 app.get("/", (req, res) => {
@@ -204,6 +222,27 @@ app.post("/login/reset", async (req, res) => {
 // SETTINGS PAGE
 app.get("/settings", (req, res) => {
   res.render("settings/settings");
+});
+
+// PROFILE PAGE
+app.use("/profile", sessionValidation);
+app.get("/profile", async (req, res) => {
+
+  var username = req.session.username;
+  var name = req.session.name;
+  var email = req.session.email;
+
+  // Create an array of user's information (this passes a single array to profile.ejs instead of multiple variables)
+  // const userInfo = [];
+  // userInfo.push(username, name, email);
+  // console.log(userInfo);
+
+  // res.render("profile/profile", {user: userInfo});
+
+  const result = await userCollection.findOne({ email: email }, {projection : {username: 1, name: 1, email: 1} });
+
+  res.render("profile/profile", {user: result});
+
 });
 
 // PLANTEPEDIA Summary PAGE

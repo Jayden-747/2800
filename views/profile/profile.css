@@ -1,0 +1,15 @@
+@font-face {
+    font-family: Ubuntu;
+    src: url("/font/Ubuntu/Ubuntu-Regular.ttf");
+  }
+
+  /* Holds the contents of the whole page */
+#profile-container {
+    width: 100%;
+    height: fit-content;
+    margin-top: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
