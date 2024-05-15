@@ -4,24 +4,45 @@
 
 <body>
   <!-- NAVBAR TOP -->
-  <div id="top-navbar-placeholder"></div>
+  <%- include("../templates/top-navbar") %>
+  <%- include("../templates/hamburger") %>
+
+  <h2>Choose a garden</h2>
   <div id="gardens">
-    <h2>Choose a garden</h2>
-    <div class="gardenGroup">garden 1</div>
-    <div class="gardenGroup">garden 2</div>
-    <div class="gardenGroup">garden 3</div>
-    <div class="gardenGroup">garden 4</div>
+    <% for(let i=0; i < 3; i++) { %>
+    <div class="gardenGroup">
+      <div class="garden-inner">Garden <%= [i] %></div>
+    </div>
+    <% } %>
   </div>
+
   <div id="posts">
     <h2>Posts from all garden</h2>
-    <!-- BOOTSTRAP EXAMPLE USED FOR POSTS -->
-
-    <div>post 1</div>
-    <div>post 2</div>
-    <div>post 3</div>
-    <div>post 4</div>
+    <!-- BOOTSTRAP USED FOR POSTS -->
+    <% for(let i=0; i < 5; i++) { %>
+    <div class="container">
+      <div class="username-container">
+        <span><b class="username">Username</b></span>
+      </div>
+      <img class="post-img" src="/img/plant.jpg">
+      <div class="post-actions">
+        <span class="material-icons-round">
+          favorite_border
+        </span>
+        <span class="material-icons-round">
+          chat_bubble_outline
+        </span>
+      </div>
+      <div class="description">
+        <aside class="likes"><small>#</small><small>&nbsp;Likes</small></aside>
+        <span><b class="username">Username&nbsp;</b></span>
+        <span id="description">This is the description to a photo posted to a garden for all to see</span>
+        <aside class="comments"><small>view all comments</small></aside>
+        <aside class="date"><small>21/12/24</small></aside>
+      </div>
+    </div>
+    <% } %>
   </div>
-  <footer></footer>
 
   <div>
     <h2>New Post</h2>
@@ -44,7 +65,8 @@
 
 
   <!-- NAVBAR BOTTOM -->
-  <div id="bottom-navbar-placeholder"></div>
+  <%- include("../templates/bottom-navbar") %>
+
   <!-- SCRIPTS -->
   <script type="module" src="/modules/navigations.js"></script>
   <script type="module" src="/views/universal.js"></script>
