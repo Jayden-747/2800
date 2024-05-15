@@ -81,13 +81,13 @@ app.use("/plantepediaSummary", express.static("./views/plantepedia/summary"));
 
 // LANDING PAGE
 app.get("/", (req, res) => {
-  res.render("landing/landing");
+  if(req.session.authenticated){
+    res.render("home/home");
+  } else {
+    res.render("landing/landing");
+  }
 });
 
-// HOME PAGE
-app.get("/home", (req, res) => {
-  res.render("home/home");
-});
 
 // SIGNUP PAGE
 app.get("/signup", async (req, res) => {
@@ -141,19 +141,15 @@ app.get("/login", async (req, res) => {
 app.post("/login/logging", async (req, res) => {
   var email = req.body.email;
   var password = req.body.password;
+  const schema = Joi.string().max(255).required();
+	const validationResult = schema.validate(email);
+	if (validationResult.error != null) {
+	   console.log(validationResult.error);
+	   res.redirect("/login");
+	   return;
+	}
+  const result = await userCollection.find({email: email}).project({email: 1, password: 1, _id: 1, username: 1}).toArray();
 
-  const schema = Joi.string().max(20).required();
-  const validationResult = schema.validate(email);
-  if (validationResult.error != null) {
-    console.log(validationResult.error);
-    res.redirect("/login");
-    return;
-  }
-
-  const result = await userCollection
-    .find({ email: email })
-    .project({ email: 1, password: 1, _id: 1, username: 1 })
-    .toArray();
 
   if (result.length != 1) {
     res.redirect("/login");
@@ -166,6 +162,7 @@ app.post("/login/logging", async (req, res) => {
     req.session.email = email;
     req.session.cookie.maxAge = expireTime;
     res.redirect("/");
+    console.log("logged in");
     return;
   } else {
     res.redirect("/login");
