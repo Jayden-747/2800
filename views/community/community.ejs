@@ -12,31 +12,33 @@
       <div class="garden-inner">Garden <%= [i] %></div>
     </div>
     <% } %>
-   
+
   </div>
   <div id="posts">
     <h2>Posts from all garden</h2>
+
     <!-- BOOTSTRAP USED FOR POSTS -->
     <% for(let i=0; i < 5; i++) { %>
     <div class="container">
       <div class="cardcontainer">
-          <div class="photo">
-              <img src="/img/plant.jpg">
-          </div>
-          <div class="content">
-              <p class="txt4"></p>
-              <p class="txt5">My Plants! (title)</p>
-              <span id="comment" class="material-symbols-rounded">comment</span>
-              <span id="heart" class="material-symbols-rounded">favorite</span>
-              <p class="txt2">caption</p>
-          </div>
-          <div class="footer">
-              <p>
-                <a class="waves-effect waves-light btn" href="#">Read More</a><a id="hearts"><span class="like"><i class="fab fa-gratipay"></i># Likes</span></a>
-              </p>
-              <p class="txt3"><i class="far fa-clock"></i>Date/time posted 
-              <span class="comments"><i class="fas fa-comments"></i>45 Comments</span></p>
-          </div>
+        <div class="photo">
+          <img src="/img/plant.jpg">
+        </div>
+        <div class="content">
+          <p class="txt4"></p>
+          <p class="txt5">My Plants! (title)</p>
+          <span id="comment" class="material-symbols-rounded">comment</span>
+          <span id="heart" class="material-symbols-rounded">favorite</span>
+          <p class="txt2">caption</p>
+        </div>
+        <div class="footer">
+          <p>
+            <a class="waves-effect waves-light btn" href="#">Read More</a><a id="hearts"><span class="like"><i class="fab fa-gratipay"></i># Likes</span></a>
+          </p>
+          <p class="txt3"><i class="far fa-clock"></i>Date/time posted
+            <span class="comments"><i class="fas fa-comments"></i>45 Comments</span>
+          </p>
+        </div>
       </div>
     </div>
     <% } %>

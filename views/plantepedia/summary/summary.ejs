@@ -2,22 +2,24 @@
     <!-- @author Mary Czapkowska -->
     <!-- see https://codepen.io/maryj25/pen/axBNVO -->
     <section id="gallery">
-        <div class="container">
-          <div class="row">
-            <div class="col-lg-4 mb-4">
-              <div class="card">
-                <img src="https://images.unsplash.com/photo-1477862096227-3a1bb3b08330?ixlib=rb-1.2.1&auto=format&fit=crop&w=700&q=60" alt="" class="card-img-top">
-                <div class="card-body">
-                  <h5 class="card-title"><%= plant.plant_name %></h5>
-                  <p class="card-text"><%= plant.summary %></p>
-                  <a class="btn btn-outline-success btn-sm">Read More</a>
-                  <a class="btn btn-outline-danger btn-sm"><%= plant.season %></a>
-                  <a class="btn btn-outline-danger btn-sm"><%= plant.type %></a>
-                  <a class="btn btn-outline-danger btn-sm"><%= plant.difficulty %></a>
-                  <a class="btn btn-outline-danger btn-sm"><%= plant.nutrition %></a>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-4 mb-4">
+            <div class="card">
+              <img src="https://images.unsplash.com/photo-1477862096227-3a1bb3b08330?ixlib=rb-1.2.1&auto=format&fit=crop&w=700&q=60" alt="" class="card-img-top">
+              <div class="card-body">
+                <h5 class="card-title"><b><%= plant.plant_name %></b></h5>
+                <p class="card-text"><%= plant.summary %></p>
+                <div class="badges">
+                  <span class="badge rounded-pill bg-primary"><%= plant.season %></span>
+                  <span class="badge rounded-pill bg-primary"><%= plant.type %></span>
+                  <span class="badge rounded-pill bg-primary"><%= plant.difficulty %></span>
+                  <span class="badge rounded-pill bg-primary"><%= plant.nutrition %></span>
                 </div>
+                <a class="btn btn-dark">Read More</a>
               </div>
             </div>
           </div>
         </div>
+      </div>
     </section>

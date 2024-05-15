@@ -8,6 +8,7 @@ const bcrypt = require("bcrypt");
 const Joi = require("joi");
 const app = express();
 app.use(express.json());
+app.set("view engine", "ejs");
 
 const fs = require("fs");
 
@@ -30,13 +31,14 @@ var { database } = require("./databaseConnection");
 
 const userCollection = database.db(mongodb_database).collection("users");
 
+const plantSummaryCollection = database
+  .db(mongodb_database_plantepedia)
+  .collection("plantSummary");
+const plantDetailsCollection = database
+  .db(mongodb_database_plantepedia)
+  .collection("plantDetails");
 
-const plantSummaryCollection = database.db(mongodb_database_plantepedia).collection('plantSummary');
-const plantDetailsCollection = database.db(mongodb_database_plantepedia).collection('plantDetails');
-
-
-
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: false }));
 
 //mongo store
 var mongoStore = MongoStore.create({
@@ -46,26 +48,13 @@ var mongoStore = MongoStore.create({
   },
 });
 
-//session
-app.use(
-  session({
-    secret: node_session_secret,
-    store: mongoStore,
-    saveUninitialized: false,
-    resave: true,
-  })
-);
-
 //salt rounds for hashing
 const saltRounds = 12;
 
 //Expiration for cookie
 const expireTime = 1 * 60 * 60 * 1000;
 
-// EXPRESS STATIC PATHS
-app.use(express.json());
-app.set("view engine", "ejs");
-
+// Express static paths
 app.use("/img", express.static("./assets/img"));
 app.use("/font", express.static("./assets/font"));
 app.use("/components", express.static("./components"));
@@ -77,7 +66,18 @@ app.use("/community", express.static("./views/community"));
 app.use("/settings", express.static("./views/settings"));
 app.use("/signup", express.static("./views/signup"));
 app.use("/login", express.static("./views/login"));
+app.use("/plantepedia", express.static("./views/plantepedia"));
 app.use("/plantepediaSummary", express.static("./views/plantepedia/summary"));
+
+//session
+app.use(
+  session({
+    secret: node_session_secret,
+    store: mongoStore,
+    saveUninitialized: false,
+    resave: true,
+  })
+);
 
 // LANDING PAGE
 app.get("/", (req, res) => {
@@ -94,7 +94,7 @@ app.get("/signup", async (req, res) => {
   res.render("signup/signup");
 });
 
-//SUBMITTING USER
+// USER SUBMISSION
 app.post("/signup/submitUser", async (req, res) => {
   var username = req.body.username;
   var password = req.body.password;
@@ -138,6 +138,7 @@ app.get("/login", async (req, res) => {
   res.render("login/login");
 });
 
+// LOGIN AUTHENTICATION
 app.post("/login/logging", async (req, res) => {
   var email = req.body.email;
   var password = req.body.password;
@@ -170,7 +171,7 @@ app.post("/login/logging", async (req, res) => {
   }
 });
 
-//reset password
+// PASSWORD RESET
 app.get("/login/resetPassword", async (req, res) => {
   res.render("login/resetPassword");
 });
@@ -203,15 +204,25 @@ app.get("/settings", (req, res) => {
   res.render("settings/settings");
 });
 
-// PLANTEPEDIA Summary PAGE
+// PLANTEPEDIA SUMMARY PAGE
 app.get("/plantepediaSummary", async (req, res) => {
   // TODO Need to Image column later
-  const result = await plantSummaryCollection.find().project({plant_name: 1, summary: 1, type: 1, season: 1, difficulty: 1, nutrition: 1}).toArray();
-  res.render("plantepedia/summary/plantepedia", {summaries: result});
+  const result = await plantSummaryCollection
+    .find()
+    .project({
+      plant_name: 1,
+      summary: 1,
+      type: 1,
+      season: 1,
+      difficulty: 1,
+      nutrition: 1,
+    })
+    .toArray();
+  res.render("plantepedia/summary/plantepedia", { summaries: result });
 });
 
-// TODO Need to add plantepediaDetail page 
-// // PLANTEPEDIA Plant's Detail PAGE
+// TODO Need to add plantepediaDetail page
+// PLANTEPEDIA Plant's Detail PAGE
 // app.get("/plantepediaDetail", async (req, res) => {
 //   res.render("")
 // });
@@ -221,7 +232,8 @@ app.get("/community", (req, res) => {
   res.render("community/community");
 });
 
-// LOGOUT ROUTE that destroys session document in database
+// LOGOUT ROUTE
+// Destroys session in database
 app.get("/logout", (req, res) => {
   req.session.destroy();
   res.redirect("/");
