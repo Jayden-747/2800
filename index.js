@@ -294,8 +294,13 @@ app.get("/community", (req, res) => {
 });
 
 
+
+app.get("/newPost", async (req, res) => {
+  res.render("newPost/newPost");
+})
+
 //Adding a post to community page
-app.post("/community/posts", upload.single("photo"), async (req, res) => {
+app.post("/newPost/posts", upload.single("photo"), async (req, res) => {
 var key = req.body.keyword;
 var desc = req.body.description;
 var garden = req.body.garden;
@@ -309,7 +314,7 @@ const photoData = {
 
 await database.db(mongodb_database).collection('posts').insertOne(photoData);
 
-res.send("photo uploaded successfully")
+res.redirect("/photos")
   
 })
 
@@ -319,15 +324,16 @@ app.get("/photos", async (req, res) => {
   //imageData from chatgpt
   const imageData = Buffer.from(result[0].data.buffer).toString('base64');
   
-  const html = `
-  <h2>hellooooo</h2>
-  <h3>${result[0].filename}</h3>
-  <img src="data:image/jpeg;base64,${imageData}" height="300" width="300" alt="my Image"">
-  `;
+  // const html = `
+  // <h2>hellooooo</h2>
+  // <h3>${result[0].filename}</h3>
+  // <img src="data:image/jpeg;base64,${imageData}" height="300" width="300" alt="my Image"">
+  // `;
   
   
   
-  res.send(html);
+  
+  res.render("newPost/newPost", {filename: result[0].filename, imgData: imageData});
 
 })
 
