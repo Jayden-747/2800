@@ -81,6 +81,7 @@ app.use("/signup", express.static("./views/signup"));
 app.use("/login", express.static("./views/login"));
 app.use("/plantepedia", express.static("./views/plantepedia"));
 app.use("/plantepediaSummary", express.static("./views/plantepedia/summary"));
+app.use("/garden", express.static("./views/garden"));
 app.use("/profile", express.static("./views/profile"));
 
 // TODO: create middleware - makes sure user is logged in otherwise gets redirected to login page (implement for every route)
@@ -94,9 +95,8 @@ function isValidSession(req) {
 function sessionValidation(req, res, next) {
   if (isValidSession(req)) {
     next();
-  }
-  else {
-    res.redirect('/login');
+  } else {
+    res.redirect("/login");
   }
 }
 
@@ -107,6 +107,11 @@ app.get("/", (req, res) => {
   } else {
     res.render("landing/landing");
   }
+});
+
+// GARDEN PAGE
+app.get("/garden", async (req, res) => {
+  res.render("garden/garden", { pageName: "Garden" });
 });
 
 // SIGNUP PAGE
@@ -239,29 +244,31 @@ app.get("/settings", (req, res) => {
 // PROFILE PAGE
 app.use("/profile", sessionValidation);
 app.get("/profile", async (req, res) => {
-
   var username = req.session.username;
   var name = req.session.name;
   var email = req.session.email;
 
-  const result = await userCollection.findOne({ email: email }, {projection : {username: 1, name: 1, email: 1} });
+  const result = await userCollection.findOne(
+    { email: email },
+    { projection: { username: 1, name: 1, email: 1 } }
+  );
 
-  res.render("profile/profile", {user: result});
-
+  res.render("profile/profile", { user: result });
 });
 
 // PROFILE PAGE
 app.use("/profile", sessionValidation);
 app.get("/profile", async (req, res) => {
-
   var username = req.session.username;
   var name = req.session.name;
   var email = req.session.email;
 
-  const result = await userCollection.findOne({ email: email }, {projection : {username: 1, name: 1, email: 1} });
+  const result = await userCollection.findOne(
+    { email: email },
+    { projection: { username: 1, name: 1, email: 1 } }
+  );
 
-  res.render("profile/profile", {user: result});
-
+  res.render("profile/profile", { user: result });
 });
 
 // PLANTEPEDIA SUMMARY PAGE
