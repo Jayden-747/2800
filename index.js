@@ -296,8 +296,12 @@ app.get("/community", (req, res) => {
 //Adding a post to community page
 app.post("/community/posts", upload.single("photo"), async (req, res) => {
 var key = req.body.keyword;
+var desc = req.body.description;
+var garden = req.body.garden;
 const photoData = {
   name: req.file.originalname,
+  desc: desc,
+  garden: garden,
   filename: key,
   data: req.file.buffer
 }
