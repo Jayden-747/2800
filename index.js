@@ -96,16 +96,19 @@ app.get("/signup", async (req, res) => {
 
 // USER SUBMISSION
 app.post("/signup/submitUser", async (req, res) => {
+  var name = req.body.name;
   var username = req.body.username;
   var password = req.body.password;
   var email = req.body.email;
 
   const schema = Joi.object({
+    name: Joi.string().max(40).required(),
     username: Joi.string().alphanum().max(20).required(),
+    email: Joi.string().email().max(255).required(),
     password: Joi.string().max(20).required(),
   });
 
-  const validationResult = schema.validate({ username, password });
+  const validationResult = schema.validate({ name, username, password , email});
   if (validationResult.error != null) {
     console.log(validationResult.error);
     res.redirect("/signup");
@@ -115,6 +118,7 @@ app.post("/signup/submitUser", async (req, res) => {
   var hashedPassword = await bcrypt.hash(password, saltRounds);
 
   await userCollection.insertOne({
+    name: name,
     username: username,
     email: email,
     password: hashedPassword,
@@ -122,14 +126,13 @@ app.post("/signup/submitUser", async (req, res) => {
 
   const result = await userCollection
     .find({ email: email })
-    .project({ email: 1, password: 1, _id: 1, username: 1 })
+    .project({ email: 1, password: 1, _id: 1, username: 1, name: 1 })
     .toArray();
   console.log("user submitted" + result);
   req.session.authenticated = true;
   req.session.username = result[0].username;
   req.session.email = result[0].email;
   req.session.cookie.maxAge = expireTime;
-
   res.redirect("/");
 });
 
