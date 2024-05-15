@@ -1,0 +1,36 @@
+<%- include("../templates/header") %>
+<link rel="stylesheet" href="/profile/profile.css" />
+</head>
+
+<body>
+  <!-- NAVBAR TOP -->
+  <%- include("../templates/top-navbar", {pageName: "Profile"}) %>
+  <%- include("../templates/hamburger") %>
+
+  <div id="profile-container">
+    <!-- PROFILE SETTINGS -->
+    <div class="profile-section">
+      <div class="profile-username">
+        Username: <%= user.username %>
+      </div>
+      <br>
+      <div class="profile-name">
+        Name: <%= user.name %>
+      </div>
+      <br>
+      <div class="profile-email">
+          Email: <%= user.email %>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVBAR BOTTOM -->
+  <%- include("../templates/bottom-navbar") %>
+
+  <!-- SCRIPTS -->
+  <script type="module" src="/modules/navigations.js"></script>
+  <script type="module" src="/modules/customizations.js"></script>
+  <script type="module" src="/profile/profile.js"></script>
+  <script type="module" src="/views/universal.js"></script>
+
+  <%- include("../templates/footer") %>

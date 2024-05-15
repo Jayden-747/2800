@@ -5,6 +5,7 @@
 <body>
   <!-- NAVBAR TOP -->
   <%- include("../../templates/top-navbar", {pageName: "Plantepedia"}) %>
+  <%- include("../../templates/hamburger") %>
 
   <% let i; %>
   <ol>
@@ -16,6 +17,11 @@
 
   <!-- NAVBAR BOTTOM -->
   <%- include("../../templates/bottom-navbar") %>
-</body>
 
-<%- include("../../templates/footer") %>
+  <!-- SCRIPTS -->
+  <script type="module" src="/modules/navigations.js"></script>
+  <script type="module" src="/modules/customizations.js"></script>
+  <script type="module" src="/plantepedia/plantepedia.js"></script>
+  <script type="module" src="/views/universal.js"></script>
+
+  <%- include("../../templates/footer") %>
