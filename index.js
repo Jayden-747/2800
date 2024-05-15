@@ -81,13 +81,12 @@ app.use(
 
 // LANDING PAGE
 app.get("/", (req, res) => {
-  if(req.session.authenticated){
+  if (req.session.authenticated) {
     res.render("home/home");
   } else {
     res.render("landing/landing");
   }
 });
-
 
 // SIGNUP PAGE
 app.get("/signup", async (req, res) => {
@@ -108,7 +107,7 @@ app.post("/signup/submitUser", async (req, res) => {
     password: Joi.string().max(20).required(),
   });
 
-  const validationResult = schema.validate({ name, username, password , email});
+  const validationResult = schema.validate({ name, username, password, email });
   if (validationResult.error != null) {
     console.log(validationResult.error);
     res.redirect("/signup");
@@ -151,19 +150,21 @@ app.post("/login/logging", async (req, res) => {
     password: Joi.string().max(20).required(),
   });
 
-const validationResult = schema.validate({ email, password });
+  const validationResult = schema.validate({ email, password });
 
-	if (validationResult.error != null) {
-	   console.log(validationResult.error);
-	   res.redirect("/login");
-	   return;
-	}
-  const result = await userCollection.find({email: email}).project({email: 1, password: 1, _id: 1, username: 1}).toArray();
-
+  if (validationResult.error != null) {
+    console.log(validationResult.error);
+    res.redirect("/login");
+    return;
+  }
+  const result = await userCollection
+    .find({ email: email })
+    .project({ email: 1, password: 1, _id: 1, username: 1 })
+    .toArray();
 
   if (result.length != 1) {
     res.redirect("/login");
-    console.log("no email")
+    console.log("no email");
     return;
   }
 
@@ -239,7 +240,7 @@ app.get("/plantepediaSummary", async (req, res) => {
 
 // COMUNITY PAGE
 app.get("/community", (req, res) => {
-  res.render("community/community");
+  res.render("community/community", { pageName: "Community" });
 });
 
 // LOGOUT ROUTE
