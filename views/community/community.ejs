@@ -9,10 +9,16 @@
 
   <h2>Choose a garden</h2>
   <div id="gardens">
-    <% for(let i=0; i < 3; i++) { %>
+    <% for(let i=1; i <= 3; i++) { %>
+    
     <div class="gardenGroup">
-      <div class="garden-inner">Garden <%= [i] %></div>
+      <form action="/community" method="get">
+        <button type="submit" class="garden-inner" name="garden<%[i]%>">
+          <div>Garden <%= [i] %></div>
+        </button>
+      </form>
     </div>
+    
     <% } %>
   </div>
 

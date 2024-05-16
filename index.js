@@ -298,8 +298,14 @@ app.get("/plantepediaSummary", async (req, res) => {
 // });
 
 // COMUNITY PAGE
+
 app.get("/community", async(req, res) => {
-  const result = await database.db(mongodb_database).collection('posts').find({garden: "garden 2"}).toArray();
+
+  
+  
+
+
+ const result = await database.db(mongodb_database).collection('posts').find().toArray();
   
   var posts = [];
   var descss = [];
@@ -320,22 +326,19 @@ app.get("/community", async(req, res) => {
 
 
   res.render("community/community", { pageName: "Community", result: result, posts: posts, desc: descss, username: user});
-});
-
-
-
-app.get("/newPost", async (req, res) => {
-  
-  const result = await database.db(mongodb_database).collection('posts').find({garden: "garden 2"}).project({filename: 1, data: 1}).toArray();
-
-  //imageData from chatgpt
-  const imageData = Buffer.from(result[0].data.buffer).toString('base64');
   
 
-  res.render("newPost/newPost", {filename: result[0].filename, imageData: imageData});
 })
 
-//Adding a post to community page
+
+
+
+//NEW POST FOR COMMUNITY PAGE
+app.get("/newPost", async (req, res) => {
+  res.render("newPost/newPost");
+})
+
+//ADDING POST TO COMMUNITY PAGE
 app.post("/newPost/posts", upload.single("photo"), async (req, res) => {
 var key = req.body.keyword;
 var desc = req.body.description;
@@ -355,6 +358,10 @@ await database.db(mongodb_database).collection('posts').insertOne(photoData);
 res.redirect("/community")
   
 })
+
+
+
+
 
 
 
