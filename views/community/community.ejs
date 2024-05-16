@@ -10,9 +10,11 @@
   <h2>Choose a garden</h2>
   <div id="gardens">
     <% for(let i=0; i < 3; i++) { %>
+    <% if (gardens[i]) { %>
     <div class="gardenGroup">
-      <div class="garden-inner">Garden <%= [i] %></div>
+      <div class="garden-inner"><%= gardens[i].gardenName %></div>
     </div>
+    <% } %>
     <% } %>
   </div>
 
@@ -46,7 +48,7 @@
 
   <div>
     <h2>New Post</h2>
-    
+
     <form action="posts" method="post" enctype="multipart/form-data">
       <input type="file" id="photo" name="photo">
       <input type="text" name="keyword" placeholder="photo">
@@ -55,10 +57,6 @@
       <button type="submit">Submit</button>
     </form>
   </div>
-  
-  
-
-
 
 
 
