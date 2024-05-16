@@ -300,12 +300,8 @@ app.get("/plantepediaSummary", async (req, res) => {
 // COMUNITY PAGE
 
 app.get("/community", async(req, res) => {
-
-  
-  
-
-
- const result = await database.db(mongodb_database).collection('posts').find().toArray();
+  const result = await database.db(mongodb_database).collection('posts').find().toArray();
+  const gardenName = await database.db(mongodb_database).collection('gardens').find().toArray();
   
   var posts = [];
   var descss = [];
@@ -317,20 +313,32 @@ app.get("/community", async(req, res) => {
     const usern = result[i].username;
     user.push(usern);
 
-
     const imageData = Buffer.from(result[i].data.buffer).toString('base64');
     posts.push(imageData);
   }
   
-
-
-
   res.render("community/community", { pageName: "Community", result: result, posts: posts, desc: descss, username: user});
-  
+});
 
-})
+app.get("/community/:garden", async (req, res) =>{
+  const garden = req.params.garden;
+  console.log(garden);
+  const result = await database.db(mongodb_database).collection('posts').find({garden: garden }).toArray();
+  var posts = [];
+  var descss = [];
+  var user = [];
+  for (let i = 0; i < result.length; i++){
+    const descrip = result[i].desc;
+    descss.push(descrip);
 
+    const usern = result[i].username;
+    user.push(usern);
 
+    const imageData = Buffer.from(result[i].data.buffer).toString('base64');
+    posts.push(imageData);
+  }
+  res.render("community/community", { pageName: "Community", result: result, posts: posts, desc: descss, username: user});
+});
 
 
 //NEW POST FOR COMMUNITY PAGE
@@ -350,7 +358,9 @@ const photoData = {
   desc: desc,
   garden: garden,
   filename: key,
-  data: req.file.buffer
+  data: req.file.buffer,
+  comments: null,
+  likes: 0
 }
 
 await database.db(mongodb_database).collection('posts').insertOne(photoData);
