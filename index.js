@@ -302,7 +302,7 @@ app.get("/plantepediaSummary", async (req, res) => {
 app.get("/community", async(req, res) => {
   const result = await database.db(mongodb_database).collection('posts').find().toArray();
   const gardenName = await database.db(mongodb_database).collection('gardens').find().toArray();
-  
+  var garden = "all gardens";
   var posts = [];
   var descss = [];
   var user = [];
@@ -317,12 +317,13 @@ app.get("/community", async(req, res) => {
     posts.push(imageData);
   }
   
-  res.render("community/community", { pageName: "Community", result: result, posts: posts, desc: descss, username: user});
+  res.render("community/community", { pageName: "Community", result: result, posts: posts, desc: descss, username: user, gardenP: garden});
 });
 
 app.get("/community/:garden", async (req, res) =>{
+
+  
   const garden = req.params.garden;
-  console.log(garden);
   const result = await database.db(mongodb_database).collection('posts').find({garden: garden }).toArray();
   var posts = [];
   var descss = [];
@@ -337,7 +338,7 @@ app.get("/community/:garden", async (req, res) =>{
     const imageData = Buffer.from(result[i].data.buffer).toString('base64');
     posts.push(imageData);
   }
-  res.render("community/community", { pageName: "Community", result: result, posts: posts, desc: descss, username: user});
+  res.render("community/community", { pageName: "Community", result: result, posts: posts, desc: descss, username: user, gardenP: garden});
 });
 
 
