@@ -295,9 +295,6 @@ app.get("/plantepediaSummary", async (req, res) => {
 // });
 
 // COMUNITY PAGE
-<<<<<<< HEAD
-
-
 app.get("/community", async (req, res) => {
   const result = await database
     .db(mongodb_database)
@@ -309,7 +306,7 @@ app.get("/community", async (req, res) => {
     .collection("gardens")
     .find()
     .toArray();
-
+  var garden = "all gardens";
   var posts = [];
   var descss = [];
   var user = [];
@@ -328,7 +325,7 @@ app.get("/community", async (req, res) => {
     posts.push(imageData);
   }
   
-  res.render("community/community", { pageName: "Community", result: result, posts: posts, desc: descss, username: user});
+  res.render("community/community", { pageName: "Community", result: result, posts: posts, desc: descss, username: user, gardens: gardenName, gardenP: garden, date: date});
 });
 
 //Route to a specific community garden that filters posts based on the "name" field
