@@ -1,11 +1,7 @@
 body {
   margin-top: 65px;
-  
-  font-family: Ubuntu;
-}
 
-#form1{
-  padding-left: 30px;
+  font-family: Ubuntu;
 }
 
 h2 {
@@ -14,7 +10,7 @@ h2 {
 }
 
 .main-content {
-  padding: 0 10vw;
+  padding: 0 20px;
 }
 
 .heading {
@@ -40,9 +36,6 @@ input {
 
   background-color: rgb(12, 12, 12);
   border: none;
-  /* border-top: solid 2px;
-  border-bottom: solid 2px;
-  border-color: rgb(83, 83, 83); */
   border-radius: 0;
 }
 
@@ -62,4 +55,9 @@ input {
 
   display: flex;
   justify-content: center;
+}
+
+select {
+  margin-bottom: 30px;
+  font-size: 20px;
 }

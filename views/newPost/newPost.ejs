@@ -5,33 +5,53 @@
 <body>
   <%- include("../templates/top-navbar") %>
   <%- include("../templates/hamburger") %>
-    <br>
-    <div>
-        <h2>New Post</h2>
-        <br>
-        <form id="form1" action="posts" method="post" enctype="multipart/form-data">
-          <div class="heading">Add a photo</div>
-          <input type="file" id="photo" name="photo">
-          <br><br>
-          <div class="heading">Select a garden to post to:</div>
-          <select name="garden">
-            <% for (let i = 0; i < garden.length; i++) { %>
-              <option value="garden<%- [i + 1] %>"><%= garden[i] %></option>
-            <% } %>
-          </select>
-          <br><br>
-          <div class="heading">Add a commment</div>
-          <input type="text" name="description" placeholder="Add a comment...">
-          <br><br>
-          <button type="submit">Submit</button>
-        </form>
+  <br>
+  <div>
+    <form id="form1" action="posts" method="post" enctype="multipart/form-data">
+      <div class="main-content">
+        <div class="heading">Photo</div>
+        <input type="file" id="photo" name="photo">
+        <br><br>
+        <div class="heading">Select a garden to post to:</div>
+        <select name="garden">
+          <% for (let i = 0; i < garden.length; i++) { %>
+          <option value="garden<%- [i + 1] %>"><%= garden[i] %></option>
+          <% } %>
+        </select>
+        <br><br>
+        <div class="heading">Description</div>
+      </div>
+      <textarea type="text" id="description" name="description" placeholder="..."></textarea>
+      <div class="submit">
+        <button type="submit" class="btn btn-success">Submit</button>
+      </div>
+    </form>
+  </div>
+  </form>
+
+  <!-- . -->
+
+  <!-- <a>Cancel</a> -->
+  </div>
+
+  <!-- <div>
+    <form id="form1" action="posts" method="post" enctype="multipart/form-data">
+      <div class="main-content">
+        <div class="heading">Photo</div>
+        <input type="file" id="photo" name="photo">
+        <div class="heading">Garden</div>
+        <input type="text" name="garden" placeholder="Select Garden">
+        <div class="heading">Description</div>
+      </div>
+      <textarea type="text" id="description" name="description" placeholder="..."></textarea>
+      <div class="submit">
+        <button type="submit" class="btn btn-success">Submit</button>
       </div>
     </form>
 
-    <!-- . -->
+    <a>Cancel</a>
+  </div> -->
 
-    <!-- <a>Cancel</a> -->
-  </div>
 </body>
 
 <!-- NAVBAR BOTTOM -->
