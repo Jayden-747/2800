@@ -383,35 +383,45 @@ app.get("/community", async (req, res) => {
 
 //Route to a specific community garden that filters posts based on the "name" field
 app.get("/community/:garden", async (req, res) => {
-  
+  //utilize req body param
   const garden = req.params.garden;
-  console.log(garden);
+  //Finds all posts that have the garden's specific reference
   const result = await database
     .db(mongodb_database)
     .collection("posts")
     .find({ garden: garden })
     .toArray();
 
+    //grabs all the garden names in the garden collection
+    //CHANGE WITH THE USERS FAVORITE GARDEN ARRAY
     const gardenName = await database
     .db(mongodb_database)
     .collection("gardens")
     .find()
     .toArray();
 
+    //Finds the garden name for the page we are currently on
+    const gardenHeader = await database
+    .db(mongodb_database)
+    .collection("gardens")
+    .findOne({ gardenRef: garden});
+    
+  //Loop that pushes all the posts variables into an array that lets us display on the page
   var posts = [];
   var descss = [];
   var user = [];
   var date = [];
   for (let i = 0; i < result.length; i++) {
+    //DESCRIPTION
     const descrip = result[i].desc;
     descss.push(descrip);
-
+    //USERNAME OF POST
     const usern = result[i].username;
     user.push(usern);
-
+    //DATE
     const dat = result[i].date;
     date.push(dat);
-
+    //PARSES IMAGE DATA AND DISPLAYS IT
     const imageData = Buffer.from(result[i].data.buffer).toString("base64");
     posts.push(imageData);
   }
@@ -423,7 +433,7 @@ app.get("/community/:garden", async (req, res) => {
     username: user,
     date: date,
     gardens: gardenName,
-    gardenP: gardenName.gardenName
+    gardenP: gardenHeader.gardenName
   });
 });
 
