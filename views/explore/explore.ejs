@@ -1,30 +1,31 @@
 <%- include("../templates/header") %>
-  <link rel="stylesheet" href="/explore/explore.css" />
-  </head>
+<link rel="stylesheet" href="/explore/explore.css" />
+</head>
 
-  <body>
-    <!-- NAVBAR TOP -->
-    <%- include("../templates/top-navbar") %>
-      <%- include("../templates/hamburger") %>
+<body>
+  <!-- NAVBAR TOP -->
+  <%- include("../templates/top-navbar") %>
+  <%- include("../templates/hamburger") %>
 
-        <h2>Choose a garden</h2>
-        <div id="gardens">
-          <% for(let i=0; i < 3; i++) { %>
-            <% if (gardens[i]) { %>
-              <div class="gardenGroup">
-                <div class="garden-inner">
-                  <%= gardens[i].gardenName %>
-                </div>
-              </div>
-              <% } %>
-                <% } %>
-        </div>
+<br><br><br><br>
+  <h2>Gardens Nearby</h2>
+  <div id="gardens">
+    <% for(let i=0; i < 3; i++) { %>
+    <% if (gardens[i]) { %>
+    <div class="gardenGroup">
+      <div class="garden-inner">
+        <%= gardens[i].gardenName %>
+      </div>
+    </div>
+    <% } %>
+    <% } %>
+  </div>
 
-        <!-- NAVBAR BOTTOM -->
-        <%- include("../templates/bottom-navbar") %>
+  <!-- NAVBAR BOTTOM -->
+  <%- include("../templates/bottom-navbar") %>
 
-          <!-- SCRIPTS -->
-          <script type="module" src="/modules/navigations.js"></script>
-          <script type="module" src="/views/universal.js"></script>
-          <script type="module" src="community.js"></script>
-          <%- include("../templates/footer") %>
+  <!-- SCRIPTS -->
+  <script type="module" src="/modules/navigations.js"></script>
+  <script type="module" src="/views/universal.js"></script>
+  <script type="module" src="community.js"></script>
+  <%- include("../templates/footer") %>
