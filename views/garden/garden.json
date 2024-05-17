@@ -1,0 +1,19 @@
+[
+    {
+        "gardenName": "garden 0",
+        "address": "1234 Sesame Street",
+        "city": "Burnaby",
+        "plotsAvailable": 10,
+        "crops": "corn",
+        "posts": ""
+
+    },
+    {
+        "gardenName": "garden 1",
+        "address": "420 Burger Street",
+        "city": "Vancouver",
+        "plotsAvailable": 5,
+        "crops": "tomato",
+        "posts": ""
+    }
+]
