@@ -94,7 +94,7 @@ a {
 
   background-color: rgb(27, 27, 27);
 
-  position: absolute;
+  position: fixed;
   top: 0;
   right: 0;
   z-index: 2;
