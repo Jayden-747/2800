@@ -10,9 +10,9 @@
   <h2>Choose a garden</h2>
   <div id="gardens">
     <% for(let i=0; i < 3; i++) { %>
-    <div class="gardenGroup">
+    <div style="background-image: url('/img/garden.jpeg')" class="gardenGroup">
       <a href="/community/garden<%=[i]%>">
-      <div class="garden-inner">Garden <%= [i] %></div>
+      <div class="garden-inner">ELmo world</div>
     </a>
     </div>
     <% } %>
@@ -40,7 +40,7 @@
         <span><b class="username"><%= username[i] %>&nbsp;</b></span>
         <span id="description"><%= desc[i] %></span>
         <aside class="comments"><small>view all comments</small></aside>
-        <aside class="date"><small>21/12/24</small></aside>
+        <aside class="date"><small><%= date[i] %></small></aside>
       </div>
     </div>
     <% } %>

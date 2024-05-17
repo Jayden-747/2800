@@ -7,7 +7,7 @@ const MongoStore = require("connect-mongo");
 const bcrypt = require("bcrypt");
 const Joi = require("joi");
 const app = express();
-const multer = require("multer")
+const multer = require("multer");
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 app.use(express.json());
@@ -298,85 +298,112 @@ app.get("/plantepediaSummary", async (req, res) => {
 // });
 
 // COMUNITY PAGE
-app.get("/community", async(req, res) => {
-  const result = await database.db(mongodb_database).collection('posts').find().toArray();
-  const gardenName = await database.db(mongodb_database).collection('gardens').find().toArray();
-  
+app.get("/community", async (req, res) => {
+  const result = await database
+    .db(mongodb_database)
+    .collection("posts")
+    .find()
+    .toArray();
+  const gardenName = await database
+    .db(mongodb_database)
+    .collection("gardens")
+    .find()
+    .toArray();
+
   var posts = [];
   var descss = [];
   var user = [];
-  for (let i = 0; i < result.length; i++){
+  var date = [];
+  for (let i = 0; i < result.length; i++) {
     const descrip = result[i].desc;
     descss.push(descrip);
 
     const usern = result[i].username;
     user.push(usern);
 
-    const imageData = Buffer.from(result[i].data.buffer).toString('base64');
+    const dat = result[i].date;
+    date.push(dat);
+
+    const imageData = Buffer.from(result[i].data.buffer).toString("base64");
     posts.push(imageData);
   }
-  
-  res.render("community/community", { pageName: "Community", result: result, posts: posts, desc: descss, username: user});
+
+  res.render("community/community", {
+    pageName: "Community",
+    result: result,
+    posts: posts,
+    desc: descss,
+    username: user,
+    date: date
+  });
 });
 
-app.get("/community/:garden", async (req, res) =>{
+//Route to a specific community garden that filters posts based on the "name" field
+app.get("/community/:garden", async (req, res) => {
   const garden = req.params.garden;
   console.log(garden);
-  const result = await database.db(mongodb_database).collection('posts').find({garden: garden }).toArray();
+  const result = await database
+    .db(mongodb_database)
+    .collection("posts")
+    .find({ garden: garden })
+    .toArray();
   var posts = [];
   var descss = [];
   var user = [];
-  for (let i = 0; i < result.length; i++){
+  var date = [];
+  for (let i = 0; i < result.length; i++) {
     const descrip = result[i].desc;
     descss.push(descrip);
 
     const usern = result[i].username;
     user.push(usern);
 
-    const imageData = Buffer.from(result[i].data.buffer).toString('base64');
+    const dat = result[i].date;
+    date.push(dat);
+
+    const imageData = Buffer.from(result[i].data.buffer).toString("base64");
     posts.push(imageData);
   }
-  res.render("community/community", { pageName: "Community", result: result, posts: posts, desc: descss, username: user});
+  res.render("community/community", {
+    pageName: "Community",
+    result: result,
+    posts: posts,
+    desc: descss,
+    username: user,
+    date: date
+  });
 });
 
-
+//routes to the new post page
 app.get("/newPost", async (req, res) => {
   
-  const result = await database.db(mongodb_database).collection('posts').find({garden: "garden 2"}).project({filename: 1, data: 1}).toArray();
+  res.render("newPost/newPost", {
+    pageName: "Create a Post",
+  });
+});
 
-  //imageData from chatgpt
-  const imageData = Buffer.from(result[0].data.buffer).toString('base64');
-  
-
-  res.render("newPost/newPost", {filename: result[0].filename, imageData: imageData});
-})
-
-//Adding a post to community page
+//Adding a document to the post collection
 app.post("/newPost/posts", upload.single("photo"), async (req, res) => {
-var key = req.body.keyword;
-var desc = req.body.description;
-var garden = req.body.garden;
-var username = req.session.username;
-const photoData = {
-  name: req.file.originalname,
-  username: username,
-  desc: desc,
-  garden: garden,
-  filename: key,
-  data: req.file.buffer,
-  comments: null,
-  likes: 0
-}
-
-await database.db(mongodb_database).collection('posts').insertOne(photoData);
-
-res.redirect("/community")
-  
-})
-
-
-
-
+  var key = req.body.keyword;
+  var desc = req.body.description;
+  var garden = req.body.garden;
+  var username = req.session.username;
+  var currentDate = new Date();
+  var dateOnly = currentDate.toISOString().split('T')[0];
+  const photoData = {
+    name: req.file.originalname,
+    username: username,
+    desc: desc,
+    garden: garden,
+    filename: key,
+    data: req.file.buffer,
+    comments: null,
+    likes: 0,
+    date: dateOnly
+  };
+  await database.db(mongodb_database).collection("posts").insertOne(photoData);
+  res.redirect("/community");
+});
 
 // LOGOUT ROUTE
 // Destroys session in database
