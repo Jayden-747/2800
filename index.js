@@ -84,6 +84,7 @@ app.use("/plantepedia", express.static("./views/plantepedia"));
 app.use("/plantepediaSummary", express.static("./views/plantepedia/summary"));
 app.use("/garden", express.static("./views/garden"));
 app.use("/profile", express.static("./views/profile"));
+app.use("/explore", express.static("./views/explore"));
 
 // TODO: create middleware - makes sure user is logged in otherwise gets redirected to login page (implement for every route)
 
@@ -294,23 +295,23 @@ app.get("/plantepediaSummary", async (req, res) => {
 app.get("/community", async (req, res) => {
   // TODO: need to filter 'saved' gardens. For now it selects ALL gardens in database
   const result = await gardensCollection
-  .find()
-  .project({
-    gardenName: 1,
-    address: 1,
-    city: 1,
-    plotsAvailable: 1,
-    crops: 1,
-    posts: 1,
-  })
-  .toArray();
+    .find()
+    .project({
+      gardenName: 1,
+      address: 1,
+      city: 1,
+      plotsAvailable: 1,
+      crops: 1,
+      posts: 1,
+    })
+    .toArray();
   res.render("community/community", { pageName: "Community", gardens: result });
 });
 
 
 // GARDEN PAGE
 app.get("/garden", async (req, res) => {
- 
+
   res.render("garden/garden", { pageName: "Garden" });
 });
 
@@ -348,10 +349,22 @@ app.get("/photos", async (req, res) => {
 
 })
 
+// EXPLORE PAGE
+app.get("/explore", async (req, res) => {
 
-
-
-
+  const result = await gardensCollection
+    .find()
+    .project({
+      gardenName: 1,
+      address: 1,
+      city: 1,
+      plotsAvailable: 1,
+      crops: 1,
+      posts: 1,
+    })
+    .toArray();
+  res.render("explore/explore", { pageName: "Explore", gardens: result });
+})
 
 // LOGOUT ROUTE
 // Destroys session in database
