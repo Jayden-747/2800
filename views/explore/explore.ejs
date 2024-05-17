@@ -8,21 +8,19 @@
   <%- include("../templates/top-navbar") %>
   <%- include("../templates/hamburger") %>
 
-<br><br><br><br>
-  <h2>Gardens Nearby</h2>
+  <h2>Nearby</h2>
   <div id="gardens">
     <!-- Displays 10 gardens at a time -->
     <% for(let i=0; i < 10; i++) { %>
     <% if (gardens[i]) { %>
-      <!-- redirects /gardens page with garden name specified in parameter -->
-      <!-- TODO: @jayden - the <a> affects the container's width -->
-      <a href="/garden/<%= encodeURIComponent(gardens[i].gardenName) %>">
-        <div class="gardenGroup">
-          <div class="garden-inner">
-            <%= gardens[i].gardenName %>
-          </div>
-        </div>
+    <!-- redirects /gardens page with garden name specified in parameter -->
+    <div class="gardenGroup">
+      <a class="garden-inner" href="/garden/<%= encodeURIComponent(gardens[i].gardenName) %>"><span class="garden-name"><%= gardens[i].gardenName %></span>
       </a>
+      <!-- <div class="garden-inner">
+        <%= gardens[i].gardenName %>
+      </div> -->
+    </div>
     <% } %>
     <% } %>
   </div>
@@ -33,5 +31,4 @@
   <!-- SCRIPTS -->
   <script type="module" src="/modules/navigations.js"></script>
   <script type="module" src="/views/universal.js"></script>
-  <script type="module" src="community.js"></script>
   <%- include("../templates/footer") %>
