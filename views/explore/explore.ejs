@@ -8,21 +8,41 @@
   <%- include("../templates/top-navbar") %>
   <%- include("../templates/hamburger") %>
 
-<br><br><br><br>
+  <br><br><br><br>
   <h2>Gardens Nearby</h2>
   <div id="gardens">
     <!-- Displays 10 gardens at a time -->
     <% for(let i=0; i < 10; i++) { %>
     <% if (gardens[i]) { %>
-      <!-- redirects /gardens page with garden name specified in parameter -->
-      <!-- TODO: @jayden - the <a> affects the container's width -->
-      <a href="/garden/<%= encodeURIComponent(gardens[i].gardenName) %>">
-        <div class="gardenGroup">
-          <div class="garden-inner">
-            <%= gardens[i].gardenName %>
-          </div>
+
+    <!-- *redirects /gardens page with garden name specified in parameter -->
+    <a href="/garden/<%= encodeURIComponent(gardens[i].gardenName) %>">
+      <div class="gardenGroup">
+        <div class="garden-inner">
+          <%= gardens[i].gardenName %>
         </div>
-      </a>
+      </div>
+    </a>
+
+    <!-- * 'Favoriting' a garden -->
+    <% if (favGardens.includes(gardens[i].gardenName)) { %>
+    <form action="/unfavGarden" method="post" style="display: inline;">
+      <input type="hidden" value="<%= gardens[i].gardenName %>" name="garden">
+      <!-- Wrapping heart icon in a <button> -->
+      <button type="submit" style="background: none; border: none; padding: 0; cursor: pointer;">
+        <span class="material-icons-round">favorite</span>
+      </button>
+    </form>
+
+    <!-- * 'UNfavoriting' a garden -->
+    <% } else { %>
+    <form action="/favGarden" method="post" style="display: inline;">
+      <input type="hidden" value="<%= gardens[i].gardenName %>" name="garden">
+      <button type="submit" style="background: none; border: none; padding: 0; cursor: pointer;">
+        <span class="material-icons-round">favorite_border</span>
+      </button>
+    </form>
+    <% } %>
     <% } %>
     <% } %>
   </div>
