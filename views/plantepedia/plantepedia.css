@@ -1,6 +1,13 @@
+/* CSS for body in plantepediaAllPlants.ejs
+   I found this code on Freefrontend.com
+   @author Mary Czapkowska
+   see https://codepen.io/maryj25/pen/axBNVO
+*/
 body {
   padding-top: 80px;
   padding-bottom: 60px;
+  /* CSS for body in plantInfo.ejs */
+  box-sizing: border-box;
 }
 
 #header {
@@ -8,13 +15,14 @@ body {
     center center / cover no-repeat;
 }
 
+/* CSS for loop in plantpediaAllPlants.ejs */
 ol {
   all: unset;
 }
 
+/* CSS for tags in summaryCards.ejs */
 .badges {
   margin-bottom: 16px;
-
   display: flex;
   gap: 10px;
 }
@@ -24,4 +32,51 @@ ol {
   height: 30px;
   display: flex;
   align-items: center;
+}
+
+/*
+CSS for card in plantDetailCard.ejs 
+I found this code on Freefrontend.com 
+@author Russ Beye
+see https://codepen.io/russbeye/pen/MYeroq
+*/
+.blog-container {
+  background: #fff;
+  border-radius: 5px;
+  box-shadow: hsla(0, 0, 0, .2) 0 4px 2px -2px;
+  font-family: "adelle-sans", sans-serif;
+  font-weight: 100;
+  margin: 48px auto;
+  width: 20rem;
+  @media screen and (min-width: 480px) {
+    width: 28rem;
+  }
+  @media screen and (min-width: 767px) {
+    width: 40rem;
+  }
+  @media screen and (min-width: 959px) {
+    width: 50rem;
+  }
+}
+
+.blog-cover {
+  background: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/17779/yosemite-3.jpg");
+  background-size: cover;
+  border-radius: 5px 5px 0 0;
+  height: 15rem;
+  box-shadow: inset hsla(0, 0, 0, .2) 0 64px 64px 16px;
+}
+
+.blog-body {
+  margin: 0 auto;
+  width: 80%;
+}
+
+.h1Font {
+  color: #333;
+  font-weight: 100;
+}
+
+.blog-summary {
+  color: #333;
 }
