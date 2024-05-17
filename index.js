@@ -310,6 +310,10 @@ app.get("/plantepediaDetail/:plant", async (req, res) => {
 
 // EXPLORE PAGE
 app.get("/explore", async (req, res) => {
+  const username = req.session.username;
+  const user = await userCollection.findOne({ username: username });
+  // Ternary: checks if user has 'favorited' gardens or not
+  const favGardens = user && user.favGardens ? user.favGardens : [];
   // TODO: may not need to send all those fields (since only garden name is used)
   const result = await gardensCollection
     .find()
@@ -322,7 +326,32 @@ app.get("/explore", async (req, res) => {
       posts: 1,
     })
     .toArray();
-  res.render("explore/explore", { pageName: "Explore", gardens: result });
+  res.render("explore/explore", { pageName: "Explore", gardens: result, favGardens: favGardens });
+});
+
+// 'Favoriting' a garden
+app.post("/favGarden", async (req, res) => {
+  var username = req.session.username;
+  var favouritedGarden = req.body.garden;
+
+  await userCollection.updateOne(
+    { username: username }, 
+    // $addToSet avoid duplicates
+    { $addToSet: { favGardens: favouritedGarden } });
+
+    res.redirect("/explore");
+});
+
+// 'Unfavoriting a garden
+app.post("/unfavGarden", async (req, res) => {
+  var username = req.session.username;
+  var unfavouritedGarden = req.body.garden;
+
+  await userCollection.updateOne(
+  { username: username },
+  { $pull: { favGardens: unfavouritedGarden } });
+
+  res.redirect("/explore");
 });
 
 
