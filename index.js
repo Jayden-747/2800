@@ -105,7 +105,7 @@ function sessionValidation(req, res, next) {
 
 // LANDING PAGE
 app.get("/", (req, res) => {
-  if(req.session.authenticated){
+  if (req.session.authenticated) {
     res.render("home/home");
   } else {
     res.render("landing/landing");
@@ -132,7 +132,7 @@ app.post("/signup/submitUser", async (req, res) => {
     password: Joi.string().max(20).required(),
   });
 
-  const validationResult = schema.validate({ name, username, password , email});
+  const validationResult = schema.validate({ name, username, password, email });
   if (validationResult.error != null) {
     console.log(validationResult.error);
     res.redirect("/signup");
@@ -177,14 +177,14 @@ app.post("/login/logging", async (req, res) => {
     password: Joi.string().max(20).required(),
   });
 
-const validationResult = schema.validate({ email, password });
+  const validationResult = schema.validate({ email, password });
 
-	if (validationResult.error != null) {
-	   console.log(validationResult.error);
-	   res.redirect("/login");
-	   return;
-	}
-  const result = await userCollection.find({email: email}).project({email: 1, password: 1, _id: 1, username: 1}).toArray();
+  if (validationResult.error != null) {
+    console.log(validationResult.error);
+    res.redirect("/login");
+    return;
+  }
+  const result = await userCollection.find({ email: email }).project({ email: 1, password: 1, _id: 1, username: 1 }).toArray();
 
 
   if (result.length != 1) {
@@ -290,22 +290,59 @@ app.get("/plantepediaSummary", async (req, res) => {
 
 // PLANTEPEDIA Plant's Detail PAGE
 app.get("/plantepediaDetail/:plant", async (req, res) => {
-    var plantName = req.params.plant;
-    // TODO Need to Image column later
-    const result = await plantCollection.find({plant_name: plantName}).project({
-        about: 1, 
-        prepare: 1, 
-        how: 1, 
-        tips: 1
-      })
-      .toArray();
+  var plantName = req.params.plant;
+  // TODO Need to Image column later
+  const result = await plantCollection.find({ plant_name: plantName }).project({
+    about: 1,
+    prepare: 1,
+    how: 1,
+    tips: 1
+  })
+    .toArray();
   console.log(result);
   res.render("plantepedia/plantDetail/plantInfo", {
-    plantAbout: result[0].about, 
+    plantAbout: result[0].about,
     plantPrepare: result[0].prepare,
-    plantHow: result[0].how, 
-    plantTips: result[0].tips});
+    plantHow: result[0].how,
+    plantTips: result[0].tips
+  });
 });
+
+// EXPLORE PAGE
+app.get("/explore", async (req, res) => {
+  // TODO: may not need to send all those fields (since only garden name is used)
+  const result = await gardensCollection
+    .find()
+    .project({
+      gardenName: 1,
+      address: 1,
+      city: 1,
+      plotsAvailable: 1,
+      crops: 1,
+      posts: 1,
+    })
+    .toArray();
+  res.render("explore/explore", { pageName: "Explore", gardens: result });
+});
+
+
+// GARDEN PAGE (coming from explore page)
+app.get("/garden/:garden", async (req, res) => {
+  var gardenname = req.params.garden;
+  const result = await gardensCollection
+    .findOne({ gardenName: gardenname },
+      {
+        projection: {
+          gardenName: 1,
+          address: 1,
+          city: 1,
+          plotsAvailable: 1,
+          crops: 1
+        }
+      });
+  res.render("garden/garden", { pageName: "Garden", garden: result });
+});
+
 
 // COMUNITY PAGE
 app.get("/community", async (req, res) => {
@@ -337,8 +374,8 @@ app.get("/community", async (req, res) => {
     const imageData = Buffer.from(result[i].data.buffer).toString("base64");
     posts.push(imageData);
   }
-  
-  res.render("community/community", { pageName: "Community", result: result, posts: posts, desc: descss, username: user, gardens: gardenName, gardenP: garden, date: date});
+
+  res.render("community/community", { pageName: "Community", result: result, posts: posts, desc: descss, username: user, gardens: gardenName, gardenP: garden, date: date });
 });
 
 //Route to a specific community garden that filters posts based on the "name" field
@@ -379,7 +416,7 @@ app.get("/community/:garden", async (req, res) => {
 
 //routes to the new post page
 app.get("/newPost", async (req, res) => {
-  
+
   res.render("newPost/newPost", {
     pageName: "Create a Post",
   });
