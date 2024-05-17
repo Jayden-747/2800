@@ -14,6 +14,7 @@
     <% for(let i=0; i < 10; i++) { %>
     <% if (gardens[i]) { %>
     <!-- redirects /gardens page with garden name specified in parameter -->
+    <!-- TODO: @jayden - the <a> affects the container's width -->
     <div class="gardenGroup">
       <a class="garden-inner" href="/garden/<%= encodeURIComponent(gardens[i].gardenName) %>"><span class="garden-name"><%= gardens[i].gardenName %></span>
       </a>
