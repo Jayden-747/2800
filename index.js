@@ -379,9 +379,15 @@ app.get("/community/:garden", async (req, res) => {
 
 //routes to the new post page
 app.get("/newPost", async (req, res) => {
+  const garden = await database.db(mongodb_database).collection("gardens").find().project({gardenName: 1}).toArray();
+  var gar = [];
+  for (let i = 0; i < garden.length; i++) {
+    gar.push(garden[i].gardenName);
+  }
   
   res.render("newPost/newPost", {
     pageName: "Create a Post",
+    garden: gar
   });
 });
 
