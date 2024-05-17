@@ -7,6 +7,9 @@ const MongoStore = require("connect-mongo");
 const bcrypt = require("bcrypt");
 const Joi = require("joi");
 const app = express();
+const multer = require("multer");
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 app.use(express.json());
 app.set("view engine", "ejs");
 
@@ -29,6 +32,7 @@ const node_session_secret = process.env.NODE_SESSION_SECRET;
 //mongodb database
 var { database } = require("./databaseConnection");
 const userCollection = database.db(mongodb_database).collection("users");
+const gardensCollection = database.db(mongodb_database).collection("gardens");
 
 const plantCollection = database
   .db(mongodb_database_plantepedia)
@@ -62,12 +66,16 @@ app.use("/modules", express.static("./modules"));
 app.use("/landing", express.static("./views/landing"));
 app.use("/home", express.static("./views/home"));
 app.use("/community", express.static("./views/community"));
+app.use("/newPost", express.static("./views/newPost"));
 app.use("/settings", express.static("./views/settings"));
 app.use("/signup", express.static("./views/signup"));
 app.use("/login", express.static("./views/login"));
 app.use("/plantepedia", express.static("./views/plantepedia"));
 app.use("/plantepediaSummary", express.static("./views/plantepedia/summary"));
 app.use("/plantepediaDetail", express.static("./views/plantepedia/plantDetail"));
+app.use("/garden", express.static("./views/garden"));
+app.use("/profile", express.static("./views/profile"));
+app.use("/explore", express.static("./views/explore"));
 
 //session
 app.use(
@@ -78,6 +86,22 @@ app.use(
     resave: true,
   })
 );
+
+// TODO: create middleware - makes sure user is logged in otherwise gets redirected to login page (implement for every route)
+
+// Returns true if user is in a valid session, otherwise false
+function isValidSession(req) {
+  return req.session.authenticated;
+}
+
+// Middleware for validating a session
+function sessionValidation(req, res, next) {
+  if (isValidSession(req)) {
+    next();
+  } else {
+    res.redirect("/login");
+  }
+}
 
 // LANDING PAGE
 app.get("/", (req, res) => {
@@ -134,6 +158,8 @@ app.post("/signup/submitUser", async (req, res) => {
   req.session.email = result[0].email;
   req.session.cookie.maxAge = expireTime;
   res.redirect("/");
+  console.log(username);
+  console.log(email);
 });
 
 //LOGIN PAGE
@@ -214,6 +240,36 @@ app.get("/settings", (req, res) => {
   res.render("settings/settings");
 });
 
+// PROFILE PAGE
+app.use("/profile", sessionValidation);
+app.get("/profile", async (req, res) => {
+  var username = req.session.username;
+  var name = req.session.name;
+  var email = req.session.email;
+
+  const result = await userCollection.findOne(
+    { email: email },
+    { projection: { username: 1, name: 1, email: 1 } }
+  );
+
+  res.render("profile/profile", { user: result });
+});
+
+// PROFILE PAGE
+app.use("/profile", sessionValidation);
+app.get("/profile", async (req, res) => {
+  var username = req.session.username;
+  var name = req.session.name;
+  var email = req.session.email;
+
+  const result = await userCollection.findOne(
+    { email: email },
+    { projection: { username: 1, name: 1, email: 1 } }
+  );
+
+  res.render("profile/profile", { user: result });
+});
+
 // PLANTEPEDIA SUMMARY PAGE
 app.get("/plantepediaSummary", async (req, res) => {
   // TODO Need to Image column later
@@ -252,8 +308,104 @@ app.get("/plantepediaDetail/:plant", async (req, res) => {
 });
 
 // COMUNITY PAGE
-app.get("/community", (req, res) => {
-  res.render("community/community");
+app.get("/community", async (req, res) => {
+  const result = await database
+    .db(mongodb_database)
+    .collection("posts")
+    .find()
+    .toArray();
+  const gardenName = await database
+    .db(mongodb_database)
+    .collection("gardens")
+    .find()
+    .toArray();
+  var garden = "all gardens";
+  var posts = [];
+  var descss = [];
+  var user = [];
+  var date = [];
+  for (let i = 0; i < result.length; i++) {
+    const descrip = result[i].desc;
+    descss.push(descrip);
+
+    const usern = result[i].username;
+    user.push(usern);
+
+    const dat = result[i].date;
+    date.push(dat);
+
+    const imageData = Buffer.from(result[i].data.buffer).toString("base64");
+    posts.push(imageData);
+  }
+  
+  res.render("community/community", { pageName: "Community", result: result, posts: posts, desc: descss, username: user, gardens: gardenName, gardenP: garden, date: date});
+});
+
+//Route to a specific community garden that filters posts based on the "name" field
+app.get("/community/:garden", async (req, res) => {
+  const garden = req.params.garden;
+  console.log(garden);
+  const result = await database
+    .db(mongodb_database)
+    .collection("posts")
+    .find({ garden: garden })
+    .toArray();
+  var posts = [];
+  var descss = [];
+  var user = [];
+  var date = [];
+  for (let i = 0; i < result.length; i++) {
+    const descrip = result[i].desc;
+    descss.push(descrip);
+
+    const usern = result[i].username;
+    user.push(usern);
+
+    const dat = result[i].date;
+    date.push(dat);
+
+    const imageData = Buffer.from(result[i].data.buffer).toString("base64");
+    posts.push(imageData);
+  }
+  res.render("community/community", {
+    pageName: "Community",
+    result: result,
+    posts: posts,
+    desc: descss,
+    username: user,
+    date: date
+  });
+});
+
+//routes to the new post page
+app.get("/newPost", async (req, res) => {
+  
+  res.render("newPost/newPost", {
+    pageName: "Create a Post",
+  });
+});
+
+//Adding a document to the post collection
+app.post("/newPost/posts", upload.single("photo"), async (req, res) => {
+  var key = req.body.keyword;
+  var desc = req.body.description;
+  var garden = req.body.garden;
+  var username = req.session.username;
+  var currentDate = new Date();
+  var dateOnly = currentDate.toISOString().split('T')[0];
+  const photoData = {
+    name: req.file.originalname,
+    username: username,
+    desc: desc,
+    garden: garden,
+    filename: key,
+    data: req.file.buffer,
+    comments: null,
+    likes: 0,
+    date: dateOnly
+  };
+  await database.db(mongodb_database).collection("posts").insertOne(photoData);
+  res.redirect("/community");
 });
 
 // LOGOUT ROUTE

@@ -1,0 +1,63 @@
+@font-face {
+  font-family: Ubuntu;
+  src: url("/font/Ubuntu/Ubuntu-Regular.ttf");
+}
+
+@font-face {
+  font-family: Roboto;
+  src: url("/font/Roboto/Roboto-Regular.ttf");
+}
+
+body {
+  margin-top: 60px;
+}
+
+#garden-header {
+  width: 100%;
+  height: 15vh;
+
+  object-position: center;
+  object-fit: cover;
+}
+
+.garden-name {
+  font-family: Ubuntu;
+  margin-bottom: 30px;
+}
+
+.garden-bio {
+  padding: 0 20px;
+  padding-top: 25px;
+  padding-bottom: 20px;
+
+  border-bottom: solid 1px white;
+}
+
+.garden-info {
+  padding-left: 50px;
+
+  margin-bottom: 20px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.icon {
+  font-size: 16;
+}
+
+.reserve {
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.reserve-button {
+  width: 65%;
+
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
