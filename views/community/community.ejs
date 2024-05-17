@@ -10,13 +10,18 @@
   <h2 class="choose-garden">Choose a garden</h2>
 
   <div id="gardens">
-    <% for(let i=0; i < 3; i++) { %>
+
+
+
+
+    <% for(let i=0; i < gardens.length; i++) { %>
     <div style="background-image: url('/img/garden.jpeg')" class="gardenGroup">
-      <a href="/community/garden<%=[i]%>">
+
+      <a href="/community/garden<%= gardens[i].gardenRef %>">
         <div class="garden-inner"><%= gardens[i].gardenName %></div>
       </a>
-    </div>
 
+    </div>
     <% } %>
   </div>
 
@@ -30,9 +35,11 @@
       </div>
       <img class="post-img" src="data:image/jpeg;base64,<%= posts[i] %>" height="300" width="300" alt="my Image">
       <div class="post-actions">
-        <span class="material-icons-round">
+        <form method="post"></form>
+        <a class="material-icons-round">
           favorite_border
-        </span>
+        </a>
+        </form>
         <span class="material-icons-round">
           chat_bubble_outline
         </span>
