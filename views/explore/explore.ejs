@@ -17,13 +17,13 @@
 
 
     <!-- *redirects /gardens page with garden name specified in parameter -->
-    <a href="/garden/<%= encodeURIComponent(gardens[i].gardenName) %>">
-      <div class="gardenGroup">
-        <div class="garden-inner">
-          <%= gardens[i].gardenName %>
-        </div>
-      </div>
-    </a>
+    <div class="gardenGroup">
+      <a class="garden-inner" href="/garden/<%= encodeURIComponent(gardens[i].gardenName) %>"><span class="garden-name"><%= gardens[i].gardenName %></span>
+      </a>
+      <!-- <div class="garden-inner">
+        <%= gardens[i].gardenName %>
+      </div> -->
+    </div>
 
     <!-- * 'Favoriting' a garden -->
     <% if (favGardens.includes(gardens[i].gardenName)) { %>
