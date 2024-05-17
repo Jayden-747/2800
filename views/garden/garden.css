@@ -54,7 +54,10 @@ a {
 .reserve {
   width: 100%;
 
+  margin-bottom: 20px;
+
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
@@ -62,6 +65,6 @@ a {
 .reserve-button {
   width: 65%;
 
+  margin-bottom: 10px;
   margin-top: 10px;
-  margin-bottom: 20px;
 }

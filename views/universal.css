@@ -63,7 +63,7 @@ a {
   display: flex;
   align-items: end;
 
-  padding: 5px 10%;
+  padding: 5px 20px;
 
   transition: right ease 0.3s;
 }

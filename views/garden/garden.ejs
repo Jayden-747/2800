@@ -7,51 +7,42 @@
   <%- include("../templates/top-navbar") %>
   <%- include("../templates/hamburger") %>
 
-  <!-- TODO change to ejs -->
   <img id="garden-header" src="/img/plant.jpg">
+
   <div class="garden-bio">
-    <!-- TODO change to ejs -->
+    <!-- GARDEN NAME -->
     <h1 class="garden-name"><b><%= garden.gardenName %></b></h1>
 
-    <!-- DESCRIPTION -->
+    <!-- GARDEN INFO -->
     <div class="garden-info">
       <span class="material-icons-round icon" style="color: rgb(156, 156, 156)">
         notes
       </span>
-      <!-- TODO change to ejs -->
-      <span>Crops: <%= garden.crops %> <br> Plots Available: <%= garden.plotsAvailable %></span>
+      <!-- DESCRIPTION -->
+      <span>Crops: <%= garden.crops %></span>
     </div>
 
-    <!-- ADDRESS -->
     <div class="garden-info">
       <span class="material-icons-round icon" style="color: rgb(255, 89, 89)">
         place
       </span>
-      <!-- TODO change to ejs -->
-      <span><%= garden.address %></span>
+      <!-- ADDRESS -->
+      <span><%= garden.address %>,</span><span><%= garden.city %></span>
     </div>
 
-    <!-- CITY (jayden you'll probably wanna change this icon teehee) -->
-    <div class="garden-info">
-      <span class="material-icons-round icon" style="color: rgb(240, 205, 205)">
-        place
-      </span>
-      <!-- TODO change to ejs -->
-      <span><%= garden.city %></span>
-    </div>
-
-    <!-- PHONE NUMBER -->
     <div class="garden-info">
       <span class="material-icons-round icon" style="color: rgb(197, 255, 250)">
         phone
       </span>
       <!-- TODO change to ejs -->
+      <!-- PHONE NUMBER -->
       <span>(604)-274-8467: need to add this field to garden collection</span>
     </div>
 
     <!-- RESERVE PLOT BUTTON -->
     <div class="reserve">
       <a class="reserve-button btn btn-success">Reserve a Plot</a>
+      <span>Available: <%= garden.plotsAvailable %></span>
     </div>
   </div>
 

@@ -7,25 +7,21 @@
   <%- include("../templates/top-navbar") %>
   <%- include("../templates/hamburger") %>
 
-  <br><br>  <br><br>  <br><br> 
-  <h2>Choose a garden</h2>
+  <h2 class="choose-garden">Choose a garden</h2>
+
   <div id="gardens">
-    
-    
-    
-      
     <% for(let i=0; i < 3; i++) { %>
     <div style="background-image: url('/img/garden.jpeg')" class="gardenGroup">
       <a href="/community/garden<%=[i]%>">
         <div class="garden-inner"><%= gardens[i].gardenName %></div>
-    </a>
+      </a>
     </div>
 
     <% } %>
   </div>
 
+  <h2>Posts from <%= gardenP %></h2>
   <div id="posts">
-    <h2>Posts from <%= gardenP %></h2>
     <!-- BOOTSTRAP USED FOR POSTS -->
     <% for(let i = result.length - 1; i >= 0; i--) { %>
     <div class="container">
@@ -51,14 +47,6 @@
     </div>
     <% } %>
   </div>
-
- 
-  
-
-
-<br>
-<br>
-<br>
 
 
 
