@@ -1,0 +1,42 @@
+<%- include("../templates/header") %>
+<link rel="stylesheet" href="/newPost/newPost.css" />
+</head>
+
+<body>
+  <%- include("../templates/top-navbar") %>
+  <%- include("../templates/hamburger") %>
+    <br>
+    <div>
+        <h2>New Post</h2>
+        <br>
+        <form id="form1" action="posts" method="post" enctype="multipart/form-data">
+          <div class="heading">Add a photo</div>
+          <input type="file" id="photo" name="photo">
+          <br><br>
+          <div class="heading">Select a garden to post to:</div>
+          <input type="text" name="garden" placeholder="Garden Name">
+          <br><br>
+          <div class="heading">Add a commment</div>
+          <input type="text" name="description" placeholder="Add a comment...">
+          <br><br>
+          <button type="submit">Submit</button>
+        </form>
+      </div>
+      
+
+      
+ 
+      
+</body>
+
+
+
+
+  <!-- NAVBAR BOTTOM -->
+  <%- include("../templates/bottom-navbar") %>
+
+  <!-- SCRIPTS -->
+  <script type="module" src="/modules/navigations.js"></script>
+  <script type="module" src="/views/universal.js"></script>
+  
+  <%- include("../templates/footer") %>
