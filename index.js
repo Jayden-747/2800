@@ -306,7 +306,7 @@ app.get("/community", async (req, res) => {
     .collection("gardens")
     .find()
     .toArray();
-  var garden = "all gardens";
+  var gardenHeader = "all gardens";
   var posts = [];
   var descss = [];
   var user = [];
@@ -324,12 +324,12 @@ app.get("/community", async (req, res) => {
     const imageData = Buffer.from(result[i].data.buffer).toString("base64");
     posts.push(imageData);
   }
-  
-  res.render("community/community", { pageName: "Community", result: result, posts: posts, desc: descss, username: user, gardens: gardenName, gardenP: garden, date: date});
+  res.render("community/community", { pageName: "Community", result: result, posts: posts, desc: descss, username: user, gardens: gardenName, gardenP: gardenHeader, date: date});
 });
 
 //Route to a specific community garden that filters posts based on the "name" field
 app.get("/community/:garden", async (req, res) => {
+  
   const garden = req.params.garden;
   console.log(garden);
   const result = await database
@@ -337,6 +337,13 @@ app.get("/community/:garden", async (req, res) => {
     .collection("posts")
     .find({ garden: garden })
     .toArray();
+
+    const gardenName = await database
+    .db(mongodb_database)
+    .collection("gardens")
+    .find()
+    .toArray();
+
   var posts = [];
   var descss = [];
   var user = [];
@@ -360,7 +367,9 @@ app.get("/community/:garden", async (req, res) => {
     posts: posts,
     desc: descss,
     username: user,
-    date: date
+    date: date,
+    gardens: gardenName,
+    gardenP: gardenName.gardenName
   });
 });
 
