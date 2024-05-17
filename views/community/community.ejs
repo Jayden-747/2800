@@ -7,16 +7,16 @@
   <%- include("../templates/top-navbar") %>
   <%- include("../templates/hamburger") %>
 
+  <br><br>  <br><br>  <br><br> 
   <h2>Choose a garden</h2>
   <div id="gardens">
     <% for(let i=1; i <= 3; i++) { %>
-    
+    <% if (gardens[i]) { %>
     <div class="gardenGroup">
-      <a href="/community/garden<%=[i]%>">
-      <div class="garden-inner">Garden <%= [i] %></div>
+      <div class="garden-inner"><%= gardens[i].gardenName %></div>
     </a>
     </div>
-    
+
     <% } %>
   </div>
 

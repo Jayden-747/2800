@@ -33,6 +33,7 @@ const node_session_secret = process.env.NODE_SESSION_SECRET;
 var { database } = require("./databaseConnection");
 
 const userCollection = database.db(mongodb_database).collection("users");
+const gardensCollection = database.db(mongodb_database).collection("gardens");
 
 const plantSummaryCollection = database
   .db(mongodb_database_plantepedia)
@@ -84,6 +85,7 @@ app.use("/plantepedia", express.static("./views/plantepedia"));
 app.use("/plantepediaSummary", express.static("./views/plantepedia/summary"));
 app.use("/garden", express.static("./views/garden"));
 app.use("/profile", express.static("./views/profile"));
+app.use("/explore", express.static("./views/explore"));
 
 // TODO: create middleware - makes sure user is logged in otherwise gets redirected to login page (implement for every route)
 
@@ -108,11 +110,6 @@ app.get("/", (req, res) => {
   } else {
     res.render("landing/landing");
   }
-});
-
-// GARDEN PAGE
-app.get("/garden", async (req, res) => {
-  res.render("garden/garden", { pageName: "Garden" });
 });
 
 // SIGNUP PAGE
@@ -298,6 +295,7 @@ app.get("/plantepediaSummary", async (req, res) => {
 // });
 
 // COMUNITY PAGE
+<<<<<<< HEAD
 
 app.get("/community", async(req, res) => {
   const result = await database.db(mongodb_database).collection('posts').find().toArray();
@@ -363,20 +361,88 @@ const photoData = {
   comments: null,
   likes: 0
 }
+=======
+app.get("/community", async (req, res) => {
+  // TODO: need to filter 'saved' gardens. For now it selects ALL gardens in database
+  const result = await gardensCollection
+    .find()
+    .project({
+      gardenName: 1,
+      address: 1,
+      city: 1,
+      plotsAvailable: 1,
+      crops: 1,
+      posts: 1,
+    })
+    .toArray();
+  res.render("community/community", { pageName: "Community", gardens: result });
+});
 
-await database.db(mongodb_database).collection('posts').insertOne(photoData);
 
+// GARDEN PAGE
+app.get("/garden", async (req, res) => {
+
+  res.render("garden/garden", { pageName: "Garden" });
+});
+
+
+//Adding a post to community page
+app.post("/community/posts", upload.single("photo"), async (req, res) => {
+  var key = req.body.keyword;
+  const photoData = {
+    name: req.file.originalname,
+    filename: key,
+    data: req.file.buffer
+  }
+>>>>>>> neriyel
+
+  await database.db(mongodb_database).collection('posts').insertOne(photoData);
+
+  res.send("photo uploaded successfully")
+
+<<<<<<< HEAD
 res.redirect("/community")
   
 })
 
 
+=======
+})
+
+app.get("/photos", async (req, res) => {
+  const result = await database.db(mongodb_database).collection('posts').find({ filename: "DisneyNight" }).project({ filename: 1, data: 1 }).toArray();
+
+  //imageData from chatgpt
+  const imageData = Buffer.from(result[0].data.buffer).toString('base64');
+
+  const html = `
+  <h2>hellooooo</h2>
+  <h3>${result[0].filename}</h3>
+  <img src="data:image/jpeg;base64,${imageData}" height="300" width="300" alt="my Image"">
+  `;
 
 
 
+  res.send(html);
+>>>>>>> neriyel
 
 
+// EXPLORE PAGE
+app.get("/explore", async (req, res) => {
 
+  const result = await gardensCollection
+    .find()
+    .project({
+      gardenName: 1,
+      address: 1,
+      city: 1,
+      plotsAvailable: 1,
+      crops: 1,
+      posts: 1,
+    })
+    .toArray();
+  res.render("explore/explore", { pageName: "Explore", gardens: result });
+})
 
 // LOGOUT ROUTE
 // Destroys session in database
