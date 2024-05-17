@@ -7,35 +7,36 @@
   <%- include("../../templates/top-navbar", {pageName: "Plantepedia"}) %>
   <%- include("../../templates/hamburger") %>
 
-  <%# Getting data(plant_name, summary, season, type. difficulty, nutrition) from database %>    
+  <%# Getting data(plant_name, summary, season, type. difficulty, nutrition) from database %>
   <% for (let i=0; i < summaries.length; i++) {%>
-    <!-- I found this code on Freefrontend.com -->
-    <!-- @author Mary Czapkowska -->
-    <!-- see https://codepen.io/maryj25/pen/axBNVO -->
-    <section id="gallery">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-4 mb-4">
-            <div class="card">
-              <img src="https://images.unsplash.com/photo-1477862096227-3a1bb3b08330?ixlib=rb-1.2.1&auto=format&fit=crop&w=700&q=60" alt="" class="card-img-top">
-              <div class="card-body">
-                <h5 class="card-title"><b><%= summaries[i].plant_name %></b></h5>
-                <p class="card-text"><%= summaries[i].summary %></p>
-                <div class="badges">
-                  <span class="badge rounded-pill bg-primary"><%= summaries[i].season %></span>
-                  <span class="badge rounded-pill bg-primary"><%= summaries[i].type %></span>
-                  <span class="badge rounded-pill bg-primary"><%= summaries[i].difficulty %></span>
-                  <span class="badge rounded-pill bg-primary"><%= summaries[i].nutrition %></span>
-                </div>
-                <!-- Added new-->
-                <a class="btn btn-dark" href="/plantepediaDetail/<%= summaries[i].plant_name %>">Read More</a>
+
+  <!-- I found this code on Freefrontend.com -->
+  <!-- @author Mary Czapkowska -->
+  <!-- see https://codepen.io/maryj25/pen/axBNVO -->
+  <section id="gallery">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4 mb-4">
+          <div class="card">
+            <!-- Get plant image from database -->
+            <img src="data:image/jpeg;base64,<%= imageD[i] %>" alt="Fruit Picture" class="card-img-top">
+            <div class="card-body">
+              <h5 class="card-title"><b><%= summaries[i].plant_name %></b></h5>
+              <p class="card-text"><%= summaries[i].summary %></p>
+              <div class="badges">
+                <span class="badge rounded-pill bg-primary"><%= summaries[i].season %></span>
+                <span class="badge rounded-pill bg-primary"><%= summaries[i].type %></span>
+                <span class="badge rounded-pill bg-primary"><%= summaries[i].difficulty %></span>
+                <span class="badge rounded-pill bg-primary"><%= summaries[i].nutrition %></span>
               </div>
+              <a class="btn btn-dark" href="/plantepediaDetail/<%= summaries[i].plant_name %>">Read More</a>
             </div>
           </div>
         </div>
       </div>
-    </section>
-    <% } %>
+    </div>
+  </section>
+  <% } %>
   <!-- NAVBAR BOTTOM -->
   <%- include("../../templates/bottom-navbar") %>
 
@@ -43,5 +44,14 @@
   <script type="module" src="/modules/navigations.js"></script>
   <script type="module" src="/modules/customizations.js"></script>
   <script type="module" src="/views/universal.js"></script>
-
+  <!-- Gotta delete this -->
+  <script>
+    const fileInput = document.querySelector('#picture-upload input[type=file]');
+    fileInput.onchange = () => {
+      if (fileInput.files.length > 0) {
+        const fileName = document.querySelector('#picture-upload .file-name');
+        fileName.textContent = fileInput.files[0].name;
+      }
+    }
+  </script>
   <%- include("../../templates/footer") %>

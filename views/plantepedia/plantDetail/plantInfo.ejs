@@ -12,26 +12,20 @@
   <!-- @author Russ Beye -->
   <!-- see https://codepen.io/russbeye/pen/MYeroq -->
   <div class="blog-container">
-    <div class="blog-header">
-      <div class="blog-cover">
-      </div>
-    </div>
+      <!-- Get plant image from database -->
+      <img src="data:image/jpeg;base64,<%= plantImage %>" alt="Plant Image" class="card-img-top">
     <div class="blog-body">
-      <div class="blog-title">
         <!-- Get plants name from database -->
         <h1 class="h1Font">About</h1>
-      </div>
       <div class="blog-summary">
         <!-- Get plants "about" from database -->
-          <%= plantAbout %>
+        <%= plantAbout %>
       </div>
     </div>
   </div>
   <div class="blog-container">
     <div class="blog-body">
-      <div class="title">
         <h1 class="h1Font">Plan for planting</h1>
-      </div>
       <div class="blog-summary">
         <!-- Get plants "prepare" from database -->
         <ul>
@@ -44,9 +38,7 @@
   </div>
   <div class="blog-container">
     <div class="blog-body">
-      <div class="title">
         <h1 class="h1Font">How to plant</h1>
-      </div>
       <div class="blog-summary">
         <!-- Get plants "how" from database -->
         <ul>
@@ -59,9 +51,7 @@
   </div>
   <div class="blog-container">
     <div class="blog-body">
-      <div class="title">
         <h1 class="h1Font">Tips on caring</h1>
-      </div>
       <div class="blog-summary">
         <!-- Get plants "tips" from database -->
         <ul>

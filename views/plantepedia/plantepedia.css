@@ -10,17 +10,6 @@ body {
   box-sizing: border-box;
 }
 
-#header {
-  background: url(https://images.unsplash.com/photo-1415795854641-f4a487a0fdc8?ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80)
-    center center / cover no-repeat;
-}
-
-/* CSS for loop in plantpediaAllPlants.ejs */
-ol {
-  all: unset;
-}
-
-/* CSS for tags in summaryCards.ejs */
 .badges {
   margin-bottom: 16px;
   display: flex;
@@ -35,7 +24,7 @@ ol {
 }
 
 /*
-CSS for card in plantDetailCard.ejs 
+CSS for card in plantInfo.ejs 
 I found this code on Freefrontend.com 
 @author Russ Beye
 see https://codepen.io/russbeye/pen/MYeroq
@@ -59,19 +48,18 @@ see https://codepen.io/russbeye/pen/MYeroq
   }
 }
 
-.blog-cover {
-  background: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/17779/yosemite-3.jpg");
-  background-size: cover;
-  border-radius: 5px 5px 0 0;
-  height: 15rem;
-  box-shadow: inset hsla(0, 0, 0, .2) 0 64px 64px 16px;
+.card-img-top {
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
 }
 
 .blog-body {
   margin: 0 auto;
   width: 80%;
+  padding: 20px;
 }
 
+/* This class applies in both plantInfo.ejs and plantepediaAllPlants.ejs*/
 .h1Font {
   color: #333;
   font-weight: 100;
