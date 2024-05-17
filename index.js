@@ -72,7 +72,10 @@ app.use("/signup", express.static("./views/signup"));
 app.use("/login", express.static("./views/login"));
 app.use("/plantepedia", express.static("./views/plantepedia"));
 app.use("/plantepediaSummary", express.static("./views/plantepedia/summary"));
-app.use("/plantepediaDetail", express.static("./views/plantepedia/plantDetail"));
+app.use(
+  "/plantepediaDetail",
+  express.static("./views/plantepedia/plantDetail")
+);
 app.use("/garden", express.static("./views/garden"));
 app.use("/profile", express.static("./views/profile"));
 app.use("/explore", express.static("./views/explore"));
@@ -105,13 +108,12 @@ function sessionValidation(req, res, next) {
 
 // LANDING PAGE
 app.get("/", (req, res) => {
-  if(req.session.authenticated){
+  if (req.session.authenticated) {
     res.render("home/home");
   } else {
     res.render("landing/landing");
   }
 });
-
 
 // SIGNUP PAGE
 app.get("/signup", async (req, res) => {
@@ -132,7 +134,7 @@ app.post("/signup/submitUser", async (req, res) => {
     password: Joi.string().max(20).required(),
   });
 
-  const validationResult = schema.validate({ name, username, password , email});
+  const validationResult = schema.validate({ name, username, password, email });
   if (validationResult.error != null) {
     console.log(validationResult.error);
     res.redirect("/signup");
@@ -177,19 +179,21 @@ app.post("/login/logging", async (req, res) => {
     password: Joi.string().max(20).required(),
   });
 
-const validationResult = schema.validate({ email, password });
+  const validationResult = schema.validate({ email, password });
 
-	if (validationResult.error != null) {
-	   console.log(validationResult.error);
-	   res.redirect("/login");
-	   return;
-	}
-  const result = await userCollection.find({email: email}).project({email: 1, password: 1, _id: 1, username: 1}).toArray();
-
+  if (validationResult.error != null) {
+    console.log(validationResult.error);
+    res.redirect("/login");
+    return;
+  }
+  const result = await userCollection
+    .find({ email: email })
+    .project({ email: 1, password: 1, _id: 1, username: 1 })
+    .toArray();
 
   if (result.length != 1) {
     res.redirect("/login");
-    console.log("no email")
+    console.log("no email");
     return;
   }
 
@@ -290,21 +294,24 @@ app.get("/plantepediaSummary", async (req, res) => {
 
 // PLANTEPEDIA Plant's Detail PAGE
 app.get("/plantepediaDetail/:plant", async (req, res) => {
-    var plantName = req.params.plant;
-    // TODO Need to Image column later
-    const result = await plantCollection.find({plant_name: plantName}).project({
-        about: 1, 
-        prepare: 1, 
-        how: 1, 
-        tips: 1
-      })
-      .toArray();
+  var plantName = req.params.plant;
+  // TODO Need to Image column later
+  const result = await plantCollection
+    .find({ plant_name: plantName })
+    .project({
+      about: 1,
+      prepare: 1,
+      how: 1,
+      tips: 1,
+    })
+    .toArray();
   console.log(result);
   res.render("plantepedia/plantDetail/plantInfo", {
-    plantAbout: result[0].about, 
+    plantAbout: result[0].about,
     plantPrepare: result[0].prepare,
-    plantHow: result[0].how, 
-    plantTips: result[0].tips});
+    plantHow: result[0].how,
+    plantTips: result[0].tips,
+  });
 });
 
 // COMUNITY PAGE
@@ -337,8 +344,17 @@ app.get("/community", async (req, res) => {
     const imageData = Buffer.from(result[i].data.buffer).toString("base64");
     posts.push(imageData);
   }
-  
-  res.render("community/community", { pageName: "Community", result: result, posts: posts, desc: descss, username: user, gardens: gardenName, gardenP: garden, date: date});
+
+  res.render("community/community", {
+    pageName: "Community",
+    result: result,
+    posts: posts,
+    desc: descss,
+    username: user,
+    gardens: gardenName,
+    gardenP: garden,
+    date: date,
+  });
 });
 
 //Route to a specific community garden that filters posts based on the "name" field
@@ -373,15 +389,14 @@ app.get("/community/:garden", async (req, res) => {
     posts: posts,
     desc: descss,
     username: user,
-    date: date
+    date: date,
   });
 });
 
 //routes to the new post page
 app.get("/newPost", async (req, res) => {
-  
   res.render("newPost/newPost", {
-    pageName: "Create a Post",
+    pageName: "New Post",
   });
 });
 
@@ -392,7 +407,7 @@ app.post("/newPost/posts", upload.single("photo"), async (req, res) => {
   var garden = req.body.garden;
   var username = req.session.username;
   var currentDate = new Date();
-  var dateOnly = currentDate.toISOString().split('T')[0];
+  var dateOnly = currentDate.toISOString().split("T")[0];
   const photoData = {
     name: req.file.originalname,
     username: username,
@@ -402,7 +417,7 @@ app.post("/newPost/posts", upload.single("photo"), async (req, res) => {
     data: req.file.buffer,
     comments: null,
     likes: 0,
-    date: dateOnly
+    date: dateOnly,
   };
   await database.db(mongodb_database).collection("posts").insertOne(photoData);
   res.redirect("/community");

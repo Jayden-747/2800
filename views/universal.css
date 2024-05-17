@@ -21,6 +21,23 @@ body {
   background-color: rgb(27, 27, 27);
 }
 
+/* 
+! Don't delete, Will be using this in the future
+  
+! -Jayden
+input {
+  padding: 5px 5px;
+
+  font-family: Roboto;
+  color: white;
+
+  outline: none;
+
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid white;
+} */
+
 .light-mode {
   background-color: rgb(228, 228, 228);
   color: black;
