@@ -8,38 +8,31 @@
   <%- include("../templates/top-navbar") %>
   <%- include("../templates/hamburger") %>
 
-  <br><br><br><br>
-  <h2>Gardens Nearby</h2>
+  <h2>Nearby</h2>
   <div id="gardens">
     <!-- Displays 10 gardens at a time -->
     <% for(let i=0; i < 10; i++) { %>
     <% if (gardens[i]) { %>
+    <!-- redirects /gardens page with garden name specified in parameter -->
+
 
     <!-- *redirects /gardens page with garden name specified in parameter -->
-    <a href="/garden/<%= encodeURIComponent(gardens[i].gardenName) %>">
-      <div class="gardenGroup">
-        <div class="garden-inner">
-          <%= gardens[i].gardenName %>
-        </div>
-      </div>
-    </a>
+    <div class="gardenGroup">
+      <a class="garden-inner" href="/garden/<%= encodeURIComponent(gardens[i].gardenName) %>"><span class="garden-name"><%= gardens[i].gardenName %></span>
+      </a>
+    </div>
 
     <!-- * 'Favoriting' a garden -->
     <% if (favGardens.includes(gardens[i].gardenName)) { %>
     <form action="/unfavGarden" method="post" style="display: inline;">
-      <input type="hidden" value="<%= gardens[i].gardenName %>" name="garden">
-      <!-- Wrapping heart icon in a <button> -->
-      <button type="submit" style="background: none; border: none; padding: 0; cursor: pointer;">
-        <span class="material-icons-round">favorite</span>
+      <button type="submit" value="<%= gardens[i].gardenName %>" name="garden" class="material-icons-round favorite-button">favorite
       </button>
     </form>
 
     <!-- * 'UNfavoriting' a garden -->
     <% } else { %>
     <form action="/favGarden" method="post" style="display: inline;">
-      <input type="hidden" value="<%= gardens[i].gardenName %>" name="garden">
-      <button type="submit" style="background: none; border: none; padding: 0; cursor: pointer;">
-        <span class="material-icons-round">favorite_border</span>
+      <button type="submit" value="<%= gardens[i].gardenName %>" name="garden" class="material-icons-round favorite-button">favorite_border
       </button>
     </form>
     <% } %>
@@ -53,5 +46,4 @@
   <!-- SCRIPTS -->
   <script type="module" src="/modules/navigations.js"></script>
   <script type="module" src="/views/universal.js"></script>
-  <script type="module" src="community.js"></script>
   <%- include("../templates/footer") %>

@@ -523,6 +523,7 @@ app.post("/newPost/posts", upload.single("photo"), async (req, res) => {
     date: dateOnly,
   };
   await database.db(mongodb_database).collection("posts").insertOne(photoData);
+  res.redirect("/community");
 });
 
 // LOGOUT ROUTE
