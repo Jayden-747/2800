@@ -1,0 +1,74 @@
+<%- include("../../templates/header") %>
+<link rel="stylesheet" href="/plantepedia/plantepedia.css" />
+</head>
+
+<body>
+  <!-- NAVBAR TOP -->
+  <%- include("../../templates/top-navbar", {pageName: "Plantepedia"}) %>
+  <%- include("../../templates/hamburger") %>
+
+  <%# Getting data(about, how, about, tips) from database %>
+  <!-- I found this code on Freefrontend.com -->
+  <!-- @author Russ Beye -->
+  <!-- see https://codepen.io/russbeye/pen/MYeroq -->
+  <div class="blog-container">
+      <!-- Get plant image from database -->
+      <img src="data:image/jpeg;base64,<%= plantImage %>" alt="Plant Image" class="card-img-top">
+    <div class="blog-body">
+        <!-- Get plants name from database -->
+        <h1 class="h1Font">About</h1>
+      <div class="blog-summary">
+        <!-- Get plants "about" from database -->
+        <%= plantAbout %>
+      </div>
+    </div>
+  </div>
+  <div class="blog-container">
+    <div class="blog-body">
+        <h1 class="h1Font">Plan for planting</h1>
+      <div class="blog-summary">
+        <!-- Get plants "prepare" from database -->
+        <ul>
+          <% for (let y = 0; y < plantPrepare.length; y++) { %>
+          <li><%= plantPrepare[y] %></li>
+          <% } %>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="blog-container">
+    <div class="blog-body">
+        <h1 class="h1Font">How to plant</h1>
+      <div class="blog-summary">
+        <!-- Get plants "how" from database -->
+        <ul>
+          <% for (let z = 0; z < plantHow.length; z++) { %>
+          <li><%= plantHow[z] %></li>
+          <% } %>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="blog-container">
+    <div class="blog-body">
+        <h1 class="h1Font">Tips on caring</h1>
+      <div class="blog-summary">
+        <!-- Get plants "tips" from database -->
+        <ul>
+          <% for (let x = 0; x < plantTips.length; x++) { %>
+          <li><%= plantTips[x] %></li>
+          <% } %>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVBAR BOTTOM -->
+  <%- include("../../templates/bottom-navbar") %>
+
+  <!-- SCRIPTS -->
+  <script type="module" src="/modules/navigations.js"></script>
+  <script type="module" src="/modules/customizations.js"></script>
+  <script type="module" src="/views/universal.js"></script>
+
+  <%- include("../../templates/footer") %>

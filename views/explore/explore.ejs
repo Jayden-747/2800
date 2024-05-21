@@ -1,0 +1,49 @@
+<%- include("../templates/header") %>
+<link rel="stylesheet" href="/explore/explore.css" />
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
+</head>
+
+<body>
+  <!-- NAVBAR TOP -->
+  <%- include("../templates/top-navbar") %>
+  <%- include("../templates/hamburger") %>
+
+  <h2>Nearby</h2>
+  <div id="gardens">
+    <!-- Displays 10 gardens at a time -->
+    <% for(let i=0; i < 10; i++) { %>
+    <% if (gardens[i]) { %>
+    <!-- redirects /gardens page with garden name specified in parameter -->
+
+
+    <!-- *redirects /gardens page with garden name specified in parameter -->
+    <div class="gardenGroup">
+      <a class="garden-inner" href="/garden/<%= encodeURIComponent(gardens[i].gardenName) %>"><span class="garden-name"><%= gardens[i].gardenName %></span>
+      </a>
+    </div>
+
+    <!-- * 'Favoriting' a garden -->
+    <% if (favGardens.includes(gardens[i].gardenName)) { %>
+    <form action="/unfavGarden" method="post" style="display: inline;">
+      <button type="submit" value="<%= gardens[i].gardenName %>" name="garden" class="material-icons-round favorite-button">favorite
+      </button>
+    </form>
+
+    <!-- * 'UNfavoriting' a garden -->
+    <% } else { %>
+    <form action="/favGarden" method="post" style="display: inline;">
+      <button type="submit" value="<%= gardens[i].gardenName %>" name="garden" class="material-icons-round favorite-button">favorite_border
+      </button>
+    </form>
+    <% } %>
+    <% } %>
+    <% } %>
+  </div>
+
+  <!-- NAVBAR BOTTOM -->
+  <%- include("../templates/bottom-navbar") %>
+
+  <!-- SCRIPTS -->
+  <script type="module" src="/modules/navigations.js"></script>
+  <script type="module" src="/views/universal.js"></script>
+  <%- include("../templates/footer") %>

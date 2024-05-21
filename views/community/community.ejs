@@ -7,42 +7,52 @@
   <%- include("../templates/top-navbar") %>
   <%- include("../templates/hamburger") %>
 
-  <h2>Choose a garden</h2>
+  <h2 class="choose-garden">Choose a garden</h2>
+
   <div id="gardens">
-    <% for(let i=0; i < 3; i++) { %>
-    <div class="gardenGroup">
-      <div class="garden-inner">Garden <%= [i] %></div>
+
+    <% for(let i=0; i < gardens.length; i++) { %>
+    <div style="background-image: url('/img/garden.jpeg')" class="gardenGroup">
+      
+      <a href="/community/<%= gardens[i].gardenRef %>">
+        <div class="garden-inner"><%= gardens[i].gardenName %></div>
+      </a>
+
     </div>
     <% } %>
   </div>
 
+  <h2>Posts from <%= gardenP %></h2>
   <div id="posts">
-    <h2>Posts from all garden</h2>
     <!-- BOOTSTRAP USED FOR POSTS -->
-    <% for(let i=0; i < 5; i++) { %>
+    <% for(let i = result.length - 1; i >= 0; i--) { %>
     <div class="container">
       <div class="username-container">
-        <span><b class="username">Username</b></span>
+        <span><b class="username"><%= username[i] %></b></span>
       </div>
-      <img class="post-img" src="/img/plant.jpg">
+      <img class="post-img" src="data:image/jpeg;base64,<%= posts[i] %>" height="300" width="300" alt="my Image">
       <div class="post-actions">
-        <span class="material-icons-round">
-          favorite_border
-        </span>
+        <form method="post">
+          <a class="material-icons-round">
+            favorite_border
+          </a>
+        </form>
         <span class="material-icons-round">
           chat_bubble_outline
         </span>
       </div>
       <div class="description">
         <aside class="likes"><small>#</small><small>&nbsp;Likes</small></aside>
-        <span><b class="username">Username&nbsp;</b></span>
-        <span id="description">This is the description to a photo posted to a garden for all to see</span>
+        <span><b class="username"><%= username[i] %>&nbsp;</b></span>
+        <span id="description"><%= desc[i] %></span>
         <aside class="comments"><small>view all comments</small></aside>
-        <aside class="date"><small>21/12/24</small></aside>
+        <aside class="date"><small><%= date[i] %></small></aside>
       </div>
     </div>
     <% } %>
   </div>
+
+
 
   <!-- NAVBAR BOTTOM -->
   <%- include("../templates/bottom-navbar") %>
@@ -50,5 +60,5 @@
   <!-- SCRIPTS -->
   <script type="module" src="/modules/navigations.js"></script>
   <script type="module" src="/views/universal.js"></script>
-  <!-- <script type="module" src="/community.js"></script> -->
+  <script type="module" src="community.js"></script>
   <%- include("../templates/footer") %>

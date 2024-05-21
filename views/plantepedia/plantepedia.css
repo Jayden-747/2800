@@ -1,20 +1,17 @@
+/* CSS for body in plantepediaAllPlants.ejs
+   I found this code on Freefrontend.com
+   @author Mary Czapkowska
+   see https://codepen.io/maryj25/pen/axBNVO
+*/
 body {
   padding-top: 80px;
   padding-bottom: 60px;
-}
-
-#header {
-  background: url(https://images.unsplash.com/photo-1415795854641-f4a487a0fdc8?ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80)
-    center center / cover no-repeat;
-}
-
-ol {
-  all: unset;
+  /* CSS for body in plantInfo.ejs */
+  box-sizing: border-box;
 }
 
 .badges {
   margin-bottom: 16px;
-
   display: flex;
   gap: 10px;
 }
@@ -24,4 +21,50 @@ ol {
   height: 30px;
   display: flex;
   align-items: center;
+}
+
+/*
+CSS for card in plantInfo.ejs 
+I found this code on Freefrontend.com 
+@author Russ Beye
+see https://codepen.io/russbeye/pen/MYeroq
+*/
+.blog-container {
+  background: #fff;
+  border-radius: 5px;
+  box-shadow: hsla(0, 0, 0, .2) 0 4px 2px -2px;
+  font-family: "adelle-sans", sans-serif;
+  font-weight: 100;
+  margin: 48px auto;
+  width: 20rem;
+  @media screen and (min-width: 480px) {
+    width: 28rem;
+  }
+  @media screen and (min-width: 767px) {
+    width: 40rem;
+  }
+  @media screen and (min-width: 959px) {
+    width: 50rem;
+  }
+}
+
+.card-img-top {
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+}
+
+.blog-body {
+  margin: 0 auto;
+  width: 80%;
+  padding: 20px;
+}
+
+/* This class applies in both plantInfo.ejs and plantepediaAllPlants.ejs*/
+.h1Font {
+  color: #333;
+  font-weight: 100;
+}
+
+.blog-summary {
+  color: #333;
 }

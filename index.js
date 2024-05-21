@@ -6,7 +6,11 @@ const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const bcrypt = require("bcrypt");
 const Joi = require("joi");
+const sharp = require("sharp"); //Resizing image before I post
 const app = express();
+const multer = require("multer");
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 app.use(express.json());
 app.set("view engine", "ejs");
 
@@ -28,12 +32,12 @@ const node_session_secret = process.env.NODE_SESSION_SECRET;
 
 //mongodb database
 var { database } = require("./databaseConnection");
-
 const userCollection = database.db(mongodb_database).collection("users");
+const gardensCollection = database.db(mongodb_database).collection("gardens");
 
-const plantSummaryCollection = database
+const plantCollection = database
   .db(mongodb_database_plantepedia)
-  .collection("plantSummary");
+  .collection("plant");
 const plantDetailsCollection = database
   .db(mongodb_database_plantepedia)
   .collection("plantDetails");
@@ -54,16 +58,6 @@ const saltRounds = 12;
 //Expiration for cookie
 const expireTime = 1 * 60 * 60 * 1000;
 
-//session
-app.use(
-  session({
-    secret: node_session_secret,
-    store: mongoStore,
-    saveUninitialized: false,
-    resave: true,
-  })
-);
-
 // Express static paths
 app.use("/img", express.static("./assets/img"));
 app.use("/font", express.static("./assets/font"));
@@ -73,12 +67,29 @@ app.use("/modules", express.static("./modules"));
 app.use("/landing", express.static("./views/landing"));
 app.use("/home", express.static("./views/home"));
 app.use("/community", express.static("./views/community"));
+app.use("/newPost", express.static("./views/newPost"));
 app.use("/settings", express.static("./views/settings"));
 app.use("/signup", express.static("./views/signup"));
 app.use("/login", express.static("./views/login"));
 app.use("/plantepedia", express.static("./views/plantepedia"));
 app.use("/plantepediaSummary", express.static("./views/plantepedia/summary"));
+app.use(
+  "/plantepediaDetail",
+  express.static("./views/plantepedia/plantDetail")
+);
+app.use("/garden", express.static("./views/garden"));
 app.use("/profile", express.static("./views/profile"));
+app.use("/explore", express.static("./views/explore"));
+
+//session
+app.use(
+  session({
+    secret: node_session_secret,
+    store: mongoStore,
+    saveUninitialized: false,
+    resave: true,
+  })
+);
 
 // TODO: create middleware - makes sure user is logged in otherwise gets redirected to login page (implement for every route)
 
@@ -91,9 +102,8 @@ function isValidSession(req) {
 function sessionValidation(req, res, next) {
   if (isValidSession(req)) {
     next();
-  }
-  else {
-    res.redirect('/login');
+  } else {
+    res.redirect("/login");
   }
 }
 
@@ -151,6 +161,8 @@ app.post("/signup/submitUser", async (req, res) => {
   req.session.email = result[0].email;
   req.session.cookie.maxAge = expireTime;
   res.redirect("/");
+  console.log(username);
+  console.log(email);
 });
 
 //LOGIN PAGE
@@ -236,57 +248,292 @@ app.get("/settings", (req, res) => {
 // PROFILE PAGE
 app.use("/profile", sessionValidation);
 app.get("/profile", async (req, res) => {
-
   var username = req.session.username;
   var name = req.session.name;
   var email = req.session.email;
 
-  const result = await userCollection.findOne({ email: email }, {projection : {username: 1, name: 1, email: 1} });
+  const result = await userCollection.findOne(
+    { email: email },
+    { projection: { username: 1, name: 1, email: 1 } }
+  );
 
-  res.render("profile/profile", {user: result});
-
-});
-
-// PROFILE PAGE
-app.use("/profile", sessionValidation);
-app.get("/profile", async (req, res) => {
-
-  var username = req.session.username;
-  var name = req.session.name;
-  var email = req.session.email;
-
-  const result = await userCollection.findOne({ email: email }, {projection : {username: 1, name: 1, email: 1} });
-
-  res.render("profile/profile", {user: result});
-
+  res.render("profile/profile", { user: result });
 });
 
 // PLANTEPEDIA SUMMARY PAGE
 app.get("/plantepediaSummary", async (req, res) => {
-  // TODO Need to Image column later
-  const result = await plantSummaryCollection
+  var postsArray = [];
+  const result = await plantCollection
     .find()
     .project({
       plant_name: 1,
       summary: 1,
+      image: 1,
       type: 1,
       season: 1,
       difficulty: 1,
       nutrition: 1,
     })
     .toArray();
-  res.render("plantepedia/summary/plantepedia", { summaries: result });
+
+  // This code block brings plant images from the database and stores them in the array called "postsArray" before posting images on the page
+  for (var i = 0; i < result.length; i++) {
+    const imageData = Buffer.from(result[i].image.buffer).toString("base64");
+    postsArray.push(imageData);
+  }
+  
+  res.render("plantepedia/summary/plantepediaAllPlants", {
+    summaries: result,
+    imageD: postsArray,
+  });
 });
 
-// TODO Need to add plantepediaDetail page
+// This is for uploading cover picture in plantepedia
+//* Form with input and button has deleted in plantepediaAllPlants.ejs
+//* If need to update the cover photo for each fruits, please make form with input and button
+app.post("/plantepediaSummary/setPlantPic", upload.single("image"), async (req, res) => {
+    
+    // Perform search a line of code(resizingImage) on a linked list.
+    // This line, resizing image before upload it in database.
+    // Generated by ChatGPT 4.o
+    //
+    // @author https://chatgpt.com/
+    const resizingImage = await sharp(req.file.buffer)
+      .resize({ width: 500 })
+      .toBuffer();
+
+    //* If need to change the photo of specific plant, please change the name of plant
+    //* in '{ plant_name: "Place here the name of plant that you want!" }'
+    await database
+      .db(mongodb_database_plantepedia)
+      .collection("plant")
+      .updateOne(
+        { plant_name: "Cherry Tomato" },
+        { $set: { image: resizingImage } }
+      );
+    console.log("Photo saved perfectly");
+    res.redirect("/plantepediaSummary");
+  }
+);
+
 // PLANTEPEDIA Plant's Detail PAGE
-// app.get("/plantepediaDetail", async (req, res) => {
-//   res.render("")
-// });
+app.get("/plantepediaDetail/:plant", async (req, res) => {
+  var plantName = req.params.plant;
+  const result = await plantCollection
+    .find({ plant_name: plantName })
+    .project({
+      image: 1,
+      about: 1,
+      prepare: 1,
+      how: 1,
+      tips: 1,
+    })
+    .toArray();
+  
+  // This code block brings a single plant image from the database
+  const imageData = Buffer.from(result[0].image.buffer).toString("base64");
+
+  res.render("plantepedia/plantDetail/plantInfo", {
+    plantImage: imageData,
+    plantAbout: result[0].about,
+    plantPrepare: result[0].prepare,
+    plantHow: result[0].how,
+    plantTips: result[0].tips,
+  });
+});
+
+// EXPLORE PAGE
+app.get("/explore", async (req, res) => {
+  const username = req.session.username;
+  const user = await userCollection.findOne({ username: username });
+  // Ternary: checks if user has 'favorited' gardens or not
+  const favGardens = user && user.favGardens ? user.favGardens : [];
+  // TODO: may not need to send all those fields (since only garden name is used)
+  const result = await gardensCollection
+    .find()
+    .project({
+      gardenName: 1,
+      address: 1,
+      city: 1,
+      plotsAvailable: 1,
+      crops: 1,
+      posts: 1,
+    })
+    .toArray();
+  res.render("explore/explore", { pageName: "Explore", gardens: result, favGardens: favGardens });
+});
+
+// 'Favoriting' a garden
+app.post("/favGarden", async (req, res) => {
+  var username = req.session.username;
+  var favouritedGarden = req.body.garden;
+
+  await userCollection.updateOne(
+    { username: username }, 
+    // $addToSet avoid duplicates
+    { $addToSet: { favGardens: favouritedGarden } });
+
+    res.redirect("/explore");
+});
+
+// 'Unfavoriting a garden
+app.post("/unfavGarden", async (req, res) => {
+  var username = req.session.username;
+  var unfavouritedGarden = req.body.garden;
+
+  await userCollection.updateOne(
+  { username: username },
+  { $pull: { favGardens: unfavouritedGarden } });
+
+  res.redirect("/explore");
+});
+
+// GARDEN PAGE (coming from explore page)
+app.get("/garden/:garden", async (req, res) => {
+  var gardenname = req.params.garden;
+  const result = await gardensCollection.findOne(
+    { gardenName: gardenname },
+    {
+      projection: {
+        gardenName: 1,
+        address: 1,
+        city: 1,
+        plotsAvailable: 1,
+        crops: 1,
+      },
+    }
+  );
+  res.render("garden/garden", { pageName: "Explore", garden: result });
+});
 
 // COMUNITY PAGE
-app.get("/community", (req, res) => {
-  res.render("community/community", { pageName: "Community" });
+app.get("/community", async (req, res) => {
+  const result = await database
+    .db(mongodb_database)
+    .collection("posts")
+    .find()
+    .toArray();
+  const gardenName = await database
+    .db(mongodb_database)
+    .collection("gardens")
+    .find()
+    .toArray();
+  var gardenHeader = "all gardens";
+  var posts = [];
+  var descss = [];
+  var user = [];
+  var date = [];
+  for (let i = 0; i < result.length; i++) {
+    const descrip = result[i].desc;
+    descss.push(descrip);
+
+    const usern = result[i].username;
+    user.push(usern);
+
+    const dat = result[i].date;
+    date.push(dat);
+
+    const imageData = Buffer.from(result[i].data.buffer).toString("base64");
+    posts.push(imageData);
+  }
+  res.render("community/community", { pageName: "Community", result: result, posts: posts, desc: descss, username: user, gardens: gardenName, gardenP: gardenHeader, date: date});
+});
+
+//Route to a specific community garden that filters posts based on the "name" field
+app.get("/community/:garden", async (req, res) => {
+  //utilize req body param
+  const garden = req.params.garden;
+  //Finds all posts that have the garden's specific reference
+  const result = await database
+    .db(mongodb_database)
+    .collection("posts")
+    .find({ garden: garden })
+    .toArray();
+
+    //grabs all the garden names in the garden collection
+    //CHANGE WITH THE USERS FAVORITE GARDEN ARRAY
+    const gardenName = await database
+    .db(mongodb_database)
+    .collection("gardens")
+    .find()
+    .toArray();
+
+    //Finds the garden name for the page we are currently on
+    const gardenHeader = await database
+    .db(mongodb_database)
+    .collection("gardens")
+    .findOne({ gardenRef: garden});
+    
+  //Loop that pushes all the posts variables into an array that lets us display on the page
+  var posts = [];
+  var descss = [];
+  var user = [];
+  var date = [];
+  for (let i = 0; i < result.length; i++) {
+    //DESCRIPTION
+    const descrip = result[i].desc;
+    descss.push(descrip);
+    //USERNAME OF POST
+    const usern = result[i].username;
+    user.push(usern);
+    //DATE
+    const dat = result[i].date;
+    date.push(dat);
+    //PARSES IMAGE DATA AND DISPLAYS IT
+    const imageData = Buffer.from(result[i].data.buffer).toString("base64");
+    posts.push(imageData);
+  }
+  res.render("community/community", {
+    pageName: "Community",
+    result: result,
+    posts: posts,
+    desc: descss,
+    username: user,
+    date: date,
+    gardens: gardenName,
+    gardenP: gardenHeader.gardenName
+  });
+});
+
+//routes to the new post page
+app.get("/newPost", async (req, res) => {
+  const garden = await database
+    .db(mongodb_database)
+    .collection("gardens")
+    .find()
+    .project({ gardenName: 1 })
+    .toArray();
+  var gar = [];
+  for (let i = 0; i < garden.length; i++) {
+    gar.push(garden[i].gardenName);
+  }
+
+  res.render("newPost/newPost", {
+    pageName: "Create a Post",
+    garden: gar,
+  });
+});
+//Adding a document to the post collection
+app.post("/newPost/posts", upload.single("photo"), async (req, res) => {
+  var key = req.body.keyword;
+  var desc = req.body.description;
+  var garden = req.body.garden;
+  var username = req.session.username;
+  var currentDate = new Date();
+  var dateOnly = currentDate.toISOString().split("T")[0];
+  const photoData = {
+    name: req.file.originalname,
+    username: username,
+    desc: desc,
+    garden: garden,
+    filename: key,
+    data: req.file.buffer,
+    comments: null,
+    likes: 0,
+    date: dateOnly,
+  };
+  await database.db(mongodb_database).collection("posts").insertOne(photoData);
+  res.redirect("/community");
 });
 
 // LOGOUT ROUTE

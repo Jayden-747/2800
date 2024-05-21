@@ -29,3 +29,6 @@ export function checkDarkMode() {
     $(".use-case-header").addClass("use-case-header-light-mode");
   }
 }
+
+
+
