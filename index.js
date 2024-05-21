@@ -79,6 +79,7 @@ app.use(
 app.use("/garden", express.static("./views/garden"));
 app.use("/profile", express.static("./views/profile"));
 app.use("/explore", express.static("./views/explore"));
+app.use("/reservation", express.static("./views/reservation"));
 
 //session
 app.use(
@@ -394,6 +395,10 @@ app.get("/garden/:garden", async (req, res) => {
     }
   );
   res.render("garden/garden", { pageName: "Explore", garden: result });
+});
+
+app.get("/reservation", async (req, res) => {
+
 });
 
 // COMUNITY PAGE
