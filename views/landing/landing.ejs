@@ -10,6 +10,15 @@
   <!-- HERO ELEMENTS -->
   <div class="hero-container">
     <div id="hero">
+
+      <div id="video">
+        <img id="group" src="/img/group_photo-2.jpg">
+        <video id="video-play" width="320" height="240">
+          <source src="/video/WeFarm.mp4" type="video/mp4">
+          Video
+        </video>
+      </div>
+
       <h1 id="wefarm">WeFarm</h1>
       <span id="hero-description">Cultivating a healthy future by allowing members of the community grow their own produce. Join the community in farming your own crops!</span>
     </div>
@@ -19,6 +28,12 @@
       <a class="btn btn-dark" href="/login">Login</a>
     </div>
     <span id="chevron" class="material-symbols-rounded">expand_less</span>
+    <div id="water"></div>
+    <div id="water-fill"></div>
+    <div id="plant-container">
+      <img id="plant" src="/img/plant.png">
+    </div>
+    <div id="trigger"></div>
   </div>
 
   <!-- SECTIONS -->
@@ -47,8 +62,8 @@
   </div>
 
   <!-- SCRIPTS -->
-  <script type="module" src="/modules/navigations.js"></script>
-  <script type="module" src="/views/universal.js"></script>
+  <!-- <script type="module" src="/modules/navigations.js"></script>
+  <script type="module" src="/views/universal.js"></script> -->
   <script type="module" src="/landing/landing.js"></script>
 
   <%- include("../templates/footer") %>
