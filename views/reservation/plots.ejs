@@ -6,16 +6,18 @@
   <!-- NAVBAR TOP -->
   <%- include("../templates/top-navbar", {pageName: "Explore"}) %>
   <%- include("../templates/hamburger") %>
-  
+
   <% for (let i = 0; i < creatingPlots.length; i++) { %>
 
   <!-- I found this code on getbootstrap.com in border section -->
   <!-- @author https://getbootstrap.com/docs/5.3/components/card/#about -->
-  <div class="card" style="width: 18rem;">
-    <div class="card-body">
-      <h5 class="card-title"><%= creatingPlots[i].plotName %></h5>
-      <p class="card-text"><%= creatingPlots[i].dimensions %><br><%= creatingPlots[i].availability %></p>
-      <a href="#" class="btn btn-primary">Reserve</a>
+  <div class="centerCard">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title"><b><%= creatingPlots[i].plotName %></b></h5>
+        <p class="card-text">Dimensions: <%= creatingPlots[i].dimensions %><br>Availability: <%= creatingPlots[i].availability %></p>
+        <a class="btn btn-primary" href="/reserveForm/<%= creatingPlots.gardenName %>">Reserve</a>
+      </div>
     </div>
   </div>
   <% } %>

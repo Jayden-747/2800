@@ -408,17 +408,6 @@ app.get("/garden/:garden", async (req, res) => {
 app.get("/gardenPlots/:plots", async (req, res) => {
   var plotsInGarden = req.params.plots;
   const result = await gardensCollection.find( {gardenName: plotsInGarden} ).project({plots: 1}).toArray();
-  //   { gardenName: plotsInGarden },
-  //   {
-  //     projection:
-  //     {plots: { 
-  //       plotName: 1,
-  //       dimensions: 1,
-  //       availability: 1
-  //     }
-  //   }
-  //   }
-  // );
   const test = result[0].plots[0]
   console.log(test);
   res.render("reservation/plots", { creatingPlots: result[0].plots
