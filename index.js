@@ -422,6 +422,7 @@ app.get("/gardenPlots/:plots", sessionValidation, async (req, res) => {
 
 // COMUNITY PAGE
 app.get("/community", sessionValidation, async (req, res) => {
+  const currentUser = req.session.username;
   const result = await database
     .db(mongodb_database)
     .collection("posts")
@@ -477,6 +478,7 @@ app.get("/community", sessionValidation, async (req, res) => {
 
 //Route to a specific community garden that filters posts based on the "name" field
 app.get("/community/:garden", async (req, res) => {
+  const currentUser = req.session.username;
   //utilize req body param
   const garden = req.params.garden;
   //Finds all posts that have the garden's specific reference
