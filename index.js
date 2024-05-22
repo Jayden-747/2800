@@ -421,7 +421,7 @@ app.get("/gardenPlots/:plots", sessionValidation, async (req, res) => {
 });
 
 // COMUNITY PAGE
-app.get("/community", async (req, res) => {
+app.get("/community", sessionValidation, async (req, res) => {
   const result = await database
     .db(mongodb_database)
     .collection("posts")
