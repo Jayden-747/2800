@@ -95,7 +95,10 @@ app.use(
 
 // Returns true if user is in a valid session, otherwise false
 function isValidSession(req) {
-  return req.session.authenticated;
+  if (req.session.authenticated) {
+    return true;
+  }
+  return false;
 }
 
 // Middleware for validating a session
@@ -106,6 +109,9 @@ function sessionValidation(req, res, next) {
     res.redirect("/login");
   }
 }
+
+
+
 
 // LANDING PAGE
 app.get("/", (req, res) => {
@@ -213,7 +219,7 @@ app.post("/login/logging", async (req, res) => {
 });
 
 // PASSWORD RESET
-app.get("/login/resetPassword", async (req, res) => {
+app.get("/login/resetPassword", sessionValidation, async (req, res) => {
   res.render("login/resetPassword");
 });
 
@@ -241,13 +247,13 @@ app.post("/login/reset", async (req, res) => {
 });
 
 // SETTINGS PAGE
-app.get("/settings", (req, res) => {
+app.get("/settings", sessionValidation, (req, res) => {
   res.render("settings/settings");
 });
 
 // PROFILE PAGE
 app.use("/profile", sessionValidation);
-app.get("/profile", async (req, res) => {
+app.get("/profile", sessionValidation, async (req, res) => {
   var username = req.session.username;
   var name = req.session.name;
   var email = req.session.email;
@@ -261,7 +267,7 @@ app.get("/profile", async (req, res) => {
 });
 
 // PLANTEPEDIA SUMMARY PAGE
-app.get("/plantepediaSummary", async (req, res) => {
+app.get("/plantepediaSummary", sessionValidation, async (req, res) => {
   var postsArray = [];
   const result = await plantCollection
     .find()
@@ -310,7 +316,7 @@ app.post(
 );
 
 // PLANTEPEDIA Plant's Detail PAGE
-app.get("/plantepediaDetail/:plant", async (req, res) => {
+app.get("/plantepediaDetail/:plant", sessionValidation, async (req, res) => {
   var plantName = req.params.plant;
   const result = await plantCollection
     .find({ plant_name: plantName })
@@ -336,7 +342,7 @@ app.get("/plantepediaDetail/:plant", async (req, res) => {
 });
 
 // EXPLORE PAGE
-app.get("/explore", async (req, res) => {
+app.get("/explore", sessionValidation, async (req, res) => {
   const username = req.session.username;
   const user = await userCollection.findOne({ username: username });
   // Ternary: checks if user has 'favorited' gardens or not
@@ -388,7 +394,7 @@ app.post("/unfavGarden", async (req, res) => {
 });
 
 // GARDEN PAGE (coming from explore page)
-app.get("/garden/:garden", async (req, res) => {
+app.get("/garden/:garden", sessionValidation, async (req, res) => {
   var gardenname = req.params.garden;
   const result = await gardensCollection.findOne(
     { gardenName: gardenname },
@@ -405,28 +411,14 @@ app.get("/garden/:garden", async (req, res) => {
   res.render("garden/garden", { pageName: "Explore", garden: result });
 });
 
-app.get("/gardenPlots/:plots", async (req, res) => {
+app.get("/gardenPlots/:plots", sessionValidation, async (req, res) => {
   var plotsInGarden = req.params.plots;
   const result = await gardensCollection.find( {gardenName: plotsInGarden} ).project({plots: 1}).toArray();
-  //   { gardenName: plotsInGarden },
-  //   {
-  //     projection:
-  //     {plots: { 
-  //       plotName: 1,
-  //       dimensions: 1,
-  //       availability: 1
-  //     }
-  //   }
-  //   }
-  // );
-  const test = result[0].plots[0]
-  console.log(test);
-  res.render("reservation/plots", { creatingPlots: result[0].plots
-  });
+  res.render("reservation/plots", { creatingPlots: result[0].plots});
 });
 
 // COMUNITY PAGE
-app.get("/community", async (req, res) => {
+app.get("/community", sessionValidation, async (req, res) => {
   const result = await database
     .db(mongodb_database)
     .collection("posts")
@@ -468,7 +460,7 @@ app.get("/community", async (req, res) => {
 });
 
 //Route to a specific community garden that filters posts based on the "name" field
-app.get("/community/:garden", async (req, res) => {
+app.get("/community/:garden", sessionValidation, async (req, res) => {
   //utilize req body param
   const garden = req.params.garden;
   //Finds all posts that have the garden's specific reference
@@ -524,7 +516,7 @@ app.get("/community/:garden", async (req, res) => {
 });
 
 //routes to the new post page
-app.get("/newPost", async (req, res) => {
+app.get("/newPost", sessionValidation, async (req, res) => {
   const garden = await database
     .db(mongodb_database)
     .collection("gardens")
