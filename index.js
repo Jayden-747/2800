@@ -109,10 +109,15 @@ function sessionValidation(req, res, next) {
   }
 }
 
+// TODO Add favourite gardens collection to page
 // LANDING PAGE
-app.get("/", (req, res) => {
+app.get("/", async (req, res) => {
   if (req.session.authenticated) {
-    res.render("home/home");
+    const username = req.session.username;
+    const user = await userCollection.findOne({ username: username });
+    // Ternary: checks if user has 'favorited' gardens or not
+    const favGardens = user && user.favGardens ? user.favGardens : [];
+    res.render("home/home", { username, favGardens });
   } else {
     res.render("landing/landing");
   }
@@ -297,7 +302,6 @@ app.post(
   "/plantepediaSummary/setPlantPic",
   upload.single("image"),
   async (req, res) => {
-
     //* If need to change the photo of specific plant, please change the name of plant
     //* in '{ plant_name: "Place here the name of plant that you want!" }'
     await database
@@ -408,9 +412,7 @@ app.get("/garden/:garden", async (req, res) => {
   res.render("garden/garden", { pageName: "Explore", garden: result });
 });
 
-app.get("/reservation", async (req, res) => {
-
-});
+app.get("/reservation", async (req, res) => {});
 
 // COMUNITY PAGE
 app.get("/community", async (req, res) => {
