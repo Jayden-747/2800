@@ -80,6 +80,7 @@ app.use("/garden", express.static("./views/garden"));
 app.use("/profile", express.static("./views/profile"));
 app.use("/explore", express.static("./views/explore"));
 app.use("/reservation", express.static("./views/reservation"));
+app.use("/reserveForm", express.static("./views/reservation"));
 
 //session
 app.use(
@@ -399,6 +400,13 @@ app.get("/garden/:garden", async (req, res) => {
 
 app.get("/reservation", async (req, res) => {
 
+});
+
+app.get("/reserveForm", async (req, res) => {
+  var gardenName = req.params.garden;
+  
+
+  res.render("reservation/reserveForm", { pageName: "Reserving a Plot" })
 });
 
 // COMUNITY PAGE
