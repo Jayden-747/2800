@@ -1,6 +1,7 @@
 // REQUIRES
 require("./utils.js");
 require("dotenv").config();
+const mongodb = require("mongodb");
 const express = require("express");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
@@ -280,7 +281,7 @@ app.get("/plantepediaSummary", async (req, res) => {
     const imageData = Buffer.from(result[i].image.buffer).toString("base64");
     postsArray.push(imageData);
   }
-  
+
   res.render("plantepedia/summary/plantepediaAllPlants", {
     summaries: result,
     imageD: postsArray,
@@ -290,8 +291,10 @@ app.get("/plantepediaSummary", async (req, res) => {
 // This is for uploading cover picture in plantepedia
 //* Form with input and button has deleted in plantepediaAllPlants.ejs
 //* If need to update the cover photo for each fruits, please make form with input and button
-app.post("/plantepediaSummary/setPlantPic", upload.single("image"), async (req, res) => {
-
+app.post(
+  "/plantepediaSummary/setPlantPic",
+  upload.single("image"),
+  async (req, res) => {
     //* If need to change the photo of specific plant, please change the name of plant
     //* in '{ plant_name: "Place here the name of plant that you want!" }'
     await database
@@ -319,7 +322,7 @@ app.get("/plantepediaDetail/:plant", async (req, res) => {
       tips: 1,
     })
     .toArray();
-  
+
   // This code block brings a single plant image from the database
   const imageData = Buffer.from(result[0].image.buffer).toString("base64");
 
@@ -350,7 +353,11 @@ app.get("/explore", async (req, res) => {
       posts: 1,
     })
     .toArray();
-  res.render("explore/explore", { pageName: "Explore", gardens: result, favGardens: favGardens });
+  res.render("explore/explore", {
+    pageName: "Explore",
+    gardens: result,
+    favGardens: favGardens,
+  });
 });
 
 // 'Favoriting' a garden
@@ -359,11 +366,12 @@ app.post("/favGarden", async (req, res) => {
   var favouritedGarden = req.body.garden;
 
   await userCollection.updateOne(
-    { username: username }, 
+    { username: username },
     // $addToSet avoid duplicates
-    { $addToSet: { favGardens: favouritedGarden } });
+    { $addToSet: { favGardens: favouritedGarden } }
+  );
 
-    res.redirect("/explore");
+  res.redirect("/explore");
 });
 
 // 'Unfavoriting a garden
@@ -372,8 +380,9 @@ app.post("/unfavGarden", async (req, res) => {
   var unfavouritedGarden = req.body.garden;
 
   await userCollection.updateOne(
-  { username: username },
-  { $pull: { favGardens: unfavouritedGarden } });
+    { username: username },
+    { $pull: { favGardens: unfavouritedGarden } }
+  );
 
   res.redirect("/explore");
 });
@@ -398,6 +407,7 @@ app.get("/garden/:garden", async (req, res) => {
 
 // COMUNITY PAGE
 app.get("/community", async (req, res) => {
+  var currentUser = req.session.username;
   const result = await database
     .db(mongodb_database)
     .collection("posts")
@@ -413,24 +423,47 @@ app.get("/community", async (req, res) => {
   var descss = [];
   var user = [];
   var date = [];
+  var likes = [];
+  var id = [];
   for (let i = 0; i < result.length; i++) {
+    //DESCRIPTION
     const descrip = result[i].desc;
     descss.push(descrip);
-
+    //USERNAME OF POST
     const usern = result[i].username;
     user.push(usern);
-
+    //DATE OF POST
     const dat = result[i].date;
     date.push(dat);
-
+    //LIKES
+    const likeArray = result[i].likes;
+    likes.push(likeArray);
+    //ID
+    const postID = result[i]._id;
+    id.push(postID);
+    //IMAGE OF POST
     const imageData = Buffer.from(result[i].data.buffer).toString("base64");
     posts.push(imageData);
   }
-  res.render("community/community", { pageName: "Community", result: result, posts: posts, desc: descss, username: user, gardens: gardenName, gardenP: gardenHeader, date: date});
+  res.render("community/community", {
+    pageName: "Community",
+    result: result,// arrays
+    posts: posts, //gives the image
+    desc: descss, //gives the caption
+    username: user, //gives the username of the post
+    gardens: gardenName, 
+    gardenP: gardenHeader, //for the page name
+    date: date,
+    userLikes: likes, // gives array of likes with usernames
+    currentUser: currentUser, //provides ejs with the current user
+    postID: id, //gives the unique id of the post as a string
+    postLikeRef: gardenHeader //used for liking a post and redirecting to the correct page
+  });
 });
 
 //Route to a specific community garden that filters posts based on the "name" field
 app.get("/community/:garden", async (req, res) => {
+  var currentUser = req.session.username;
   //utilize req body param
   const garden = req.params.garden;
   //Finds all posts that have the garden's specific reference
@@ -440,25 +473,27 @@ app.get("/community/:garden", async (req, res) => {
     .find({ garden: garden })
     .toArray();
 
-    //grabs all the garden names in the garden collection
-    //CHANGE WITH THE USERS FAVORITE GARDEN ARRAY
-    const gardenName = await database
+  //grabs all the garden names in the garden collection
+  //CHANGE WITH THE USERS FAVORITE GARDEN ARRAY
+  const gardenName = await database
     .db(mongodb_database)
     .collection("gardens")
     .find()
     .toArray();
 
-    //Finds the garden name for the page we are currently on
-    const gardenHeader = await database
+  //Finds the garden name for the page we are currently on
+  const gardenHeader = await database
     .db(mongodb_database)
     .collection("gardens")
-    .findOne({ gardenRef: garden});
-    
+    .findOne({ gardenRef: garden });
+
   //Loop that pushes all the posts variables into an array that lets us display on the page
   var posts = [];
   var descss = [];
   var user = [];
   var date = [];
+  var likes = [];
+  var id = [];
   for (let i = 0; i < result.length; i++) {
     //DESCRIPTION
     const descrip = result[i].desc;
@@ -469,20 +504,68 @@ app.get("/community/:garden", async (req, res) => {
     //DATE
     const dat = result[i].date;
     date.push(dat);
+    //LIKES
+    const likeArray = result[i].likes;
+    likes.push(likeArray);
+    //ID
+    const postID = result[i]._id;
+    id.push(postID);
     //PARSES IMAGE DATA AND DISPLAYS IT
     const imageData = Buffer.from(result[i].data.buffer).toString("base64");
     posts.push(imageData);
   }
-  res.render("community/community", {
+  res.render("community/community" , {
     pageName: "Community",
-    result: result,
-    posts: posts,
-    desc: descss,
+    result: result,//array
+    posts: posts,//picture
+    desc: descss,//caption
     username: user,
     date: date,
-    gardens: gardenName,
-    gardenP: gardenHeader.gardenName
+    gardens: gardenName, //provides a garden array
+    gardenP: gardenHeader.gardenName, //for the page name
+    userLikes: likes, //give like array of usernames
+    currentUser: currentUser, //provides ejs with the current user
+    postID: id, //gives the unique id of the post as a string
+    postLikeRef: garden //used for liking a post and redirecting to the correct page
   });
+});
+
+//When user want to like a post
+app.post("/community/favPost", async (req, res) => {
+  var username = req.session.username;
+  var postID = req.body.postID;
+  var garden = req.body.garden;
+
+  await database
+    .db(mongodb_database)
+    .collection("posts")
+    .updateOne(
+      { _id: new mongodb.ObjectId(postID) },
+      { $addToSet: { likes: username } }
+    );
+    //redirect to which page according to what page the user was on
+    if (garden !== 'all gardens') {
+    res.redirect("/community/" + garden);
+  } else {
+    res.redirect("/community");
+  }
+});
+//handles when users wants to unlike a post
+app.post("/unfavPost", async (req, res) => {
+  var username = req.session.username;
+  var postID = req.body.postID;
+  var garden = req.body.garden;
+
+  await database.db(mongodb_database).collection("posts").updateOne(
+      { _id: new mongodb.ObjectId(postID) },
+      { $pull: { likes: username } }
+  );
+  //redirect to which page according to what page the user was on
+  if (garden !== 'all gardens') {
+    res.redirect("/community/" + garden);
+  } else {
+    res.redirect("/community");
+  }
 });
 
 //routes to the new post page
@@ -518,8 +601,8 @@ app.post("/newPost/posts", upload.single("photo"), async (req, res) => {
     garden: garden,
     filename: key,
     data: req.file.buffer,
-    comments: null,
-    likes: 0,
+    comments: [],
+    likes: [],
     date: dateOnly,
   };
   await database.db(mongodb_database).collection("posts").insertOne(photoData);
