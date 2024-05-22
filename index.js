@@ -297,7 +297,6 @@ app.post(
   "/plantepediaSummary/setPlantPic",
   upload.single("image"),
   async (req, res) => {
-
     //* If need to change the photo of specific plant, please change the name of plant
     //* in '{ plant_name: "Place here the name of plant that you want!" }'
     await database
@@ -408,8 +407,13 @@ app.get("/garden/:garden", async (req, res) => {
   res.render("garden/garden", { pageName: "Explore", garden: result });
 });
 
-app.get("/reservation", async (req, res) => {
-
+app.get("/gardenPlots/:plots", async (req, res) => {
+  var plotsInGarden = req.params.plots;
+  const result = await gardensCollection.find( {gardenName: plotsInGarden} ).project({plots: 1}).toArray();
+  const test = result[0].plots[0]
+  console.log(test);
+  res.render("reservation/plots", { creatingPlots: result[0].plots
+  });
 });
 
 // COMUNITY PAGE
