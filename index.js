@@ -268,7 +268,13 @@ app.get("/profile", sessionValidation, async (req, res) => {
     { projection: { username: 1, name: 1, email: 1 } }
   );
 
-  res.render("profile/profile", { user: result });
+  const posts = await database
+    .db(mongodb_database)
+    .collection("posts")
+    .find({ username: username })
+    .toArray();
+
+  res.render("profile/profile", { user: result, posts: posts });
 });
 
 // PLANTEPEDIA SUMMARY PAGE
