@@ -4,13 +4,21 @@
 
 <body>
   <!-- NAVBAR TOP -->
-  <%- include("../templates/top-navbar", {pageName: "Profile"}) %>
+  <%- include("../templates/top-navbar", {pageName: "Explore"}) %>
   <%- include("../templates/hamburger") %>
+  
+  <% for (let i = 0; i < creatingPlots.length; i++) { %>
 
-    
-
-
-
+  <!-- I found this code on getbootstrap.com in border section -->
+  <!-- @author https://getbootstrap.com/docs/5.3/components/card/#about -->
+  <div class="card" style="width: 18rem;">
+    <div class="card-body">
+      <h5 class="card-title"><%= creatingPlots[i].plotName %></h5>
+      <p class="card-text"><%= creatingPlots[i].dimensions %><br><%= creatingPlots[i].availability %></p>
+      <a href="#" class="btn btn-primary">Reserve</a>
+    </div>
+  </div>
+  <% } %>
 
   <!-- NAVBAR BOTTOM -->
   <%- include("../templates/bottom-navbar") %>

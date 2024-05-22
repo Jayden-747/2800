@@ -281,7 +281,7 @@ app.get("/plantepediaSummary", async (req, res) => {
     const imageData = Buffer.from(result[i].image.buffer).toString("base64");
     postsArray.push(imageData);
   }
-  
+
   res.render("plantepedia/summary/plantepediaAllPlants", {
     summaries: result,
     imageD: postsArray,
@@ -291,8 +291,10 @@ app.get("/plantepediaSummary", async (req, res) => {
 // This is for uploading cover picture in plantepedia
 //* Form with input and button has deleted in plantepediaAllPlants.ejs
 //* If need to update the cover photo for each fruits, please make form with input and button
-app.post("/plantepediaSummary/setPlantPic", upload.single("image"), async (req, res) => {
-
+app.post(
+  "/plantepediaSummary/setPlantPic",
+  upload.single("image"),
+  async (req, res) => {
     //* If need to change the photo of specific plant, please change the name of plant
     //* in '{ plant_name: "Place here the name of plant that you want!" }'
     await database
@@ -320,7 +322,7 @@ app.get("/plantepediaDetail/:plant", async (req, res) => {
       tips: 1,
     })
     .toArray();
-  
+
   // This code block brings a single plant image from the database
   const imageData = Buffer.from(result[0].image.buffer).toString("base64");
 
@@ -351,7 +353,11 @@ app.get("/explore", async (req, res) => {
       posts: 1,
     })
     .toArray();
-  res.render("explore/explore", { pageName: "Explore", gardens: result, favGardens: favGardens });
+  res.render("explore/explore", {
+    pageName: "Explore",
+    gardens: result,
+    favGardens: favGardens,
+  });
 });
 
 // 'Favoriting' a garden
@@ -360,11 +366,12 @@ app.post("/favGarden", async (req, res) => {
   var favouritedGarden = req.body.garden;
 
   await userCollection.updateOne(
-    { username: username }, 
+    { username: username },
     // $addToSet avoid duplicates
-    { $addToSet: { favGardens: favouritedGarden } });
+    { $addToSet: { favGardens: favouritedGarden } }
+  );
 
-    res.redirect("/explore");
+  res.redirect("/explore");
 });
 
 // 'Unfavoriting a garden
@@ -373,8 +380,9 @@ app.post("/unfavGarden", async (req, res) => {
   var unfavouritedGarden = req.body.garden;
 
   await userCollection.updateOne(
-  { username: username },
-  { $pull: { favGardens: unfavouritedGarden } });
+    { username: username },
+    { $pull: { favGardens: unfavouritedGarden } }
+  );
 
   res.redirect("/explore");
 });
@@ -397,8 +405,24 @@ app.get("/garden/:garden", async (req, res) => {
   res.render("garden/garden", { pageName: "Explore", garden: result });
 });
 
-app.get("/reservation", async (req, res) => {
-
+app.get("/gardenPlots/:plots", async (req, res) => {
+  var plotsInGarden = req.params.plots;
+  const result = await gardensCollection.find( {gardenName: plotsInGarden} ).project({plots: 1}).toArray();
+  //   { gardenName: plotsInGarden },
+  //   {
+  //     projection:
+  //     {plots: { 
+  //       plotName: 1,
+  //       dimensions: 1,
+  //       availability: 1
+  //     }
+  //   }
+  //   }
+  // );
+  const test = result[0].plots[0]
+  console.log(test);
+  res.render("reservation/plots", { creatingPlots: result[0].plots
+  });
 });
 
 // COMUNITY PAGE
@@ -431,7 +455,16 @@ app.get("/community", async (req, res) => {
     const imageData = Buffer.from(result[i].data.buffer).toString("base64");
     posts.push(imageData);
   }
-  res.render("community/community", { pageName: "Community", result: result, posts: posts, desc: descss, username: user, gardens: gardenName, gardenP: gardenHeader, date: date});
+  res.render("community/community", {
+    pageName: "Community",
+    result: result,
+    posts: posts,
+    desc: descss,
+    username: user,
+    gardens: gardenName,
+    gardenP: gardenHeader,
+    date: date,
+  });
 });
 
 //Route to a specific community garden that filters posts based on the "name" field
@@ -445,20 +478,20 @@ app.get("/community/:garden", async (req, res) => {
     .find({ garden: garden })
     .toArray();
 
-    //grabs all the garden names in the garden collection
-    //CHANGE WITH THE USERS FAVORITE GARDEN ARRAY
-    const gardenName = await database
+  //grabs all the garden names in the garden collection
+  //CHANGE WITH THE USERS FAVORITE GARDEN ARRAY
+  const gardenName = await database
     .db(mongodb_database)
     .collection("gardens")
     .find()
     .toArray();
 
-    //Finds the garden name for the page we are currently on
-    const gardenHeader = await database
+  //Finds the garden name for the page we are currently on
+  const gardenHeader = await database
     .db(mongodb_database)
     .collection("gardens")
-    .findOne({ gardenRef: garden});
-    
+    .findOne({ gardenRef: garden });
+
   //Loop that pushes all the posts variables into an array that lets us display on the page
   var posts = [];
   var descss = [];
@@ -486,7 +519,7 @@ app.get("/community/:garden", async (req, res) => {
     username: user,
     date: date,
     gardens: gardenName,
-    gardenP: gardenHeader.gardenName
+    gardenP: gardenHeader.gardenName,
   });
 });
 
