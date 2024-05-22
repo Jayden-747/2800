@@ -32,17 +32,39 @@
       </div>
       <img class="post-img" src="data:image/jpeg;base64,<%= posts[i] %>" height="300" width="300" alt="my Image">
       <div class="post-actions">
-        <form method="post">
-          <a class="material-icons-round">
-            favorite_border
-          </a>
-        </form>
+
+
+
+
+          <% if (userLikes[i].includes(currentUser)) { %>
+            <form action="/unfavPost" method="post" style="display: inline;">
+              <input type="hidden" name="postID" value="<%= postID[i] %>">
+              <input type="hidden" name="garden" value="<%= postLikeRef %>">
+              <button type="submit" value="" name="likes" class="material-icons-round favorite-button">favorite
+              </button>
+            </form>
+        
+            <% } else { %>
+              <form action="favPost" method="post">
+                <input type="hidden" name="postID" value="<%= postID[i] %>">
+                <input type="hidden" name="garden" value="<%= postLikeRef %>">
+                <button class="material-icons-round">
+                  favorite_border
+                </button></form>
+            <% } %>
+
+
+
+
+
+        
         <span class="material-icons-round">
           chat_bubble_outline
         </span>
+        
       </div>
       <div class="description">
-        <aside class="likes"><small>#</small><small>&nbsp;Likes</small></aside>
+        <aside class="likes"><small></small><small>&nbsp;<%= userLikes[i].length %> Likes</small></aside>
         <span><b class="username"><%= username[i] %>&nbsp;</b></span>
         <span id="description"><%= desc[i] %></span>
         <aside class="comments"><small>view all comments</small></aside>
