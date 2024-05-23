@@ -32,3 +32,43 @@ function comment(userArray, commentsArray) {
 
 
 }
+
+
+
+function alert () {
+
+    Swal.fire({
+    title: "Post Submitted!",
+    text: "Thank You!", 
+    icon: "success",
+    showConfirmButton: true,
+    confirmButtonText: "Yes!",
+    cancelButtonText: "Cancel",
+    closeOnConfirm: true
+    }.then((isConfirmed) => {
+      if (isConfirmed) { $('#sub').submit(); }
+    })
+  ) 
+    
+
+}
+
+// $("#sub").submit(function(e) {
+//     e.preventDefault();
+//     var form = this;
+  
+//     swal({
+//       title: "Are you sure?",
+//       type: "warning",
+//       showCancelButton: true,
+//       confirmButtonColor: "#DD6B55",
+//       confirmButtonText: "Yes!",
+//       cancelButtonText: "Cancel",
+//       closeOnConfirm: true
+//     }, function(isConfirm) {
+//       if (isConfirm) {
+//         form.submit();
+//       }
+//     });
+//   });
+

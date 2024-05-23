@@ -511,7 +511,7 @@ app.get("/community", sessionValidation, async (req, res) => {
     currentUser: currentUser, //provides ejs with the current user
     postID: id, //gives the unique id of the post as a string
     postLikeRef: gardenHeader, //used for liking a post and redirecting to the correct page
-    comments: result.comments
+    comments: result[0].comments
   });
 });
 
@@ -628,7 +628,7 @@ app.post("/unfavPost", async (req, res) => {
 // post route when user comments on a post
 // sorts through the database for the post id and enters the user's username and
 // comment into arrays
-app.post("submitComment", async (req, res) =>{
+app.post("/community/submitComment", async (req, res) =>{
   var comment = req.body.comment;
   var username = req.session.username
   var postID = new mongodb.ObjectId(req.body.postID);
@@ -638,14 +638,14 @@ app.post("submitComment", async (req, res) =>{
   .collection("posts")
   .updateOne(
     { _id: postID },
-    { $addToSet: { comments: comment } }
+    { $push: { comments: comment } }
   );
   await database
   .db(mongodb_database)
   .collection("posts")
   .updateOne(
     { _id: postID },
-    { $addToSet: { commentsUser: username } }
+    { $push: { commentsUser: username } }
   );
     //redirect to which page according to what page the user was on
     if (garden !== 'all gardens') {
@@ -691,6 +691,7 @@ app.post("/newPost/posts", upload.single("photo"), async (req, res) => {
     comments: [],
     likes: [],
     date: dateOnly,
+    commentsUser: []
   };
   await database.db(mongodb_database).collection("posts").insertOne(photoData);
   res.redirect("/community");
