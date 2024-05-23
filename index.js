@@ -83,6 +83,7 @@ app.use("/garden", express.static("./views/garden"));
 app.use("/profile", express.static("./views/profile"));
 app.use("/explore", express.static("./views/explore"));
 app.use("/reservation", express.static("./views/reservation"));
+app.use("/reservationForm", express.static("./views/reservation"));
 
 //session
 app.use(
@@ -423,12 +424,35 @@ app.get("/garden/:garden", sessionValidation, async (req, res) => {
 });
 
 app.get("/gardenPlots/:plots", sessionValidation, async (req, res) => {
+  // :plots is the gardenName
   var plotsInGarden = req.params.plots;
-  const result = await gardensCollection
-    .find({ gardenName: plotsInGarden })
-    .project({ plots: 1 })
-    .toArray();
-  res.render("reservation/plots", { creatingPlots: result[0].plots });
+  const result = await gardensCollection.find({ gardenName: plotsInGarden }).project({ plots: 1 }).toArray();
+  res.render("reservation/plots", { garden: plotsInGarden, creatingPlots: result[0].plots });
+});
+
+// RESERVATION FORM (reserving a plot)
+ app.get("/reservationForm/:garden/:plotName", async (req, res) => {
+    const gardenname = req.params.garden;
+    const plotName = req.params.plotName;
+
+    console.log("Garden name: " + gardenname);
+    console.log("Plot name: " + plotName);
+
+    const result = await gardensCollection.findOne(
+        { gardenName: gardenname },
+        { projection: { gardenName: 1 } }
+      );
+
+    console.log(result);
+    res.render("reservation/reserveForm", {pageName: "Reserving a Plot", nameOfGarden: result.gardenName, plotName:plotName
+    });
+  });
+
+// Submitting the reservation form
+app.post('/submitReservation', async (req, res) => {
+  var user = req.session.username;
+  // I'm so sorry for being unavailble to help you brother me dumb me no logic I sincerly apolosise to you for everything
+  // nono im sorry i keep breaking the codeLMAOOOO ALL GOOD BRUDA
 });
 
 // COMUNITY PAGE
