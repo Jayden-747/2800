@@ -583,6 +583,36 @@ app.post("/unfavPost", async (req, res) => {
   }
 });
 
+// post route when user comments on a post
+// sorts through the database for the post id and enters the user's username and
+// comment into arrays
+app.post("submitComment", async (req, res) =>{
+  var comment = req.body.comment;
+  var username = req.session.username
+  var postID = new mongodb.ObjectId(req.body.postID);
+  var garden = req.body.garden;
+  await database
+  .db(mongodb_database)
+  .collection("posts")
+  .updateOne(
+    { _id: postID },
+    { $addToSet: { comments: comment } }
+  );
+  await database
+  .db(mongodb_database)
+  .collection("posts")
+  .updateOne(
+    { _id: postID },
+    { $addToSet: { commentsUser: username } }
+  );
+    //redirect to which page according to what page the user was on
+    if (garden !== 'all gardens') {
+      res.redirect("/community/" + garden);
+    } else {
+      res.redirect("/community");
+    }
+});
+
 //routes to the new post page
 app.get("/newPost", sessionValidation, async (req, res) => {
   const garden = await database
