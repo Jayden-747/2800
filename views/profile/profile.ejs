@@ -23,38 +23,38 @@
       </div>
     </div>
   </div>
-  <div><%= posts[0] %></div>
+  <div>My Posts</div>
 
   <div id="posts">
     <!-- BOOTSTRAP USED FOR POSTS -->
-    <% for(let i = 0; i < posts.length; i++) { %>
+    <% for(let i = posts.length - 1; i >= 0; i--) { %>
     <div class="container">
       <div class="username-container">
         <span><b class="username"><%= posts[i].username %></b></span>
       </div>
-      <img class="post-img" src="data:image/jpeg;base64,<%= posts[i] %>" height="300" width="300" alt="my Image">
+      <img class="post-img" src="data:image/jpeg;base64,<%= image[i] %>" height="300" width="300" alt="my Image">
       <div class="post-actions">
 
 
 
 
-        <!-- <%# if (userLikes[i].includes(currentUser)) { %>
+        <% if (likes[i].includes(currentUser)) { %>
         <form action="/unfavPost" method="post" style="display: inline;">
-          <input type="hidden" name="postID" value="<%# postID[i] %>">
+          <input type="hidden" name="postID" value="<%= postID[i] %>">
           <input type="hidden" name="garden" value="<%# postLikeRef %>">
           <button type="submit" value="" name="likes" class="material-icons-round favorite-button">favorite
           </button>
         </form>
 
-        <%# } else { %>
+        <% } else { %>
         <form action="favPost" method="post">
-          <input type="hidden" name="postID" value="<%#postID[i] %>">
+          <input type="hidden" name="postID" value="<%= postID[i] %>">
           <input type="hidden" name="garden" value="<%# postLikeRef %>">
           <button class="material-icons-round">
             favorite_border
           </button>
         </form>
-        <%# } %>
+        <% } %>
 
 
 
@@ -66,13 +66,13 @@
 
       </div>
       <div class="description">
-        <aside class="likes"><small></small><small>&nbsp;<%# userLikes[i].length %> Likes</small></aside>
-        <span><b class="username"><%# username[i] %>&nbsp;</b></span>
-        <span id="description"><%# desc[i] %></span>
+        <aside class="likes"><small></small><small>&nbsp;<%= likes[i].length %> Likes</small></aside>
+        <span><b class="username"><%= posts[i].username %>&nbsp;</b></span>
+        <span id="description"><%= desc[i] %></span>
         <aside class="comments"><small>view all comments</small></aside>
-        <aside class="date"><small><%# date[i] %></small></aside>
+        <aside class="date"><small><%= date[i] %></small></aside>
       </div>
-    </div> -->
+    </div>
         <% } %>
       </div>
 

@@ -120,9 +120,31 @@ app.get("/", async (req, res) => {
   if (req.session.authenticated) {
     const username = req.session.username;
     const user = await userCollection.findOne({ username: username });
+    const gardenName = await database
+    .db(mongodb_database)
+    .collection("gardens")
+    .find()
+    .toArray();
+
     // Ternary: checks if user has 'favorited' gardens or not
     const favGardens = user && user.favGardens ? user.favGardens : [];
-    res.render("home/home", { username, favGardens });
+    
+      // Query the gardens collection for documents with gardenName in favGardens
+      const gardenDocs = await database.db(mongodb_database).collection("gardens").find({
+          gardenName: { $in: favGardens }
+      }).toArray();
+    
+      const gardenMap = gardenDocs.reduce((acc, doc) => {
+        acc[doc.gardenName] = doc.gardenRef;
+        return acc;
+    }, {});
+
+    // Order the gardenRefs based on the order of favGardens
+    const gardenRef = favGardens.map(gardenName => gardenMap[gardenName]);
+    console.log(favGardens)
+    console.log(gardenDocs)
+    console.log(gardenRef)
+    res.render("home/home", { username: username, favGardens: favGardens, gardens: gardenName, gardenRef: gardenRef });
   } else {
     res.render("landing/landing");
   }
@@ -258,7 +280,7 @@ app.get("/settings", sessionValidation, (req, res) => {
 });
 
 // PROFILE PAGE
-app.use("/profile", sessionValidation);
+
 app.get("/profile", sessionValidation, async (req, res) => {
   var username = req.session.username;
   var name = req.session.name;
@@ -275,7 +297,30 @@ app.get("/profile", sessionValidation, async (req, res) => {
     .find({ username: username })
     .toArray();
 
-  res.render("profile/profile", { user: result, posts: posts });
+    const date = [];
+    const likes = [];
+    const id = [];
+    const description = [];
+    const image = [];
+    for(i=0; i < posts.length; i++){
+       //DESCRIPTION
+    const descrip = posts[i].desc;
+    description.push(descrip);
+    //DATE OF POST
+    const dat = posts[i].date;
+    date.push(dat);
+    //LIKES
+    const likeArray = posts[i].likes;
+    likes.push(likeArray);
+    //ID
+    const postID = posts[i]._id;
+    id.push(postID);
+    //IMAGES
+    const imageData = Buffer.from(posts[i].data.buffer).toString("base64");
+    image.push(imageData);
+    }
+
+  res.render("profile/profile", { user: result, posts: posts, image: image, date: date, likes: likes, postID: id, currentUser: username, desc: description});
 });
 
 // PLANTEPEDIA SUMMARY PAGE
@@ -634,14 +679,14 @@ app.post("submitComment", async (req, res) =>{
   .collection("posts")
   .updateOne(
     { _id: postID },
-    { $addToSet: { comments: comment } }
+    { $push: { comments: comment } }
   );
   await database
   .db(mongodb_database)
   .collection("posts")
   .updateOne(
     { _id: postID },
-    { $addToSet: { commentsUser: username } }
+    { $push: { commentsUser: username } }
   );
     //redirect to which page according to what page the user was on
     if (garden !== 'all gardens') {
@@ -687,6 +732,7 @@ app.post("/newPost/posts", upload.single("photo"), async (req, res) => {
     comments: [],
     likes: [],
     date: dateOnly,
+    commentsUser: [],
   };
   await database.db(mongodb_database).collection("posts").insertOne(photoData);
   res.redirect("/community");
