@@ -57,24 +57,76 @@
 
 
 
-        
-        <span class="material-icons-round">
-          chat_bubble_outline
-        </span>
+
+          <button class="material-icons-round" data-bs-toggle="modal" data-bs-target="#commentPModal">
+            chat_bubble_outline
+          </button>
         
       </div>
       <div class="description">
         <aside class="likes"><small></small><small>&nbsp;<%= userLikes[i].length %> Likes</small></aside>
         <span><b class="username"><%= username[i] %>&nbsp;</b></span>
         <span id="description"><%= desc[i] %></span>
-        <aside class="comments"><small>view all comments</small></aside>
+        
+        <aside class="comments" id="com">
+          
+         
+
+          <button onclick="comment('<%= JSON.stringify(username) %>' ,'<%= JSON.stringify(desc) %>')" data-bs-toggle="modal" data-bs-target="#commentsModal"><small>view all comments</small></button>
+          
+        
+        
+        
+        
+        </aside>
         <aside class="date"><small><%= date[i] %></small></aside>
       </div>
     </div>
     <% } %>
   </div>
+ 
 
 
+ 
+
+  <!-- posting a comment modal -->
+  <div class="modal fade" id="commentPModal" tabindex="-1" aria-labelledby="commentPModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="commentPModalLabel">Post a Comment</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="postC">
+          <input type="text">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- viewing all comments modal -->
+   <div class="modal fade" id="commentsModal" tabindex="-1" aria-labelledby="commentsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="commentsModalLabel">All Comments</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="viewC">
+          ...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- NAVBAR BOTTOM -->
   <%- include("../templates/bottom-navbar") %>
@@ -82,5 +134,5 @@
   <!-- SCRIPTS -->
   <script type="module" src="/modules/navigations.js"></script>
   <script type="module" src="/views/universal.js"></script>
-  <script type="module" src="community.js"></script>
+  <script src="community.js"></script>
   <%- include("../templates/footer") %>

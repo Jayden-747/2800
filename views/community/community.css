@@ -126,3 +126,7 @@ small {
 button{
   background: none;
 }
+
+.modal-content {
+  color: black;
+}

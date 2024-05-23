@@ -459,6 +459,9 @@ app.get("/community", sessionValidation, async (req, res) => {
     //IMAGE OF POST
     const imageData = Buffer.from(result[i].data.buffer).toString("base64");
     posts.push(imageData);
+
+
+    
   }
   res.render("community/community", {
     pageName: "Community",
@@ -472,7 +475,8 @@ app.get("/community", sessionValidation, async (req, res) => {
     userLikes: likes, // gives array of likes with usernames
     currentUser: currentUser, //provides ejs with the current user
     postID: id, //gives the unique id of the post as a string
-    postLikeRef: gardenHeader //used for liking a post and redirecting to the correct page
+    postLikeRef: gardenHeader, //used for liking a post and redirecting to the correct page
+    comments: result.comments
   });
 });
 

@@ -1,25 +1,34 @@
 
 
+function comment(userArray, commentsArray) {
+    console.log("hello")
 
-// var urlData;
-// async function image() {
-    
-//     document.querySelector("#photo").addEventListener("change", function () { 
-//         const reader = new FileReader();
+    const setup = async () => {
+        $('.modal-body').empty();
+        let user = JSON.parse(userArray)
+        let comments = JSON.parse(commentsArray)
+        console.log(JSON.parse(userArray))
+        for (let i = 0; i < user.length; i++){
 
-//         reader.addEventListener("load", () => { 
-//             console.log(reader.result);
-//             global.urlData = reader.result;
+        
+        $('#viewC').append(`
         
         
-//         });
- 
-//             reader.readAsDataURL(this.files[0]);
+        <h3>${user[i]} 
+        <br>
+        <br>
+        ${comments[i]}</h3>
+        <br>
+        <h3>Comments!</h3>
+        <br>
+        `)
+
+        }
+
+    }
 
 
-    
-
-//     });
-// }
+    $(document).ready(setup);
 
 
+}
