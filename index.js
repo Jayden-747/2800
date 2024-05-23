@@ -83,7 +83,7 @@ app.use("/garden", express.static("./views/garden"));
 app.use("/profile", express.static("./views/profile"));
 app.use("/explore", express.static("./views/explore"));
 app.use("/reservation", express.static("./views/reservation"));
-app.use("/reserveForm", express.static("./views/reservation"));
+app.use("/reservationForm", express.static("./views/reservation"));
 
 //session
 app.use(
@@ -416,16 +416,35 @@ app.get("/garden/:garden", sessionValidation, async (req, res) => {
 });
 
 app.get("/gardenPlots/:plots", sessionValidation, async (req, res) => {
+  // :plots is the gardenName
   var plotsInGarden = req.params.plots;
-  const result = await gardensCollection.find( {gardenName: plotsInGarden} ).project({plots: 1}).toArray();
-  res.render("reservation/plots", { creatingPlots: result[0].plots});
+  const result = await gardensCollection.find({ gardenName: plotsInGarden }).project({ plots: 1 }).toArray();
+  res.render("reservation/plots", { garden: plotsInGarden, creatingPlots: result[0].plots });
 });
 
-app.get("/reserveForm", async (req, res) => {
-  var gardenName = req.params.garden;
-  
+// RESERVATION FORM (reserving a plot)
+ app.get("/reservationForm/:garden/:plotName", async (req, res) => {
+    const gardenname = req.params.garden;
+    const plotName = req.params.plotName;
 
-  res.render("reservation/reserveForm", { pageName: "Reserving a Plot" })
+    console.log("Garden name: " + gardenname);
+    console.log("Plot name: " + plotName);
+
+    const result = await gardensCollection.findOne(
+        { gardenName: gardenname },
+        { projection: { gardenName: 1 } }
+      );
+
+    console.log(result);
+    res.render("reservation/reserveForm", {pageName: "Reserving a Plot", nameOfGarden: result.gardenName, plotName:plotName
+    });
+  });
+
+// Submitting the reservation form
+app.post('/submitReservation', async (req, res) => {
+  var user = req.session.username;
+  // I'm so sorry for being unavailble to help you brother me dumb me no logic I sincerly apolosise to you for everything
+  // nono im sorry i keep breaking the codeLMAOOOO ALL GOOD BRUDA
 });
 
 // COMUNITY PAGE
@@ -474,7 +493,7 @@ app.get("/community", async (req, res) => {
     posts: posts, //gives the image
     desc: descss, //gives the caption
     username: user, //gives the username of the post
-    gardens: gardenName, 
+    gardens: gardenName,
     gardenP: gardenHeader, //for the page name
     date: date,
     userLikes: likes, // gives array of likes with usernames
@@ -537,7 +556,7 @@ app.get("/community/:garden", async (req, res) => {
     const imageData = Buffer.from(result[i].data.buffer).toString("base64");
     posts.push(imageData);
   }
-  res.render("community/community" , {
+  res.render("community/community", {
     pageName: "Community",
     result: result,//array
     posts: posts,//picture
@@ -566,8 +585,8 @@ app.post("/community/favPost", async (req, res) => {
       { _id: new mongodb.ObjectId(postID) },
       { $addToSet: { likes: username } }
     );
-    //redirect to which page according to what page the user was on
-    if (garden !== 'all gardens') {
+  //redirect to which page according to what page the user was on
+  if (garden !== 'all gardens') {
     res.redirect("/community/" + garden);
   } else {
     res.redirect("/community");
@@ -580,8 +599,8 @@ app.post("/unfavPost", async (req, res) => {
   var garden = req.body.garden;
 
   await database.db(mongodb_database).collection("posts").updateOne(
-      { _id: new mongodb.ObjectId(postID) },
-      { $pull: { likes: username } }
+    { _id: new mongodb.ObjectId(postID) },
+    { $pull: { likes: username } }
   );
   //redirect to which page according to what page the user was on
   if (garden !== 'all gardens') {

@@ -51,8 +51,16 @@ function validDates() {
         const day = String(endStartDate.getDate()).padStart(2, '0');
         const formattedEndDate = `${year}-${month}-${day}`;
 
-         // Replaces end date input to new end date (1 day after start date)
-         document.getElementById('reservationStartDate').value = formattedEndDate;
-         alert('Error: End date cannot be set before start date!');
+        // Replaces end date input to new end date (1 day after start date)
+        document.getElementById('reservationStartDate').value = formattedEndDate;
+        alert('Error: End date cannot be set before start date!');
     }
 }
+
+// TODO: when i select start date FIRST then select end date as any day prior, the start date changes to the last day of the month 
+
+
+$(document).ready(function(){
+    $('.modal-body').html(``);
+
+});
