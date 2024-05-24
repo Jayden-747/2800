@@ -1,7 +1,11 @@
+
+/**
+ * validDates() warns the user if they inputted invalid dates: Error if user selects the same start and end dates. Error if start date is after end date, then automatically sets the start date 1 day prior to end date.
+ */
 function validDates() {
     let startDateValue = document.getElementById('reservationStartDate').value;
     let endDateValue = document.getElementById('reservationEndDate').value;
-    console.log('startDateValue: ' + startDateValue);
+    console.log('!!!!!!!!startDateValue: ' + startDateValue);
     console.log('endDateValue: ' + endDateValue);
 
     // * NOTE: using Date constructor converts to ONE DAY BEHIND
@@ -16,12 +20,12 @@ function validDates() {
         alert("Error: Dates selected are the same!");
 
     } else if (startDate.getTime() > endDate.getTime()) {
-        // **** SETS 'START-DATE' TO 1 DAY BEFORE 'END-DATE' ****
+        // **** SETS 'START-DATE' ONE DAY PRIOR TO 'END-DATE' ****
         // Initialize newStartDate as a Date object
-        const newStartDate = new Date(startDate);
+        const newStartDate = new Date(endDate);
         // Set newStartDate to day before end date
         // ! WORKAROUND: I dont need subtract a day because Date constructor changes the original date to the day before 
-        newStartDate.setDate(endDate.getDate());
+        // newStartDate.setDate(endDate.getDate());
 
         // ** FORMATS START DATE TO YYYY-MM-DD (chatGPT) **
         const year = newStartDate.getFullYear();
@@ -35,32 +39,13 @@ function validDates() {
         document.getElementById('reservationStartDate').value = formattedStartDate;
         alert('Error: Start date cannot be set after end date!');
 
-    } else if (endDate.getTime() > startDate.getTime()) {
-        // **** SETS 'END-DATE' TO 1 DAY AFTER 'START-DATE' ****
-        // Initialize newEndDate as a Date object
-        const endStartDate = new Date(endDate);
-        // Set endStartDate to day after start date
-        // ! WORKAROUND: I add TWO DAYS because Date constructor changes the original date to the day before 
-        endStartDate.setDate(startDate.getDate() + 2);
-
-        // ** FORMATS END DATE TO YYYY-MM-DD (chatGPT) **
-        const year = endStartDate.getFullYear();
-        // Get 0-based month, convert to 1-based month, convert to String then pad with 0's if needed 
-        const month = String(endStartDate.getMonth() + 1).padStart(2, '0');
-        // Get day of month, pad with 0's if needed
-        const day = String(endStartDate.getDate()).padStart(2, '0');
-        const formattedEndDate = `${year}-${month}-${day}`;
-
-        // Replaces end date input to new end date (1 day after start date)
-        document.getElementById('reservationStartDate').value = formattedEndDate;
-        alert('Error: End date cannot be set before start date!');
-    }
+    }     
 }
 
-// TODO: when i select start date FIRST then select end date as any day prior, the start date changes to the last day of the month 
+// ! when i select start date FIRST then select end date as first of the month, the start date changes to the last day of the month 
 
-//Function for conformation modal and submitting a form
-$(document).ready(function(){
+// Function for conformation modal and submitting a form
+$(document).ready(function() {
 
     console.log("why not working?");
 
