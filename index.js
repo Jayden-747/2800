@@ -56,7 +56,7 @@ var mongoStore = MongoStore.create({
 const saltRounds = 12;
 
 //Expiration for cookie
-const expireTime = 1 * 60 * 60 * 1000;
+const expireTime = 23 * 60 * 60 * 1000;
 
 // Express static paths
 app.use("/img", express.static("./assets/img"));
@@ -83,6 +83,7 @@ app.use("/garden", express.static("./views/garden"));
 app.use("/profile", express.static("./views/profile"));
 app.use("/explore", express.static("./views/explore"));
 app.use("/reservation", express.static("./views/reservation"));
+app.use("/reservationForm", express.static("./views/reservation"));
 
 //session
 app.use(
@@ -119,9 +120,39 @@ app.get("/", async (req, res) => {
   if (req.session.authenticated) {
     const username = req.session.username;
     const user = await userCollection.findOne({ username: username });
+    const gardenName = await database
+      .db(mongodb_database)
+      .collection("gardens")
+      .find()
+      .toArray();
+
     // Ternary: checks if user has 'favorited' gardens or not
     const favGardens = user && user.favGardens ? user.favGardens : [];
-    res.render("home/home", { username, favGardens });
+
+    // Query the gardens collection for documents with gardenName in favGardens
+    const gardenDocs = await database
+      .db(mongodb_database)
+      .collection("gardens")
+      .find({
+        gardenName: { $in: favGardens },
+      })
+      .toArray();
+
+    //CHATGPT USED gives a function that maps gardenName to gardenRef
+    const gardenMap = gardenDocs.reduce((acc, doc) => {
+      acc[doc.gardenName] = doc.gardenRef;
+      return acc;
+    }, {});
+
+    // Orders the gardenRefs based on the order of favGardens
+    const gardenRef = favGardens.map((gardenName) => gardenMap[gardenName]);
+
+    res.render("home/home", {
+      username: username,
+      favGardens: favGardens,
+      gardens: gardenName,
+      gardenRef: gardenRef,
+    });
   } else {
     res.render("landing/landing");
   }
@@ -257,7 +288,7 @@ app.get("/settings", sessionValidation, (req, res) => {
 });
 
 // PROFILE PAGE
-app.use("/profile", sessionValidation);
+
 app.get("/profile", sessionValidation, async (req, res) => {
   var username = req.session.username;
   var name = req.session.name;
@@ -273,8 +304,41 @@ app.get("/profile", sessionValidation, async (req, res) => {
     .collection("posts")
     .find({ username: username })
     .toArray();
+  const likeRef = "profile";
+  const date = [];
+  const likes = [];
+  const id = [];
+  const description = [];
+  const image = [];
+  for (i = 0; i < posts.length; i++) {
+    //DESCRIPTION
+    const descrip = posts[i].desc;
+    description.push(descrip);
+    //DATE OF POST
+    const dat = posts[i].date;
+    date.push(dat);
+    //LIKES
+    const likeArray = posts[i].likes;
+    likes.push(likeArray);
+    //ID
+    const postID = posts[i]._id;
+    id.push(postID);
+    //IMAGES
+    const imageData = Buffer.from(posts[i].data.buffer).toString("base64");
+    image.push(imageData);
+  }
 
-  res.render("profile/profile", { user: result, posts: posts });
+  res.render("profile/profile", {
+    user: result,
+    posts: posts,
+    image: image,
+    date: date,
+    likes: likes,
+    postID: id,
+    currentUser: username,
+    desc: description,
+    likeRef: likeRef,
+  });
 });
 
 // PLANTEPEDIA SUMMARY PAGE
@@ -423,16 +487,49 @@ app.get("/garden/:garden", sessionValidation, async (req, res) => {
 });
 
 app.get("/gardenPlots/:plots", sessionValidation, async (req, res) => {
+  // :plots is the gardenName
   var plotsInGarden = req.params.plots;
   const result = await gardensCollection
     .find({ gardenName: plotsInGarden })
     .project({ plots: 1 })
     .toArray();
-  res.render("reservation/plots", { creatingPlots: result[0].plots });
+  res.render("reservation/plots", {
+    garden: plotsInGarden,
+    creatingPlots: result[0].plots,
+  });
+});
+
+// RESERVATION FORM (reserving a plot)
+app.get("/reservationForm/:garden/:plotName", async (req, res) => {
+  const gardenname = req.params.garden;
+  const plotName = req.params.plotName;
+
+  console.log("Garden name: " + gardenname);
+  console.log("Plot name: " + plotName);
+
+  const result = await gardensCollection.findOne(
+    { gardenName: gardenname },
+    { projection: { gardenName: 1 } }
+  );
+
+  console.log(result);
+  res.render("reservation/reserveForm", {
+    pageName: "Reserving a Plot",
+    nameOfGarden: result.gardenName,
+    plotName: plotName,
+  });
+});
+
+// Submitting the reservation form
+app.post("/submitReservation", async (req, res) => {
+  var user = req.session.username;
+  console.log(res);
+  // I'm so sorry for being unavailble to help you brother me dumb me no logic I sincerly apolosise to you for everything
+  // nono im sorry i keep breaking the codeLMAOOOO ALL GOOD BRUDA
 });
 
 // COMUNITY PAGE
-app.get("/community", async (req, res) => {
+app.get("/community", sessionValidation, async (req, res) => {
   const currentUser = req.session.username;
   const result = await database
     .db(mongodb_database)
@@ -470,6 +567,9 @@ app.get("/community", async (req, res) => {
     //IMAGE OF POST
     const imageData = Buffer.from(result[i].data.buffer).toString("base64");
     posts.push(imageData);
+
+
+    
   }
   res.render("community/community", {
     pageName: "Community",
@@ -484,6 +584,7 @@ app.get("/community", async (req, res) => {
     currentUser: currentUser, //provides ejs with the current user
     postID: id, //gives the unique id of the post as a string
     postLikeRef: gardenHeader, //used for liking a post and redirecting to the correct page
+    comments: result[0].comments
   });
 });
 
@@ -577,7 +678,7 @@ app.post("/community/favPost", async (req, res) => {
   }
 });
 //handles when users wants to unlike a post
-app.post("/unfavPost", async (req, res) => {
+app.post("/community/unfavPost", async (req, res) => {
   var username = req.session.username;
   var postID = req.body.postID;
   var garden = req.body.garden;
@@ -595,6 +696,36 @@ app.post("/unfavPost", async (req, res) => {
   } else {
     res.redirect("/community");
   }
+});
+
+// post route when user comments on a post
+// sorts through the database for the post id and enters the user's username and
+// comment into arrays
+app.post("/community/submitComment", async (req, res) => {
+  var comment = req.body.comment;
+  var username = req.session.username;
+  var postID = new mongodb.ObjectId(req.body.postID);
+  var garden = req.body.garden;
+  await database
+  .db(mongodb_database)
+  .collection("posts")
+  .updateOne(
+    { _id: postID },
+    { $push: { comments: comment } }
+  );
+  await database
+  .db(mongodb_database)
+  .collection("posts")
+  .updateOne(
+    { _id: postID },
+    { $push: { commentsUser: username } }
+  );
+    //redirect to which page according to what page the user was on
+    if (garden !== 'all gardens') {
+      res.redirect("/community/" + garden);
+    } else {
+      res.redirect("/community");
+    }
 });
 
 //routes to the new post page
@@ -633,6 +764,7 @@ app.post("/newPost/posts", upload.single("photo"), async (req, res) => {
     comments: [],
     likes: [],
     date: dateOnly,
+    commentsUser: []
   };
   await database.db(mongodb_database).collection("posts").insertOne(photoData);
   res.redirect("/community");
@@ -643,6 +775,12 @@ app.post("/newPost/posts", upload.single("photo"), async (req, res) => {
 app.get("/logout", (req, res) => {
   req.session.destroy();
   res.redirect("/");
+});
+
+//Catches routes that don't exist 404
+app.get("*", (req, res) => {
+  res.status(404);
+  res.render("404");
 });
 
 // PORT

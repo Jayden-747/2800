@@ -4,7 +4,7 @@
 
 <body>
   <!-- NAVBAR TOP -->
-  <%- include("../templates/top-navbar", {pageName: "Explore"}) %>
+  <%- include("../templates/top-navbar", {pageName: "Reserve a plot"}) %>
   <%- include("../templates/hamburger") %>
 
   <% for (let i = 0; i < creatingPlots.length; i++) { %>
@@ -16,7 +16,7 @@
       <div class="card-body">
         <h5 class="card-title"><b><%= creatingPlots[i].plotName %></b></h5>
         <p class="card-text">Dimensions: <%= creatingPlots[i].dimensions %><br>Availability: <%= creatingPlots[i].availability %></p>
-        <a class="btn btn-primary" href="/reserveForm/<%= creatingPlots.gardenName %>">Reserve</a>
+        <a class="btn btn-primary" href="/reservationForm/<%= encodeURIComponent(garden) %>/<%= encodeURIComponent(creatingPlots[i].plotName) %>">Reserve</a>
       </div>
     </div>
   </div>
