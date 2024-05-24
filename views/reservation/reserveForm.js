@@ -14,6 +14,11 @@ function validDates() {
     console.log('startDate: ' + startDate);
     console.log('endDate: ' + endDate);
 
+    // * Calculates number of days of reservation
+    // TODO: when negative, it stays negative lol
+    let length = endDate - startDate;
+    console.log("LENGTH: " + length);
+    document.getElementById('reservationTotal').innerHTML = length;
 
     // If dates are equal
     if (startDate.getTime() === endDate.getTime()) {
@@ -39,17 +44,17 @@ function validDates() {
         document.getElementById('reservationStartDate').value = formattedStartDate;
         alert('Error: Start date cannot be set after end date!');
 
-    }     
+    }
 }
 
 // ! when i select start date FIRST then select end date as first of the month, the start date changes to the last day of the month 
 
 // Function for conformation modal and submitting a form
-$(document).ready(function() {
+$(document).ready(function () {
 
     console.log("why not working?");
 
-    $('#positive').on('click', function() {
+    $('#positive').on('click', function () {
         console.log('is this function working?');
         $('#reservationFormId').submit();
     });
