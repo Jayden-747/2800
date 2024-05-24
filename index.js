@@ -548,6 +548,8 @@ app.get("/community", sessionValidation, async (req, res) => {
   var date = [];
   var likes = [];
   var id = [];
+  var commentsUser = [];
+  var comments = [];
   for (let i = 0; i < result.length; i++) {
     //DESCRIPTION
     const descrip = result[i].desc;
@@ -564,13 +566,20 @@ app.get("/community", sessionValidation, async (req, res) => {
     //ID
     const postID = result[i]._id;
     id.push(postID);
+    //commentsUser
+    const comUser = result[i].commentsUser
+    commentsUser.push(comUser);
+    //comments
+    const comm = result[i].comments
+    comments.push(comm);
     //IMAGE OF POST
     const imageData = Buffer.from(result[i].data.buffer).toString("base64");
     posts.push(imageData);
 
-
-    
   }
+  
+  
+  
   res.render("community/community", {
     pageName: "Community",
     result: result, // arrays
@@ -584,7 +593,8 @@ app.get("/community", sessionValidation, async (req, res) => {
     currentUser: currentUser, //provides ejs with the current user
     postID: id, //gives the unique id of the post as a string
     postLikeRef: gardenHeader, //used for liking a post and redirecting to the correct page
-    comments: result[0].comments
+    commentsUser: commentsUser,
+    comments: comments,
   });
 });
 

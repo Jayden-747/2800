@@ -95,16 +95,35 @@
           
          
 
-          <button onclick="comment('<%= JSON.stringify(username) %>' ,'<%= JSON.stringify(desc) %>')" data-bs-toggle="modal" data-bs-target="#commentsModal"><small>view all comments</small></button>
-          
-        
-        
-        
-        
+          <button data-bs-toggle="modal" data-bs-target="#comments<%- [i] %>"><small>view all comments</small></button>
+
         </aside>
         <aside class="date"><small><%= date[i] %></small></aside>
       </div>
     </div>
+      <!-- viewing all comments modal -->
+   <div class="modal fade" id="comments<%- [i] %>" tabindex="-1" aria-labelledby="commentsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <% for (let x = commentsUser[i].length - 1; x >= 0; x--) { %>
+          <h5 class="modal-title" id="commentsModalLabel"><%= commentsUser[i][x] %>:</h5>
+          <br>
+          <div><%= comments[i][x] %></div>
+          <br>
+          <% } %>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
     <% } %>
   </div>
  
@@ -115,24 +134,7 @@
 
 
 
-  <!-- viewing all comments modal -->
-   <div class="modal fade" id="commentsModal" tabindex="-1" aria-labelledby="commentsModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="commentsModalLabel">All Comments</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body" id="viewC">
-          ...
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
-        </div>
-      </div>
-    </div>
-  </div>
+
 
   <!-- NAVBAR BOTTOM -->
   <%- include("../templates/bottom-navbar") %>
