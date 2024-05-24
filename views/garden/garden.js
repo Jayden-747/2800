@@ -1,25 +1,30 @@
 
 
 
-
-
 let map;
-// initMap is now async
+
 async function initMap() {
-    // Request libraries when needed, not in the script tag.
-    const { Map } = await google.maps.importLibrary("maps");
-    // Short namespaces can be used.
-    map = new Map(document.getElementById("map"), {
-        center: { lat: -34.397, lng: 150.644 },
-        zoom: 8,
-    });
+    
+  const position = { lat: 49.258377, lng: -122.778777 };
+
+  const { Map } = await google.maps.importLibrary("maps");
+  const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+
+
+  map = new Map(document.getElementById("map"), {
+    zoom: 17,
+    center: position,
+    mapId: "DEMO_MAP_ID",
+  });
+
+
+  const marker = new AdvancedMarkerElement({
+    map: map,
+    position: position,
+    title: "Garden",
+  });
+
+  console.log("this works")
 }
 
 
-
-
-
-
-async function googlemaps () {
-    await initMap();
-}
