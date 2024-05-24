@@ -29,6 +29,7 @@ const mongodb_database = process.env.MONGODB_DATABASE;
 const mongodb_database_plantepedia = process.env.MONGODB_DATABASE_PLANTEPEDIA;
 const mongodb_session_secret = process.env.MONGODB_SESSION_SECRET;
 const node_session_secret = process.env.NODE_SESSION_SECRET;
+const google_maps_api = process.env.GOOGLE_MAPS_API_KEY
 
 //mongodb database
 var { database } = require("./databaseConnection");
