@@ -1,0 +1,19 @@
+ .reservationForm {
+    /* padding-top: 10%; */
+    padding-left: 10%;
+    padding-right: 10%;
+  }
+
+ .reservation-title {
+    padding-top: 20%;
+    padding-left: 10%;
+    padding-right: 10%;
+  }
+  
+  .changeFontColour{
+    color: black;
+  }
+
+  .no-padding{
+    padding: 16px 0!important;
+  }
