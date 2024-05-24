@@ -48,3 +48,14 @@ a:hover {
 input {
   width: 80vw !important;
 }
+
+#sign-up {
+  text-align: center;
+
+  display: flex;
+  flex-direction: column;
+}
+
+#or {
+  margin: 40px 0 20px 0;
+}
