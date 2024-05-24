@@ -57,7 +57,11 @@ function validDates() {
     }
 }
 
-// TODO: when i select start date FIRST then select end date as any day prior, the start date changes to the last day of the month 
+// ! when i select start date FIRST then select end date as any day prior, the start date changes to the last day of the month 
+
+async function populateForm() {
+    document.getElementById('contactName').value = user;
+}
 
 
 $(document).ready(function(){
