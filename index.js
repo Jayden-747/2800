@@ -528,7 +528,7 @@ app.post("/submitReservation", async (req, res) => {
 });
 
 // COMUNITY PAGE
-app.get("/community", async (req, res) => {
+app.get("/community", sessionValidation, async (req, res) => {
   const currentUser = req.session.username;
   const result = await database
     .db(mongodb_database)
@@ -566,6 +566,9 @@ app.get("/community", async (req, res) => {
     //IMAGE OF POST
     const imageData = Buffer.from(result[i].data.buffer).toString("base64");
     posts.push(imageData);
+
+
+    
   }
   res.render("community/community", {
     pageName: "Community",
@@ -580,6 +583,7 @@ app.get("/community", async (req, res) => {
     currentUser: currentUser, //provides ejs with the current user
     postID: id, //gives the unique id of the post as a string
     postLikeRef: gardenHeader, //used for liking a post and redirecting to the correct page
+    comments: result[0].comments
   });
 });
 
@@ -696,25 +700,31 @@ app.post("/community/unfavPost", async (req, res) => {
 // post route when user comments on a post
 // sorts through the database for the post id and enters the user's username and
 // comment into arrays
-app.post("submitComment", async (req, res) => {
+app.post("/community/submitComment", async (req, res) => {
   var comment = req.body.comment;
   var username = req.session.username;
   var postID = new mongodb.ObjectId(req.body.postID);
   var garden = req.body.garden;
   await database
-    .db(mongodb_database)
-    .collection("posts")
-    .updateOne({ _id: postID }, { $push: { comments: comment } });
+  .db(mongodb_database)
+  .collection("posts")
+  .updateOne(
+    { _id: postID },
+    { $push: { comments: comment } }
+  );
   await database
-    .db(mongodb_database)
-    .collection("posts")
-    .updateOne({ _id: postID }, { $push: { commentsUser: username } });
-  //redirect to which page according to what page the user was on
-  if (garden !== "all gardens") {
-    res.redirect("/community/" + garden);
-  } else {
-    res.redirect("/community");
-  }
+  .db(mongodb_database)
+  .collection("posts")
+  .updateOne(
+    { _id: postID },
+    { $push: { commentsUser: username } }
+  );
+    //redirect to which page according to what page the user was on
+    if (garden !== 'all gardens') {
+      res.redirect("/community/" + garden);
+    } else {
+      res.redirect("/community");
+    }
 });
 
 //routes to the new post page
@@ -753,7 +763,7 @@ app.post("/newPost/posts", upload.single("photo"), async (req, res) => {
     comments: [],
     likes: [],
     date: dateOnly,
-    commentsUser: [],
+    commentsUser: []
   };
   await database.db(mongodb_database).collection("posts").insertOne(photoData);
   res.redirect("/community");
