@@ -12,7 +12,7 @@
   <div id="gardens">
 
     <% for(let i=0; i < gardens.length; i++) { %>
-    <div style="background-image: url('/img/garden.jpeg')" class="gardenGroup">
+    <div style="background-image: url('/img/garden<%- [i] %>.jpg')" class="gardenGroup">
       
       <a href="/community/<%= gardens[i].gardenRef %>">
         <div class="garden-inner"><%= gardens[i].gardenName %></div>
