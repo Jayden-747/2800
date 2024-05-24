@@ -1,5 +1,5 @@
 <%- include("../templates/header") %>
-<link rel="stylesheet" href="/reservation/reservation.css" />
+<link rel="stylesheet" href="/reservation/afterSubmit.css" />
 </head>
 
 <body>
@@ -11,15 +11,15 @@
   <!-- @author https://getbootstrap.com/docs/5.3/components/card/ -->
   <div class="card text-center mb-3" style="width: 18rem;">
     <div class="card-body">
-      <h5 class="card-title"><%= plotName %> Reserved Succesfully</h5>
+      <h5 class="card-title"> <%# plotName %> Reserved Succesfully</h5>
       <p class="card-text">We look forward to seeing you
         <br>
         <br>
-        <b>Reservee:</b> <%= user %>
+        <b>Reservee:</b> <%# user %>
         <br>
-        <b>Reserved plot:</b> <%= plotName %>
+        <b>Reserved plot:</b> <%# plotName %>
         <br>
-        <b>Reserved For:</b> <%= startDate %> <%= endDate %>
+        <b>Reserved For:</b> <%# startDate %> <%# endDate %>
         <br>
         <br>
         <br>

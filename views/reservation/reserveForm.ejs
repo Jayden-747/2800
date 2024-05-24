@@ -9,8 +9,8 @@
 
 
   <div class="reservation-title">
-    <h2 class="reservation-garden"><%= nameOfGarden %></h2>
-    <h4 class="reservation-gardenPlot"><%= plotName %></h4>
+    <h2 class="reservation-garden"><b><%= nameOfGarden %></b></h2>
+    <h4 class="reservation-gardenPlot"><b><%= plotName %></b></h4>
   </div>
 
   <form class="reservationForm" action="/reservationForm/submitReservation" method="post" id="reservationFormId">
@@ -32,11 +32,12 @@
     <div class="mb-3">
       <h3>Confirm your Contact Info</h3>
       <label for="contactName" class="form-label">Name</label>
-      <input type="text" class="form-control" id="contactName" name="reservationName" value="<%= user.username %>" placeholder="<%= user.username %>">
+      <input type="text" class="form-control" id="contactName" name="reservationName" value="<%= user.name %>" placeholder="<%= user.name %>">
       <label for="contactEmail" class="form-label">Email</label>
       <input type="text" class="form-control" id="contactEmail" name="reservationEmail" value="<%= user.email %>" placeholder="<%= user.email %>">
     </div>
     <!-- Changed type from 'submit' to 'button'. Modal requires button -->
+    <input type="hidden" name="gardenName" value="<%= nameOfGarden %>">
     <input type="hidden" name="plotName" value="<%= plotName %>">
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmModal">Reserve a Plot</button>
   </form>
