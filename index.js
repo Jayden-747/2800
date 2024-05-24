@@ -527,26 +527,48 @@ app.get("/reservationForm/:garden/:plotName", async (req, res) => {
 
 // Submitting the reservation form
 app.post("/reservationForm/submitReservation", async (req, res) => {
-  const { reservationStartDate, reservationEndDate, reservationName, reservationEmail, plotName } = req.body; 
+  const { reservationStartDate, reservationEndDate, reservationName, reservationEmail, plotName } = req.body;
   const startDate = new Date(reservationStartDate);
   const endDate = new Date(reservationEndDate);
-//! Gotta fix this database structure
-  const updateAvailability = await gardensCollection.findOneAndUpdate( 
-    {plotName: plotName}, 
-    { 
+  //! Gotta fix this database structure
+  const updateAvailability = await gardensCollection.findOneAndUpdate(
+    { plotName: plotName },
+    {
       $set: {
-        availability: "Unavailable", 
-        reservee: { 
-          startingDate: startDate, 
-          endingData: endDate, 
-          name: reservationName, 
+        availability: "Unavailable",
+        reservee: {
+          startingDate: startDate,
+          endingData: endDate,
+          name: reservationName,
           email: reservationEmail
         }
-      }  
-  });
+      }
+    });
   console.log("successfully uploaded in MoNgO let's gooooooooooooooo" + updateAvailability);
   // I'm so sorry for being unavailble to help you brother me dumb me no logic I sincerly apolosise to you for everything
   // nono im sorry i keep breaking the codeLMAOOOO ALL GOOD BRUDA
+
+  // * Update the number of available plots ('plotsAvailable') in garden collection
+  const garden = req.body.gardenName;
+  console.log("garden name: " + garden);
+
+  // Queries a list of plots of the specified garden
+  const allPlots = await gardensCollection
+    .find({ gardenName: garden })
+    .project({ plots: 1 })
+    .toArray();
+  console.log("array of ALL plots in garden " + garden + ": " + allPlots[0].plots);
+
+  // Filters the plots by availabilty
+  const availPlotsOnly = allPlots[0].plots.filter(plot => plot.availability === "Available");
+  console.log("array of avail plots: " + availPlotsOnly);
+  console.log("length of available plots: " + availPlotsOnly.length);
+
+  // Set this garden's plotsAvailable fieldset to updated list of available plots (availPlotsOnly array)
+  const updatePlotsAvail = await gardensCollection
+    .findOneAndUpdate({ gardenName: garden},
+      {$set: {plotsAvailable: availPlotsOnly.length}}
+    );
 });
 
 // COMUNITY PAGE
@@ -598,9 +620,9 @@ app.get("/community", sessionValidation, async (req, res) => {
     posts.push(imageData);
 
   }
-  
-  
-  
+
+
+
   res.render("community/community", {
     pageName: "Community",
     result: result, // arrays
@@ -738,25 +760,25 @@ app.post("/community/submitComment", async (req, res) => {
   var postID = new mongodb.ObjectId(req.body.postID);
   var garden = req.body.garden;
   await database
-  .db(mongodb_database)
-  .collection("posts")
-  .updateOne(
-    { _id: postID },
-    { $push: { comments: comment } }
-  );
+    .db(mongodb_database)
+    .collection("posts")
+    .updateOne(
+      { _id: postID },
+      { $push: { comments: comment } }
+    );
   await database
-  .db(mongodb_database)
-  .collection("posts")
-  .updateOne(
-    { _id: postID },
-    { $push: { commentsUser: username } }
-  );
-    //redirect to which page according to what page the user was on
-    if (garden !== 'all gardens') {
-      res.redirect("/community/" + garden);
-    } else {
-      res.redirect("/community");
-    }
+    .db(mongodb_database)
+    .collection("posts")
+    .updateOne(
+      { _id: postID },
+      { $push: { commentsUser: username } }
+    );
+  //redirect to which page according to what page the user was on
+  if (garden !== 'all gardens') {
+    res.redirect("/community/" + garden);
+  } else {
+    res.redirect("/community");
+  }
 });
 
 //routes to the new post page

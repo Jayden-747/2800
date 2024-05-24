@@ -13,6 +13,7 @@
     <h4 class="reservation-gardenPlot"><%= plotName %></h4>
   </div>
 
+  <!-- *FORM FOR RESERVING A PLOT -->
   <form class="reservationForm" action="/reservationForm/submitReservation" method="post" id="reservationFormId">
     <!-- Reservation Dates -->
     <div class="mb-3">
@@ -22,7 +23,7 @@
       <label for="reservationEndDate" class="form-label">End</label>
       <input type="date" class="form-control" id="reservationEndDate" name="reservationEndDate" onchange="validDates()">
       <div class="reservationDuration">
-        Total: <span>this is where the length will be</span>
+        Total: <span id="reservationTotal">this is where the length will be</span>
       </div>
     </div>
 
@@ -38,11 +39,12 @@
     </div>
     <!-- Changed type from 'submit' to 'button'. Modal requires button -->
     <input type="hidden" name="plotName" value="<%= plotName %>">
+    <input type="hidden" name="gardenName" value="<%= nameOfGarden %>">
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmModal">Reserve a Plot</button>
   </form>
 
 
-  <!-- Displaying confirmation modal -->
+  <!-- *DISPLAYING CONFIRMATION MODAL -->
   <!-- I found this code on Bootstrap -->
   <!-- see https://getbootstrap.com/docs/5.3/examples/modals/ -->
   <div class="modal fade" tabindex="-1" role="dialog" id="confirmModal" aria-labelledby="modalLabel" aria-hidden="true">
