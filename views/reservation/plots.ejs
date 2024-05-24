@@ -16,7 +16,12 @@
       <div class="card-body">
         <h5 class="card-title"><b><%= creatingPlots[i].plotName %></b></h5>
         <p class="card-text">Dimensions: <%= creatingPlots[i].dimensions %><br>Availability: <%= creatingPlots[i].availability %></p>
-        <a class="btn btn-primary" href="/reservationForm/<%= encodeURIComponent(garden) %>/<%= encodeURIComponent(creatingPlots[i].plotName) %>">Reserve</a>
+        <!-- Renders clickable button if and only if plot is 'available' -->
+        <% if (creatingPlots[i].availability === 'Unavailable') { %>
+            <a class="btn btn-secondary"  id="<%= creatingPlots[i].plotName %> Button" style="pointer-events: none; cursor: default;">Reserve</a>
+        <% } else { %>
+        <a class="btn btn-primary" id="<%= creatingPlots[i].plotName %> Button" href="/reservationForm/<%= encodeURIComponent(garden) %>/<%= encodeURIComponent(creatingPlots[i].plotName) %>">Reserve</a>
+        <% } %>
       </div>
     </div>
   </div>

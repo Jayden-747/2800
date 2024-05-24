@@ -115,13 +115,12 @@ function sessionValidation(req, res, next) {
   }
 }
 
-// TODO Add favourite gardens collection to page
 // LANDING PAGE
 app.get("/", async (req, res) => {
   if (req.session.authenticated) {
     const username = req.session.username;
     const user = await userCollection.findOne({ username: username });
-    const gardens = await database
+    const gardenName = await database
       .db(mongodb_database)
       .collection("gardens")
       .find()
@@ -146,29 +145,20 @@ app.get("/", async (req, res) => {
     }, {});
     
     // Orders the gardenRefs based on the order of favGardens
-    const gardenRef = favGardens.map(gardenName => gardenMap[gardenName].gardenRef);
-
-    console.log("gardenMap:", gardenMap);
-      console.log("gardenRef:", gardenRef);
-    const backImage = gardenRef.map(gardenName => {
-      const garden = gardenMap[gardenName];
-      if (garden && garden.photo && garden.photo.buffer) {
-        backImage.push(Buffer.from(garden.photo.buffer).toString("base64"));
-      }
-      return null;
-    }).filter(imageData => imageData !== null);
+    const gardenRef = favGardens.map((gardenName) => gardenMap[gardenName].gardenRef);
+    var backImage = [];
     
-    // for(i=0; i < gardenRef.length; i++){
-      
-    //       //PARSES IMAGE DATA AND DISPLAYS IT
-    // const imageData = Buffer.from(gardenDocs[i].photo.buffer).toString("base64");
-    // backImage.push(imageData);
-    // }
-    console.log(backImage)
+    for(i=0; i < gardenRef.length; i++){
+      // Find the document with the corresponding gardenRef
+      const gardenDoc = gardenDocs.find(doc => doc.gardenRef === gardenRef[i]);
+          //PARSES IMAGE DATA AND DISPLAYS IT
+    const imageData = Buffer.from(gardenDoc.photo.buffer).toString("base64");
+    backImage.push(imageData);
+    }
     res.render("home/home", {
       username: username,
       favGardens: favGardens,
-      gardens: gardens,
+      gardens: gardenName,
       gardenRef: gardenRef,
       image: backImage
     });
@@ -499,10 +489,14 @@ app.get("/garden/:garden", sessionValidation, async (req, res) => {
         city: 1,
         plotsAvailable: 1,
         crops: 1,
+        photo: 1,
       },
     }
   );
-  res.render("garden/garden", { pageName: "Explore", garden: result });
+  
+  const imageData = Buffer.from(result.photo.buffer).toString("base64");
+  
+  res.render("garden/garden", { pageName: "Explore", garden: result, image: imageData });
 });
 
 app.get("/gardenPlots/:plots", sessionValidation, async (req, res) => {
@@ -549,7 +543,7 @@ app.post("/reservationForm/submitReservation", async (req, res) => {
   const { reservationStartDate, reservationEndDate, reservationName, reservationEmail, plotName } = req.body; 
   const startDate = new Date(reservationStartDate);
   const endDate = new Date(reservationEndDate);
-
+//! Gotta fix this database structure
   const updateAvailability = await gardensCollection.findOneAndUpdate( 
     {plotName: plotName}, 
     { 

@@ -17,7 +17,7 @@
 
 
     <!-- *redirects /gardens page with garden name specified in parameter -->
-    <div class="gardenGroup">
+    <div class="gardenGroup" style="background-image: url('/img/garden<%- [i] %>.jpg');">
       <a class="garden-inner" href="/garden/<%= encodeURIComponent(gardens[i].gardenName) %>"><span class="garden-name"><%= gardens[i].gardenName %></span>
       </a>
     </div>
