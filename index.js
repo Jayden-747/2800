@@ -576,6 +576,9 @@ app.get("/community", sessionValidation, async (req, res) => {
     posts.push(imageData);
 
   }
+  
+  
+  
   res.render("community/community", {
     pageName: "Community",
     result: result, // arrays
