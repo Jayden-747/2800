@@ -54,6 +54,8 @@
   gap: 20px;
 
   margin-top: 20px;
+
+  z-index: 1;
 }
 
 #chevron {
@@ -173,4 +175,13 @@ video {
   position: absolute;
   top: 0;
   left: 0;
+}
+
+#trigger2 {
+  width: 60%;
+  height: 70%;
+
+  position: absolute;
+  top: 0%;
+  left: 25%;
 }

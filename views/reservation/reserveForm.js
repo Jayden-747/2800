@@ -57,10 +57,19 @@ function validDates() {
     }
 }
 
-// TODO: when i select start date FIRST then select end date as any day prior, the start date changes to the last day of the month 
+// ! when i select start date FIRST then select end date as any day prior, the start date changes to the last day of the month 
 
+async function populateForm() {
+    document.getElementById('contactName').value = user;
+}
 
+//Function for conformation modal and submitting a form
 $(document).ready(function(){
-    $('.modal-body').html(``);
 
+    console.log("why not working?");
+
+    $('#positive').on('click', function() {
+        console.log('is this function working?');
+        $('#reservationFormId').submit();
+    });
 });

@@ -13,7 +13,7 @@
     <h4 class="reservation-gardenPlot"><%= plotName %></h4>
   </div>
 
-  <form class="reservationForm" action="/submitReservation" method="post">
+  <form class="reservationForm" action="/submitReservation" method="post" id="reservationFormId">
     <!-- Reservation Dates -->
     <div class="mb-3">
       <h3>Reservation Duration</h3>
@@ -31,26 +31,37 @@
     <div class="mb-3">
       <h3>Confirm your Contact Info</h3>
       <label for="contactName" class="form-label">Name</label>
-      <input type="text" class="form-control" id="contactName">
+      <input type="text" class="form-control" id="contactName" onload="populateForm(JSON.stringify('<%= user %>'))">
       <label for="contactEmail" class="form-label">Email</label>
-      <input type="text" class="form-control" id="contactEmail">
+      <input type="text" class="form-control" id="contactEmail" onload="populateForm(JSON.stringify('<%= email %>'))">
       <label for="contactPhone" class="form-label">Phone Number</label>
       <input type="text" class="form-control" id="contactPhone">
     </div>
-    <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#confirmModal">Reserve a Plot</button>
+    <!-- Changed type from 'submit' to 'button'. Modal requires button -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmModal">Reserve a Plot</button>
   </form>
 
 
   <!-- Displaying confirmation modal -->
   <!-- I found this code on Bootstrap -->
   <!-- see https://getbootstrap.com/docs/5.3/examples/modals/ -->
-  
-
+  <div class="modal fade" tabindex="-1" role="dialog" id="confirmModal" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content rounded-3 shadow">
+        <div class="modal-body p-4 text-center">
+          <h5 class="mb-0 changeFontColour">Reserve this plot?</h5>
+        </div>
+        <div class="modal-footer flex-nowrap p-0">          
+          <button type="button" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 py-3 m-0 rounded-0 border-end no-padding" id="positive">Yes, please</button>
+          <button type="button" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 py-3 m-0 rounded-0 no-padding" data-bs-dismiss="modal">No, thanks</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- NAVBAR BOTTOM -->
   <%- include("../templates/bottom-navbar") %>
 
-  <!-- SCRIPTS -->
   <script src="/views/reservation/reserveForm.js"></script>
   <script type="module" src="/modules/navigations.js"></script>
   <script type="module" src="/modules/customizations.js"></script>
