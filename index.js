@@ -121,7 +121,7 @@ app.get("/", async (req, res) => {
   if (req.session.authenticated) {
     const username = req.session.username;
     const user = await userCollection.findOne({ username: username });
-    const gardenName = await database
+    const gardens = await database
       .db(mongodb_database)
       .collection("gardens")
       .find()
@@ -141,18 +141,36 @@ app.get("/", async (req, res) => {
 
     //CHATGPT USED gives a function that maps gardenName to gardenRef
     const gardenMap = gardenDocs.reduce((acc, doc) => {
-      acc[doc.gardenName] = doc.gardenRef;
+      acc[doc.gardenName] = doc;
       return acc;
     }, {});
-
+    
     // Orders the gardenRefs based on the order of favGardens
-    const gardenRef = favGardens.map((gardenName) => gardenMap[gardenName]);
+    const gardenRef = favGardens.map(gardenName => gardenMap[gardenName].gardenRef);
 
+    console.log("gardenMap:", gardenMap);
+      console.log("gardenRef:", gardenRef);
+    const backImage = gardenRef.map(gardenName => {
+      const garden = gardenMap[gardenName];
+      if (garden && garden.photo && garden.photo.buffer) {
+        backImage.push(Buffer.from(garden.photo.buffer).toString("base64"));
+      }
+      return null;
+    }).filter(imageData => imageData !== null);
+    
+    // for(i=0; i < gardenRef.length; i++){
+      
+    //       //PARSES IMAGE DATA AND DISPLAYS IT
+    // const imageData = Buffer.from(gardenDocs[i].photo.buffer).toString("base64");
+    // backImage.push(imageData);
+    // }
+    console.log(backImage)
     res.render("home/home", {
       username: username,
       favGardens: favGardens,
-      gardens: gardenName,
+      gardens: gardens,
       gardenRef: gardenRef,
+      image: backImage
     });
   } else {
     res.render("landing/landing");
@@ -550,7 +568,7 @@ app.post("/reservationForm/submitReservation", async (req, res) => {
   // nono im sorry i keep breaking the codeLMAOOOO ALL GOOD BRUDA
 });
 
-// COMUNITY PAGE
+// COMUNITY PAGE that shows all posts
 app.get("/community", sessionValidation, async (req, res) => {
   const currentUser = req.session.username;
   const result = await database
@@ -564,6 +582,7 @@ app.get("/community", sessionValidation, async (req, res) => {
     .find()
     .toArray();
   var gardenHeader = "all gardens";
+  //Loop that pushes all the posts variables into an array that lets us display on the page
   var posts = [];
   var descss = [];
   var user = [];
@@ -599,7 +618,7 @@ app.get("/community", sessionValidation, async (req, res) => {
     posts.push(imageData);
 
   }
-  
+
   
   
   res.render("community/community", {
@@ -620,7 +639,7 @@ app.get("/community", sessionValidation, async (req, res) => {
   });
 });
 
-//Route to a specific community garden that filters posts based on the "name" field
+//Route to a specific community garden that filters posts based on the "name" field; similar to community route
 app.get("/community/:garden", async (req, res) => {
   const currentUser = req.session.username;
   //utilize req body param
@@ -646,6 +665,8 @@ app.get("/community/:garden", async (req, res) => {
     .collection("gardens")
     .findOne({ gardenRef: garden });
 
+  
+
   //Loop that pushes all the posts variables into an array that lets us display on the page
   var posts = [];
   var descss = [];
@@ -653,6 +674,8 @@ app.get("/community/:garden", async (req, res) => {
   var date = [];
   var likes = [];
   var id = [];
+  var commentsUser = [];
+  var comments = [];
   for (let i = 0; i < result.length; i++) {
     //DESCRIPTION
     const descrip = result[i].desc;
@@ -669,6 +692,12 @@ app.get("/community/:garden", async (req, res) => {
     //ID
     const postID = result[i]._id;
     id.push(postID);
+    //commentsUser
+    const comUser = result[i].commentsUser
+    commentsUser.push(comUser);
+    //comments
+    const comm = result[i].comments
+    comments.push(comm);
     //PARSES IMAGE DATA AND DISPLAYS IT
     const imageData = Buffer.from(result[i].data.buffer).toString("base64");
     posts.push(imageData);
@@ -678,14 +707,16 @@ app.get("/community/:garden", async (req, res) => {
     result: result, //array
     posts: posts, //picture
     desc: descss, //caption
-    username: user,
-    date: date,
+    username: user, //username of the poster
+    date: date, // date of the post
     gardens: gardenName, //provides a garden array
     gardenP: gardenHeader.gardenName, //for the page name
     userLikes: likes, //give like array of usernames
     currentUser: currentUser, //provides ejs with the current user
     postID: id, //gives the unique id of the post as a string
     postLikeRef: garden, //used for liking a post and redirecting to the correct page
+    commentsUser: commentsUser,//gives array of usernames that have commented on the post
+    comments: comments,// gives an array of users' comments on a post
   });
 });
 
@@ -798,7 +829,8 @@ app.post("/newPost/posts", upload.single("photo"), async (req, res) => {
     date: dateOnly,
     commentsUser: []
   };
-  await database.db(mongodb_database).collection("posts").insertOne(photoData);
+  
+  await database.db(mongodb_database).collection("gardens").updateOne({gardenName: "Elizabeth Garden"}, {$set: {photo: req.file.buffer}});
   res.redirect("/community");
 });
 
