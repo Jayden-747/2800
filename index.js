@@ -541,7 +541,6 @@ app.get("/reservationForm/:garden/:plotName", async (req, res) => {
 
 // Submitting the reservation form
 app.post("/reservationForm/submitReservation", async (req, res) => {
-<<<<<<< HEAD
   const { reservationStartDate, reservationEndDate, reservationName, reservationEmail, gardenName, plotName } = req.body;
   const startDate = new Date(reservationStartDate);
   const endDate = new Date(reservationEndDate);
@@ -570,26 +569,6 @@ app.post("/reservationForm/submitReservation", async (req, res) => {
   console.log(updateAvailability);
   res.redirect("/afterSubmission");
 
-=======
-  const { reservationStartDate, reservationEndDate, reservationName, reservationEmail, plotName } = req.body;
-  const startDate = new Date(reservationStartDate);
-  const endDate = new Date(reservationEndDate);
-  //! Gotta fix this database structure
-  const updateAvailability = await gardensCollection.findOneAndUpdate(
-    { plotName: plotName },
-    {
-      $set: {
-        availability: "Unavailable",
-        reservee: {
-          startingDate: startDate,
-          endingData: endDate,
-          name: reservationName,
-          email: reservationEmail
-        }
-      }
-    });
-  console.log("successfully uploaded in MoNgO let's gooooooooooooooo" + updateAvailability);
->>>>>>> neriyel
   // I'm so sorry for being unavailble to help you brother me dumb me no logic I sincerly apolosise to you for everything
   // nono im sorry i keep breaking the codeLMAOOOO ALL GOOD BRUDA
 
@@ -674,13 +653,8 @@ app.get("/community", sessionValidation, async (req, res) => {
 
   }
 
-<<<<<<< HEAD
   
   
-=======
-
-
->>>>>>> neriyel
   res.render("community/community", {
     pageName: "Community",
     result: result, // arrays
