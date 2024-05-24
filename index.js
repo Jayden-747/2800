@@ -56,7 +56,7 @@ var mongoStore = MongoStore.create({
 const saltRounds = 12;
 
 //Expiration for cookie
-const expireTime = 1 * 60 * 60 * 1000;
+const expireTime = 23 * 60 * 60 * 1000;
 
 // Express static paths
 app.use("/img", express.static("./assets/img"));
@@ -451,6 +451,7 @@ app.get("/gardenPlots/:plots", sessionValidation, async (req, res) => {
 // Submitting the reservation form
 app.post('/submitReservation', async (req, res) => {
   var user = req.session.username;
+  console.log(res);
   // I'm so sorry for being unavailble to help you brother me dumb me no logic I sincerly apolosise to you for everything
   // nono im sorry i keep breaking the codeLMAOOOO ALL GOOD BRUDA
 });

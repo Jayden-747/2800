@@ -1,0 +1,39 @@
+<%- include("../templates/header") %>
+<link rel="stylesheet" href="/reservation/reservation.css" />
+</head>
+
+<body>
+  <!-- NAVBAR TOP -->
+  <%- include("../templates/top-navbar", {pageName: "Reserve a plot"}) %>
+  <%- include("../templates/hamburger") %>
+
+  <!-- I found this code on getbootstrap.com in cards section -->
+  <!-- @author https://getbootstrap.com/docs/5.3/components/card/ -->
+  <div class="card text-center mb-3" style="width: 18rem;">
+    <div class="card-body">
+      <h5 class="card-title"><%= plotName %> Reserved Succesfully</h5>
+      <p class="card-text">We look forward to seeing you
+        <br>
+        <br>
+        <b>Reservee:</b> <%= user %>
+        <br>
+        <b>Reserved plot:</b> <%= plotName %>
+        <br>
+        <b>Reserved For:</b> <%= startDate %> <%= endDate %>
+        <br>
+        <br>
+        <br>
+      </p>
+      <a href="#" class="btn btn-primary">Continue</a>
+    </div>
+  </div>
+
+  <!-- NAVBAR BOTTOM -->
+  <%- include("../templates/bottom-navbar") %>
+
+  <!-- SCRIPTS -->
+  <script type="module" src="/modules/navigations.js"></script>
+  <script type="module" src="/modules/customizations.js"></script>
+  <script type="module" src="/views/universal.js"></script>
+
+  <%- include("../templates/footer") %>
