@@ -486,6 +486,7 @@ app.get("/garden/:garden", sessionValidation, async (req, res) => {
   res.render("garden/garden", { pageName: "Explore", garden: result });
 });
 
+// PLOT PAGE (Displaying plots for certain gardens)
 app.get("/gardenPlots/:plots", sessionValidation, async (req, res) => {
   // :plots is the gardenName
   var plotsInGarden = req.params.plots;
@@ -527,26 +528,43 @@ app.get("/reservationForm/:garden/:plotName", async (req, res) => {
 
 // Submitting the reservation form
 app.post("/reservationForm/submitReservation", async (req, res) => {
-  const { reservationStartDate, reservationEndDate, reservationName, reservationEmail, plotName } = req.body; 
+  const { reservationStartDate, reservationEndDate, reservationName, reservationEmail, gardenName, plotName } = req.body;
   const startDate = new Date(reservationStartDate);
   const endDate = new Date(reservationEndDate);
-//! Gotta fix this database structure
-  const updateAvailability = await gardensCollection.findOneAndUpdate( 
-    {plotName: plotName}, 
-    { 
-      $set: {
-        availability: "Unavailable", 
-        reservee: { 
-          startingDate: startDate, 
-          endingData: endDate, 
-          name: reservationName, 
-          email: reservationEmail
+  console.log(reservationEmail);
+  const updateAvailability = await gardensCollection.findOneAndUpdate(
+    {
+      gardenName: gardenName,
+      "plots.plotName": plotName
+      // "plots.$.plotName": plotName
+    }, 
+      { 
+        $set: {
+          "plots.$.availability": "Unavailable", 
+          "plots.$.startingDate": startDate, 
+          "plots.$.endingData": endDate, 
+          "plots.$.reserveeName": reservationName, 
+          "plots.$.email": reservationEmail
+          // email: reservationEmail
         }
-      }  
+      },
+        { 
+          returnOriginal: false
+          // returnNewDocument: true   
   });
-  console.log("successfully uploaded in MoNgO let's gooooooooooooooo" + updateAvailability);
+  console.log(gardenName);
+  console.log(updateAvailability);
+  res.redirect("/afterSubmission");
+
   // I'm so sorry for being unavailble to help you brother me dumb me no logic I sincerly apolosise to you for everything
   // nono im sorry i keep breaking the codeLMAOOOO ALL GOOD BRUDA
+});
+
+// After submission for reserving plot PAGE
+app.get("/afterSubmission", sessionValidation, async (req, res) => {
+  res.render("reservation/afterSubmit", {
+
+  });
 });
 
 // COMUNITY PAGE
