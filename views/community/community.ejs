@@ -37,7 +37,7 @@
 
 
           <% if (userLikes[i].includes(currentUser)) { %>
-            <form action="/unfavPost" method="post" style="display: inline;">
+            <form action="/community/unfavPost" method="post" style="display: inline;">
               <input type="hidden" name="postID" value="<%= postID[i] %>">
               <input type="hidden" name="garden" value="<%= postLikeRef %>">
               <button type="submit" value="" name="likes" class="material-icons-round favorite-button">favorite
@@ -45,7 +45,7 @@
             </form>
         
             <% } else { %>
-              <form action="favPost" method="post">
+              <form action="/community/favPost" method="post">
                 <input type="hidden" name="postID" value="<%= postID[i] %>">
                 <input type="hidden" name="garden" value="<%= postLikeRef %>">
                 <button class="material-icons-round">

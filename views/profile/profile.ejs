@@ -41,15 +41,15 @@
         <% if (likes[i].includes(currentUser)) { %>
         <form action="/unfavPost" method="post" style="display: inline;">
           <input type="hidden" name="postID" value="<%= postID[i] %>">
-          <input type="hidden" name="garden" value="<%# postLikeRef %>">
+          <input type="hidden" name="garden" value="<%= likeRef %>">
           <button type="submit" value="" name="likes" class="material-icons-round favorite-button">favorite
           </button>
         </form>
 
         <% } else { %>
-        <form action="favPost" method="post">
+        <form action="/favPost" method="post">
           <input type="hidden" name="postID" value="<%= postID[i] %>">
-          <input type="hidden" name="garden" value="<%# postLikeRef %>">
+          <input type="hidden" name="garden" value="<%= likeRef %>">
           <button class="material-icons-round">
             favorite_border
           </button>
