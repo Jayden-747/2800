@@ -530,7 +530,7 @@ app.post("/reservationForm/submitReservation", async (req, res) => {
   const { reservationStartDate, reservationEndDate, reservationName, reservationEmail, plotName } = req.body; 
   const startDate = new Date(reservationStartDate);
   const endDate = new Date(reservationEndDate);
-
+//! Gotta fix this database structure
   const updateAvailability = await gardensCollection.findOneAndUpdate( 
     {plotName: plotName}, 
     { 
