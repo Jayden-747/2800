@@ -153,7 +153,7 @@ app.get("/", async (req, res) => {
     const backImage = gardenRef.map(gardenName => {
       const garden = gardenMap[gardenName];
       if (garden && garden.photo && garden.photo.buffer) {
-        return Buffer.from(garden.photo.buffer).toString("base64");
+        backImage.push(Buffer.from(garden.photo.buffer).toString("base64"));
       }
       return null;
     }).filter(imageData => imageData !== null);
