@@ -4,7 +4,7 @@ function comment(userArray, commentsArray) {
     console.log("hello")
 
     const setup = async () => {
-        $('.modal-body').empty();
+        $('#viewC').empty();
         let user = JSON.parse(userArray)
         let comments = JSON.parse(commentsArray)
         console.log(JSON.parse(userArray))
