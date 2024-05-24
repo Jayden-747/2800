@@ -503,28 +503,49 @@ app.get("/gardenPlots/:plots", sessionValidation, async (req, res) => {
 // RESERVATION FORM (reserving a plot)
 app.get("/reservationForm/:garden/:plotName", async (req, res) => {
   const gardenname = req.params.garden;
-  const plotName = req.params.plotName;
+  var user = req.session.username;
+  var plotname = req.params.plotName;
 
-  console.log("Garden name: " + gardenname);
-  console.log("Plot name: " + plotName);
+  // querying user's info
+  const userResult = await userCollection.findOne(
+    { username: user },
+    { projection: { username: 1, name: 1, email: 1 } }
+  );
 
-  const result = await gardensCollection.findOne(
+  // querying garden's info
+  const gardenResult = await gardensCollection.findOne(
     { gardenName: gardenname },
     { projection: { gardenName: 1 } }
   );
 
-  console.log(result);
   res.render("reservation/reserveForm", {
     pageName: "Reserving a Plot",
-    nameOfGarden: result.gardenName,
-    plotName: plotName,
+    nameOfGarden: gardenResult.gardenName,
+    plotName: plotname,
+    user: userResult,
   });
 });
 
 // Submitting the reservation form
-app.post("/submitReservation", async (req, res) => {
-  var user = req.session.username;
-  console.log(res);
+app.post("/reservationForm/submitReservation", async (req, res) => {
+  const { reservationStartDate, reservationEndDate, reservationName, reservationEmail, plotName } = req.body; 
+  const startDate = new Date(reservationStartDate);
+  const endDate = new Date(reservationEndDate);
+
+  const updateAvailability = await gardensCollection.findOneAndUpdate( 
+    {plotName: plotName}, 
+    { 
+      $set: {
+        availability: "Unavailable", 
+        reservee: { 
+          startingDate: startDate, 
+          endingData: endDate, 
+          name: reservationName, 
+          email: reservationEmail
+        }
+      }  
+  });
+  console.log("successfully uploaded in MoNgO let's gooooooooooooooo" + updateAvailability);
   // I'm so sorry for being unavailble to help you brother me dumb me no logic I sincerly apolosise to you for everything
   // nono im sorry i keep breaking the codeLMAOOOO ALL GOOD BRUDA
 });

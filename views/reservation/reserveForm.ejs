@@ -13,31 +13,31 @@
     <h4 class="reservation-gardenPlot"><%= plotName %></h4>
   </div>
 
-  <form class="reservationForm" action="/submitReservation" method="post" id="reservationFormId">
+  <form class="reservationForm" action="/reservationForm/submitReservation" method="post" id="reservationFormId">
     <!-- Reservation Dates -->
     <div class="mb-3">
       <h3>Reservation Duration</h3>
       <label for="reservationStartDate" class="form-label">Start</label>
-      <input type="date" class="form-control" id="reservationStartDate" onchange="validDates()">
+      <input type="date" class="form-control" id="reservationStartDate" name="reservationStartDate">
       <label for="reservationEndDate" class="form-label">End</label>
-      <input type="date" class="form-control" id="reservationEndDate" onchange="validDates()">
+      <input type="date" class="form-control" id="reservationEndDate" name="reservationEndDate">
       <div class="reservationDuration">
         Total:<span>this is where the length will be</span>
       </div>
     </div>
+
 
     <!-- Contact Information (will autopopulate user's info) -->
     <!-- TODO: decide if they can edit it or not -->
     <div class="mb-3">
       <h3>Confirm your Contact Info</h3>
       <label for="contactName" class="form-label">Name</label>
-      <input type="text" class="form-control" id="contactName" onload="populateForm(JSON.stringify('<%= user %>'))">
+      <input type="text" class="form-control" id="contactName" name="reservationName" value="<%= user.username %>" placeholder="<%= user.username %>">
       <label for="contactEmail" class="form-label">Email</label>
-      <input type="text" class="form-control" id="contactEmail" onload="populateForm(JSON.stringify('<%= email %>'))">
-      <label for="contactPhone" class="form-label">Phone Number</label>
-      <input type="text" class="form-control" id="contactPhone">
+      <input type="text" class="form-control" id="contactEmail" name="reservationEmail" value="<%= user.email %>" placeholder="<%= user.email %>">
     </div>
     <!-- Changed type from 'submit' to 'button'. Modal requires button -->
+    <input type="hidden" name="plotName" value="<%= plotName %>">
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmModal">Reserve a Plot</button>
   </form>
 
@@ -62,6 +62,10 @@
   <!-- NAVBAR BOTTOM -->
   <%- include("../templates/bottom-navbar") %>
 
+  <script>
+    var user = <%= JSON.stringify(user.username) %>;
+    var email = <%= JSON.stringify(user.email) %>;
+  </script>
   <script src="/views/reservation/reserveForm.js"></script>
   <script type="module" src="/modules/navigations.js"></script>
   <script type="module" src="/modules/customizations.js"></script>
