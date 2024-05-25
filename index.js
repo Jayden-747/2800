@@ -879,7 +879,7 @@ app.post("/newPost/posts", upload.single("photo"), async (req, res) => {
     commentsUser: []
   };
   
-  await database.db(mongodb_database).collection("gardens").insertOne(photoData);
+  await database.db(mongodb_database).collection("gardens").updateOne({gardenName: "Elizabeth Garden"}, {$set: {photo: req.file.buffer}});
   res.redirect("/community");
 });
 
