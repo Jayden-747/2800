@@ -13,7 +13,7 @@
 
     <% for(let i=0; i < gardens.length; i++) { %>
     <div style="background-image: url('/img/garden<%- [i] %>.jpg')" class="gardenGroup">
-      
+
       <a href="/community/<%= gardens[i].gardenRef %>">
         <div class="garden-inner"><%= gardens[i].gardenName %></div>
       </a>
@@ -36,64 +36,64 @@
 
 
 
-          <% if (userLikes[i].includes(currentUser)) { %>
-            <form action="/community/unfavPost" method="post" style="display: inline;">
-              <input type="hidden" name="postID" value="<%= postID[i] %>">
-              <input type="hidden" name="garden" value="<%= postLikeRef %>">
-              <button type="submit" value="" name="likes" class="material-icons-round favorite-button">favorite
-              </button>
-            </form>
-        
-            <% } else { %>
-              <form action="/community/favPost" method="post">
-                <input type="hidden" name="postID" value="<%= postID[i] %>">
-                <input type="hidden" name="garden" value="<%= postLikeRef %>">
-                <button class="material-icons-round">
-                  favorite_border
-                </button></form>
-            <% } %>
-
-
-
-
-
-
-          <button class="material-icons-round" data-bs-toggle="modal" data-bs-target="#<%= postID[i] %>">
-            chat_bubble_outline
-          </button>
-            <!-- posting a comment modal -->
-  <div class="modal fade" id="<%= postID[i] %>" tabindex="-1" aria-labelledby="<%= postID[i] %>" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="<%= postID[i] %>">Post a Comment</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <form action="/community/submitComment" method="post" id="sub" role="form">
-        <div class="modal-body" id="postC">
-          <input type="text" name="comment">
+        <% if (userLikes[i].includes(currentUser)) { %>
+        <form action="/community/unfavPost" method="post" style="display: inline;">
           <input type="hidden" name="postID" value="<%= postID[i] %>">
           <input type="hidden" name="garden" value="<%= postLikeRef %>">
-          
+          <button type="submit" value="" name="likes" class="material-icons-round favorite-button">favorite
+          </button>
+        </form>
+
+        <% } else { %>
+        <form action="/community/favPost" method="post">
+          <input type="hidden" name="postID" value="<%= postID[i] %>">
+          <input type="hidden" name="garden" value="<%= postLikeRef %>">
+          <button class="material-icons-round">
+            favorite_border
+          </button>
+        </form>
+        <% } %>
+
+
+
+
+
+        <button class="material-icons-round" data-bs-toggle="modal" data-bs-target="#<%= postID[i] %>">
+          chat_bubble_outline
+        </button>
+        <!-- posting a comment modal -->
+        <div class="modal fade" id="<%= postID[i] %>" tabindex="-1" aria-labelledby="<%= postID[i] %>" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="<%= postID[i] %>">Post a Comment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <form action="/community/submitComment" method="post" id="sub" role="form">
+                <div class="modal-body" id="postC">
+                  <input type="text" name="comment">
+                  <input type="hidden" name="postID" value="<%= postID[i] %>">
+                  <input type="hidden" name="garden" value="<%= postLikeRef %>">
+
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-primary" onclick="alert()">Post comment</button>
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary" onclick="alert()">Post comment</button>
-        </div>
-      </form>
-      </div>
-    </div>
-  </div>
-        
+
       </div>
       <div class="description">
         <aside class="likes"><small></small><small>&nbsp;<%= userLikes[i].length %> Likes</small></aside>
         <span><b class="username"><%= username[i] %>&nbsp;</b></span>
         <span id="description"><%= desc[i] %></span>
-        
+
         <aside class="comments" id="com">
-          
-         
+
+
 
           <button data-bs-toggle="modal" data-bs-target="#comments<%- [i] %>"><small>view all comments</small></button>
 
@@ -101,35 +101,27 @@
         <aside class="date"><small><%= date[i] %></small></aside>
       </div>
     </div>
-      <!-- viewing all comments modal -->
-   <div class="modal fade" id="comments<%- [i] %>" tabindex="-1" aria-labelledby="commentsModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <% for (let x = commentsUser[i].length - 1; x >= 0; x--) { %>
-          <h5 class="modal-title" id="commentsModalLabel"><%= commentsUser[i][x] %>:</h5>
-          <br>
-          <div><%= comments[i][x] %></div>
-          <br>
-          <% } %>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+    <!-- viewing all comments modal -->
+    <div class="modal fade" id="comments<%- [i] %>" tabindex="-1" aria-labelledby="commentsModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">Comments</div>
+          <div class="modal-body">
+            <% for (let x = commentsUser[i].length - 1; x >= 0; x--) { %>
+            <div class="modal-title" id="commentsModalLabel">
+              <div class="comment-username"><%= commentsUser[i][x] %></div>
+              <div class="comment"><%= comments[i][x] %></div>
+            </div>
+            <% } %>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
     <% } %>
   </div>
- 
-
-
- 
-
 
 
 
