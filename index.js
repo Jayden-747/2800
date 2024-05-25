@@ -575,8 +575,23 @@ app.post("/reservationForm/submitReservation", async (req, res) => {
 
 // After submission for reserving plot PAGE
 app.get("/afterSubmission", sessionValidation, async (req, res) => {
-  res.render("reservation/afterSubmit", {
+  // Querying reservee info
+  // const reserveeInfo = await gardensCollection.findOne(
+  //   { gardenName: gardenname },
+  //   {
+  //     projection: {
+  //       plots: 1
+  //     },
+  //   }
+  // );
 
+  // console.log(reserveeInfo);
+  res.render("reservation/afterSubmit", {
+    // plotName: reserveeInfo.plotName,
+    // reserveeName: reserveeInfo.reserveeName,
+    // reservationStartDate: reserveeInfo.reservationStartDate,
+    // reservationEndDate: reserveeInfo.reservationEndDate,
+    // reservationName: reserveeInfo.regservationName
   });
 });
 
