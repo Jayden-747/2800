@@ -17,13 +17,15 @@
   <form class="reservationForm" action="/reservationForm/submitReservation" method="post" id="reservationFormId">
     <!-- Reservation Dates -->
     <div class="mb-3">
-      <h3>Reservation Duration</h3>
-      <label for="reservationStartDate" class="form-label">Start</label>
-      <input type="date" class="form-control" id="reservationStartDate" name="reservationStartDate" onchange="validDates()">
-      <label for="reservationEndDate" class="form-label">End</label>
-      <input type="date" class="form-control" id="reservationEndDate" name="reservationEndDate" onchange="validDates()">
-      <div class="reservationDuration">
-        Total: <span id="reservationTotal">this is where the length will be</span>
+      <h3>Duration</h3>
+      <div class="inputs">
+        <label for="reservationStartDate" class="form-label">Start</label>
+        <input type="date" class="form-control" id="reservationStartDate" name="reservationStartDate" onchange="validDates()">
+        <label for="reservationEndDate" class="form-label">End</label>
+        <input type="date" class="form-control" id="reservationEndDate" name="reservationEndDate" onchange="validDates()">
+        <div class="reservationDuration">
+          Total: <span id="reservationTotal">this is where the length will be</span>
+        </div>
       </div>
     </div>
 
@@ -31,16 +33,20 @@
     <!-- Contact Information (will autopopulate user's info) -->
     <!-- TODO: decide if they can edit it or not -->
     <div class="mb-3">
-      <h3>Confirm your Contact Info</h3>
-      <label for="contactName" class="form-label">Name</label>
-      <input type="text" class="form-control" id="contactName" name="reservationName" value="<%= user.name %>" placeholder="<%= user.name %>">
-      <label for="contactEmail" class="form-label">Email</label>
-      <input type="text" class="form-control" id="contactEmail" name="reservationEmail" value="<%= user.email %>" placeholder="<%= user.email %>">
+      <h3>Confirm Info</h3>
+      <div class="inputs">
+        <label for="contactName" class="form-label">Name</label>
+        <input type="text" class="form-control input" id="contactName" name="reservationName" value="<%= user.name %>">
+        <label for="contactEmail" class="form-label">Email</label>
+        <input type="text" class="form-control input" id="contactEmail" name="reservationEmail" value="<%= user.email %>">
+      </div>
     </div>
     <!-- Changed type from 'submit' to 'button'. Modal requires button -->
-    <input type="hidden" name="gardenName" value="<%= nameOfGarden %>">
-    <input type="hidden" name="plotName" value="<%= plotName %>">
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmModal">Reserve a Plot</button>
+    <input type="hidden" class="input" name="gardenName" value="<%= nameOfGarden %>">
+    <input type="hidden" class="input" name="plotName" value="<%= plotName %>">
+    <div class="button">
+      <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#confirmModal">Reserve Plot</button>
+    </div>
   </form>
 
 
@@ -53,7 +59,7 @@
         <div class="modal-body p-4 text-center">
           <h5 class="mb-0 changeFontColour">Reserve this plot?</h5>
         </div>
-        <div class="modal-footer flex-nowrap p-0">          
+        <div class="modal-footer flex-nowrap p-0">
           <button type="button" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 py-3 m-0 rounded-0 border-end no-padding" id="positive">Yes, please</button>
           <button type="button" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 py-3 m-0 rounded-0 no-padding" data-bs-dismiss="modal">No, thanks</button>
         </div>

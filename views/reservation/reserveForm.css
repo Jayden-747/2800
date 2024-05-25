@@ -1,19 +1,48 @@
- .reservationForm {
-    padding-top: 5%;
-    padding-left: 10%;
-    padding-right: 10%;
-  }
+body {
+  margin: 60px 0;
+}
 
- .reservation-title {
-    padding-top: 15%;
-    padding-left: 10%;
-    padding-right: 10%;
-  }
-  
-  .changeFontColour{
-    color: black;
-  }
+.reservationForm {
+  padding: 0 20px;
+}
 
-  .no-padding{
-    padding: 16px 0!important;
-  }
+.reservation-title {
+  padding: 20px 20px 10px 20px;
+}
+
+.changeFontColour {
+  color: black;
+}
+
+.no-padding {
+  padding: 16px 0 !important;
+}
+
+.reservation-garden {
+  margin-bottom: 40px;
+}
+
+.inputs {
+  padding: 0 20px 30px 20px;
+}
+
+label {
+  margin: 0 !important;
+}
+
+.form-control {
+  margin-bottom: 20px;
+}
+
+h3 {
+  padding: 0 20px;
+}
+
+.button {
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+
+  padding-top: 20px;
+}
