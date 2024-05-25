@@ -567,7 +567,7 @@ app.post("/reservationForm/submitReservation", async (req, res) => {
   });
   console.log(gardenName);
   console.log(updateAvailability);
-  res.redirect("/afterSubmission");
+  res.render("reservation/afterSubmit", { garden: gardenName, startDate: startDate, endDate: endDate, reserveeName: reservationName, plotName: plotName });
 
   // I'm so sorry for being unavailble to help you brother me dumb me no logic I sincerly apolosise to you for everything
   // nono im sorry i keep breaking the codeLMAOOOO ALL GOOD BRUDA
@@ -596,25 +596,10 @@ app.post("/reservationForm/submitReservation", async (req, res) => {
 });
 
 // After submission for reserving plot PAGE
-app.get("/afterSubmission", sessionValidation, async (req, res) => {
-  // Querying reservee info
-  // const reserveeInfo = await gardensCollection.findOne(
-  //   { gardenName: gardenname },
-  //   {
-  //     projection: {
-  //       plots: 1
-  //     },
-  //   }
-  // );
-
-  // console.log(reserveeInfo);
-  res.render("reservation/afterSubmit", {
-    // plotName: reserveeInfo.plotName,
-    // reserveeName: reserveeInfo.reserveeName,
-    // reservationStartDate: reserveeInfo.reservationStartDate,
-    // reservationEndDate: reserveeInfo.reservationEndDate,
-    // reservationName: reserveeInfo.regservationName
-  });
+app.get("/afterSubmit", sessionValidation, async (req, res) => {
+  
+  console.log("Reservee Info: " + reserveeInfo);
+  res.render("reservation/afterSubmit");
 });
 
 // COMUNITY PAGE that shows all posts

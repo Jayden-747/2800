@@ -16,16 +16,16 @@
         <p class="card-text">We look forward to seeing you
           <br>
           <br>
-          <b>Reservee:</b> <%# reserveeName %>
+          <b>Reservee:</b> <%= reserveeName %>
           <br>
-          <b>Reserved plot:</b> <%# plotName %>
+          <b>Reserved plot:</b> <%= plotName %>
           <br>
-          <b>Reserved For:</b> <%# reservationStartDate %> <%# reservationEndDate %>
+          <b>Reserved For:</b> <%= startDate %> to <%= endDate %>
           <br>
           <br>
           <br>
         </p>
-        <a href="/garden" class="btn btn-primary">Continue</a>
+        <a href="/garden/<%= garden %>" class="btn btn-primary">Continue</a>
       </div>
     </div>
   </div>

@@ -18,7 +18,7 @@ function validDates() {
     // TODO: when negative, it stays negative lol
     let length = endDate - startDate;
     console.log("LENGTH: " + length);
-    document.getElementById('reservationTotal').innerHTML = length;
+    document.getElementById('reservationTotal').innerHTML = length / (1000 * 60 * 60 * 24) + " days ! 🌱";
 
     // If dates are equal
     if (startDate.getTime() === endDate.getTime()) {
