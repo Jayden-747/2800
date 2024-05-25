@@ -1,3 +1,8 @@
 body {
     margin: 150px 0;
 }
+.cardLocation {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
