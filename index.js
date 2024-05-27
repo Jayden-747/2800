@@ -155,7 +155,6 @@ app.get("/", async (req, res) => {
     const imageData = Buffer.from(gardenDoc.photo.buffer).toString("base64");
     backImage.push(imageData);
     }
-    console.log(backImage);
     res.render("home/home", {
       username: username,
       favGardens: favGardens,
