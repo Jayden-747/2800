@@ -155,6 +155,7 @@ app.get("/", async (req, res) => {
     const imageData = Buffer.from(gardenDoc.photo.buffer).toString("base64");
     backImage.push(imageData);
     }
+    console.log(backImage);
     res.render("home/home", {
       username: username,
       favGardens: favGardens,
@@ -864,7 +865,7 @@ app.post("/newPost/posts", upload.single("photo"), async (req, res) => {
     commentsUser: []
   };
   
-  await database.db(mongodb_database).collection("gardens").updateOne({gardenName: "Elizabeth Garden"}, {$set: {photo: req.file.buffer}});
+  await database.db(mongodb_database).collection("posts").insertOne(photoData);
   res.redirect("/community");
 });
 
