@@ -20,11 +20,12 @@
       <h3>Duration</h3>
       <div class="inputs">
         <label for="reservationStartDate" class="form-label">Start</label>
-        <input type="date" class="form-control" id="reservationStartDate" name="reservationStartDate" onchange="validDates()">
+        <input type="date" class="form-control" id="reservationStartDate" name="reservationStartDate" onchange="validDates()" onkeydown="return false">
         <label for="reservationEndDate" class="form-label">End</label>
-        <input type="date" class="form-control" id="reservationEndDate" name="reservationEndDate" onchange="validDates()">
+        <input type="date" class="form-control" id="reservationEndDate" name="reservationEndDate" onchange="validDates()" onkeydown="return false">
         <div class="reservationDuration">
-          Total: <span id="reservationTotal">this is where the length will be</span>
+          <div id="total">Total: <span id="reservationTotal"></span></div>
+          <div id="error-messages"></div>
         </div>
       </div>
     </div>
