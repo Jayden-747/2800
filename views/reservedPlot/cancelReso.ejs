@@ -7,15 +7,17 @@
   <%- include("../templates/top-navbar", {pageName: "Reservation"}) %>
   <%- include("../templates/hamburger") %>
   <div class="border">
-    <div>Garden Name: <%# gardenName %> </div>
-    <div>Plot Name: <%# plotName %></div>
-    <div>Start Date: <%# startDate %></div>
-    <div>End Date: <%# endDate %></div>
-    <div>Registered email: <%# reservations.email %></div>
+    <div>Garden Name: </div>
+    <div>Plot Name: </div>
+    <div>Start Date: </div>
+    <div>End Date: </div>
+    <div>Registered email: </div>
     <!--! make a form for the button -->
-    <a type="button" class="btn btn-success">Cancel Reservation</a>
+    <form method="post">
+      <input type="hidden" name="" value="">
+      <a type="button" class="btn btn-success">Cancel Reservation</a>
+    </form>
   </div>
-
 
   <!-- NAVBAR BOTTOM -->
   <%- include("../templates/bottom-navbar") %>

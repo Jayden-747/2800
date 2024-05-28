@@ -29,7 +29,7 @@ const mongodb_database = process.env.MONGODB_DATABASE;
 const mongodb_database_plantepedia = process.env.MONGODB_DATABASE_PLANTEPEDIA;
 const mongodb_session_secret = process.env.MONGODB_SESSION_SECRET;
 const node_session_secret = process.env.NODE_SESSION_SECRET;
-const google_maps_api = process.env.GOOGLE_MAPS_API_KEY
+const google_maps_api = process.env.GOOGLE_MAPS_API_KEY;
 
 //mongodb database
 var { database } = require("./databaseConnection");
@@ -146,24 +146,28 @@ app.get("/", async (req, res) => {
       acc[doc.gardenName] = doc;
       return acc;
     }, {});
-    
+
     // Orders the gardenRefs based on the order of favGardens
-    const gardenRef = favGardens.map((gardenName) => gardenMap[gardenName].gardenRef);
+    const gardenRef = favGardens.map(
+      (gardenName) => gardenMap[gardenName].gardenRef
+    );
     var backImage = [];
-    
-    for(i=0; i < gardenRef.length; i++){
+
+    for (i = 0; i < gardenRef.length; i++) {
       // Find the document with the corresponding gardenRef
-      const gardenDoc = gardenDocs.find(doc => doc.gardenRef === gardenRef[i]);
-          //PARSES IMAGE DATA AND DISPLAYS IT
-    const imageData = Buffer.from(gardenDoc.photo.buffer).toString("base64");
-    backImage.push(imageData);
+      const gardenDoc = gardenDocs.find(
+        (doc) => doc.gardenRef === gardenRef[i]
+      );
+      //PARSES IMAGE DATA AND DISPLAYS IT
+      const imageData = Buffer.from(gardenDoc.photo.buffer).toString("base64");
+      backImage.push(imageData);
     }
     res.render("home/home", {
       username: username,
       favGardens: favGardens,
       gardens: gardenName,
       gardenRef: gardenRef,
-      image: backImage
+      image: backImage,
     });
   } else {
     res.render("landing/landing");
@@ -496,10 +500,14 @@ app.get("/garden/:garden", sessionValidation, async (req, res) => {
       },
     }
   );
-  
+
   const imageData = Buffer.from(result.photo.buffer).toString("base64");
-  
-  res.render("garden/garden", { pageName: "Explore", garden: result, image: imageData });
+
+  res.render("garden/garden", {
+    pageName: "Explore",
+    garden: result,
+    image: imageData,
+  });
 });
 
 // PLOT PAGE (Displaying plots for certain gardens)
@@ -544,17 +552,24 @@ app.get("/reservationForm/:garden/:plotName", async (req, res) => {
 
 // Submitting the reservation form
 app.post("/reservationForm/submitReservation", async (req, res) => {
-  const { reservationStartDate, reservationEndDate, reservationName, reservationEmail, gardenName, plotName } = req.body;
+  const {
+    reservationStartDate,
+    reservationEndDate,
+    reservationName,
+    reservationEmail,
+    gardenName,
+    plotName,
+  } = req.body;
   const startDate = new Date(reservationStartDate);
   const endDate = new Date(reservationEndDate);
 
   /**
-  * I got an idea of using 'toISOString()' by performing serach on ChatGPT 4.O
-  * 
-  * @author https://chatgpt.com/?model=gpt-4o&oai-dm=1
-  */
-  const reformatStartDate = startDate.toISOString().split('T')[0];
-  const reformatEndDate = endDate.toISOString().split('T')[0];
+   * I got an idea of using 'toISOString()' by performing serach on ChatGPT 4.O
+   *
+   * @author https://chatgpt.com/?model=gpt-4o&oai-dm=1
+   */
+  const reformatStartDate = startDate.toISOString().split("T")[0];
+  const reformatEndDate = endDate.toISOString().split("T")[0];
 
   // console.log(reformatStartDate);
   // console.log(reservationEmail);
@@ -562,26 +577,33 @@ app.post("/reservationForm/submitReservation", async (req, res) => {
   const updateAvailability = await gardensCollection.findOneAndUpdate(
     {
       gardenName: gardenName,
-      "plots.plotName": plotName
+      "plots.plotName": plotName,
       // "plots.$.plotName": plotName
-    }, 
-      { 
-        $set: {
-          "plots.$.availability": "Unavailable", 
-          "plots.$.startingDate": reformatStartDate, 
-          "plots.$.endingData": reformatEndDate, 
-          "plots.$.reserveeName": reservationName, 
-          "plots.$.email": reservationEmail
-          // email: reservationEmail
-        }
+    },
+    {
+      $set: {
+        "plots.$.availability": "Unavailable",
+        "plots.$.startingDate": reformatStartDate,
+        "plots.$.endingData": reformatEndDate,
+        "plots.$.reserveeName": reservationName,
+        "plots.$.email": reservationEmail,
+        // email: reservationEmail
       },
-        { 
-          returnOriginal: false
-          // returnNewDocument: true   
-  });
+    },
+    {
+      returnOriginal: false,
+      // returnNewDocument: true
+    }
+  );
   // console.log(gardenName);
   // console.log(updateAvailability);
-  res.render("reservation/afterSubmit", { garden: gardenName, startDate: reformatStartDate, endDate: reformatEndDate, reserveeName: reservationName, plotName: plotName });
+  res.render("reservation/afterSubmit", {
+    garden: gardenName,
+    startDate: reformatStartDate,
+    endDate: reformatEndDate,
+    reserveeName: reservationName,
+    plotName: plotName,
+  });
 
   // I'm so sorry for being unavailble to help you brother me dumb me no logic I sincerly apolosise to you for everything
   // nono im sorry i keep breaking the codeLMAOOOO ALL GOOD BRUDA
@@ -598,44 +620,27 @@ app.post("/reservationForm/submitReservation", async (req, res) => {
   // console.log("array of ALL plots in garden " + garden + ": " + allPlots[0].plots);
 
   // Filters the plots by availabilty
-  const availPlotsOnly = allPlots[0].plots.filter(plot => plot.availability === "Available");
+  const availPlotsOnly = allPlots[0].plots.filter(
+    (plot) => plot.availability === "Available"
+  );
   // console.log("array of avail plots: " + availPlotsOnly);
   // console.log("length of available plots: " + availPlotsOnly.length);
 
   // Set this garden's plotsAvailable fieldset to updated list of available plots (availPlotsOnly array)
-  const updatePlotsAvail = await gardensCollection
-    .findOneAndUpdate({ gardenName: garden},
-      {$set: {plotsAvailable: availPlotsOnly.length}}
-    );
+  const updatePlotsAvail = await gardensCollection.findOneAndUpdate(
+    { gardenName: garden },
+    { $set: { plotsAvailable: availPlotsOnly.length } }
+  );
 });
 
 // After submission for reserving plot PAGE
 app.get("/afterSubmit", sessionValidation, async (req, res) => {
-  
   // console.log("Reservee Info: " + reserveeInfo);
   res.render("reservation/afterSubmit");
 });
 
-//! Add sessionValidation lata
-app.get("/reservation", async (req,res) => {
-  const userEmail = req.session.email;
-  const emailArray = [];
 
-  const result = await gardensCollection.find({ gardenName: "Elmo's Garden", "plots.email": userEmail }).project().toArray();
-  console.log("What is your output?", result[0]);
-  // if(plots.email === userEamil) {
-  //   console.log("ya grabbing?");
-  // }
-  result.forEach(singleGarden => {
-    singleGarden.plots.forEach(singlePlot => {
-      if (singlePlot.email === userEmail) {
-        emailArray.push({ gardenName: singleGarden.gardenName, ...singlePlot });
-      }
-    });
-    console.log(emailArray);
-    res.render("reservedPlot/cancelReso");
-  });
-});
+app.post("/cancelReservation", )
 
 // COMUNITY PAGE that shows all posts
 app.get("/community", sessionValidation, async (req, res) => {
@@ -677,19 +682,16 @@ app.get("/community", sessionValidation, async (req, res) => {
     const postID = result[i]._id;
     id.push(postID);
     //commentsUser
-    const comUser = result[i].commentsUser
+    const comUser = result[i].commentsUser;
     commentsUser.push(comUser);
     //comments
-    const comm = result[i].comments
+    const comm = result[i].comments;
     comments.push(comm);
     //IMAGE OF POST
     const imageData = Buffer.from(result[i].data.buffer).toString("base64");
     posts.push(imageData);
-
   }
 
-  
-  
   res.render("community/community", {
     pageName: "Community",
     result: result, // arrays
@@ -734,8 +736,6 @@ app.get("/community/:garden", async (req, res) => {
     .collection("gardens")
     .findOne({ gardenRef: garden });
 
-  
-
   //Loop that pushes all the posts variables into an array that lets us display on the page
   var posts = [];
   var descss = [];
@@ -762,10 +762,10 @@ app.get("/community/:garden", async (req, res) => {
     const postID = result[i]._id;
     id.push(postID);
     //commentsUser
-    const comUser = result[i].commentsUser
+    const comUser = result[i].commentsUser;
     commentsUser.push(comUser);
     //comments
-    const comm = result[i].comments
+    const comm = result[i].comments;
     comments.push(comm);
     //PARSES IMAGE DATA AND DISPLAYS IT
     const imageData = Buffer.from(result[i].data.buffer).toString("base64");
@@ -784,8 +784,8 @@ app.get("/community/:garden", async (req, res) => {
     currentUser: currentUser, //provides ejs with the current user
     postID: id, //gives the unique id of the post as a string
     postLikeRef: garden, //used for liking a post and redirecting to the correct page
-    commentsUser: commentsUser,//gives array of usernames that have commented on the post
-    comments: comments,// gives an array of users' comments on a post
+    commentsUser: commentsUser, //gives array of usernames that have commented on the post
+    comments: comments, // gives an array of users' comments on a post
   });
 });
 
@@ -841,19 +841,13 @@ app.post("/community/submitComment", async (req, res) => {
   await database
     .db(mongodb_database)
     .collection("posts")
-    .updateOne(
-      { _id: postID },
-      { $push: { comments: comment } }
-    );
+    .updateOne({ _id: postID }, { $push: { comments: comment } });
   await database
     .db(mongodb_database)
     .collection("posts")
-    .updateOne(
-      { _id: postID },
-      { $push: { commentsUser: username } }
-    );
+    .updateOne({ _id: postID }, { $push: { commentsUser: username } });
   //redirect to which page according to what page the user was on
-  if (garden !== 'all gardens') {
+  if (garden !== "all gardens") {
     res.redirect("/community/" + garden);
   } else {
     res.redirect("/community");
@@ -896,10 +890,16 @@ app.post("/newPost/posts", upload.single("photo"), async (req, res) => {
     comments: [],
     likes: [],
     date: dateOnly,
-    commentsUser: []
+    commentsUser: [],
   };
-  
-  await database.db(mongodb_database).collection("gardens").updateOne({gardenName: "Elizabeth Garden"}, {$set: {photo: req.file.buffer}});
+
+  await database
+    .db(mongodb_database)
+    .collection("gardens")
+    .updateOne(
+      { gardenName: "Elizabeth Garden" },
+      { $set: { photo: req.file.buffer } }
+    );
   res.redirect("/community");
 });
 
