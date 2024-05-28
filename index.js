@@ -620,22 +620,33 @@ app.get("/afterSubmit", sessionValidation, async (req, res) => {
 app.get("/reservation", async (req,res) => {
   const userEmail = req.session.email;
   const emailArray = [];
+  const gardenArray = []
 
-  const result = await gardensCollection.find({ gardenName: "Elmo's Garden", "plots.email": userEmail }).project().toArray();
-  console.log("What is your output?", result[0]);
-  // if(plots.email === userEamil) {
-  //   console.log("ya grabbing?");
-  // }
-  result.forEach(singleGarden => {
-    singleGarden.plots.forEach(singlePlot => {
-      if (singlePlot.email === userEmail) {
-        emailArray.push({ gardenName: singleGarden.gardenName, ...singlePlot });
+  const resultN = await gardensCollection.find().project().toArray();
+  
+  for (let k = 0; k < resultN.length; k++) {
+    gardenArray.push(resultN[k].gardenName)
+  }
+  
+  
+
+
+  for (let j = 0; j < gardenArray.length; j++) {
+    const result = await gardensCollection.find({ gardenName: gardenArray[j], "plots.email": userEmail }).project().toArray();
+    
+
+    for(let i = 0; i < result[0].plots.length; i++){
+      if(result[0].plots[i].email === userEmail) {
+        emailArray.push({garden: gardenArray[j], info: result[0].plots[i]})
       }
-    });
-    console.log(emailArray);
-    res.render("reservedPlot/cancelReso");
+    }
+
+    
+  }
+ 
+    res.render("reservedPlot/cancelReso", {email: emailArray});
   });
-});
+
 
 // COMUNITY PAGE that shows all posts
 app.get("/community", sessionValidation, async (req, res) => {

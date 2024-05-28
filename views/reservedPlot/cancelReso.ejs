@@ -7,13 +7,16 @@
   <%- include("../templates/top-navbar", {pageName: "Reservation"}) %>
   <%- include("../templates/hamburger") %>
   <div class="border">
-    <div>Garden Name: <%# gardenName %> </div>
-    <div>Plot Name: <%# plotName %></div>
-    <div>Start Date: <%# startDate %></div>
-    <div>End Date: <%# endDate %></div>
-    <div>Registered email: <%# reservations.email %></div>
-    <!--! make a form for the button -->
+    <% for(let i = 0; i < email.length; i++) { %>
+    <div>Garden Name: <%= email[i].garden %> </div>
+    <div>Plot Name: <%= email[i].info.plotName %></div>
+    <div>Start Date: <%= email[i].info.startingDate %></div>
+    <div>End Date: <%= email[i].info.endingData %></div>
+    <div>Registered email: <%= email[i].info.email %></div>
+    
     <a type="button" class="btn btn-success">Cancel Reservation</a>
+
+    <% } %>
   </div>
 
 
