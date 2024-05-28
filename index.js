@@ -497,6 +497,8 @@ app.get("/garden/:garden", sessionValidation, async (req, res) => {
         plotsAvailable: 1,
         crops: 1,
         photo: 1,
+        Lat: 1,
+        Long: 1
       },
     }
   );

@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="garden.css">
 </head>
 
-<body onload="initMap()">
+<body onload="initMap(), getComps(`<%- garden.Lat %>`, `<%- garden.Long %>`)">
   <!-- NAVBAR TOP -->
   <%- include("../templates/top-navbar") %>
   <%- include("../templates/hamburger") %>
