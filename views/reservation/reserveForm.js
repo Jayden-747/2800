@@ -155,8 +155,15 @@ $(document).ready(function () {
 
   console.log("why not working?");
 
-  $('#positive').on('click', function () {
+  $('#positive').on('click', function (event) {
     console.log('is this function working?');
-    $('#reservationFormId').submit();
+    let startInput = document.getElementById('reservationStartDate').value;
+    let endInput = document.getElementById('reservationEndDate').value;
+    if (!startInput || !endInput) {
+      alert('All fields are required.');
+      event.preventDefault();
+    } else {
+      $('#reservationFormId').submit();
+    }
   });
 });

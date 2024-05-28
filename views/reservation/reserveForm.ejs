@@ -34,12 +34,12 @@
     <!-- Contact Information (will autopopulate user's info) -->
     <!-- TODO: decide if they can edit it or not -->
     <div class="mb-3">
-      <h3>Confirm Info</h3>
+      <h3>Your Information</h3>
       <div class="inputs">
         <label for="contactName" class="form-label">Name</label>
-        <input type="text" class="form-control input" id="contactName" name="reservationName" value="<%= user.name %>" required="true">
+        <input type="text" class="form-control input" id="contactName" name="reservationName" value="<%= user.name %>" required="true" readonly>
         <label for="contactEmail" class="form-label">Email</label>
-        <input type="text" class="form-control input" id="contactEmail" name="reservationEmail" value="<%= user.email %>" required="true">
+        <input type="text" class="form-control input" id="contactEmail" name="reservationEmail" value="<%= user.email %>" required="true" readonly>
       </div>
     </div>
     <!-- Changed type from 'submit' to 'button'. Modal requires button -->
