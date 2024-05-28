@@ -86,8 +86,9 @@ app.use("/explore", express.static("./views/explore"));
 app.use("/reservation", express.static("./views/reservation"));
 app.use("/reservedPlot", express.static("./views/reservedPlot"));
 // ↓ Unknown code
-app.use("/reservationForm", express.static("./views/reservation")); // ← Noodle code
+// app.use("/reservationForm", express.static("./views/reservation")); // ← Noodle code
 // ↑ Pasta code
+app.use("/404", express.static("./views/404"));
 
 //session
 app.use(
@@ -158,6 +159,7 @@ app.get("/", async (req, res) => {
     const imageData = Buffer.from(gardenDoc.photo.buffer).toString("base64");
     backImage.push(imageData);
     }
+
     res.render("home/home", {
       username: username,
       favGardens: favGardens,
@@ -181,7 +183,8 @@ app.post("/signup/submitUser", async (req, res) => {
   var username = req.body.username;
   var password = req.body.password;
   var email = req.body.email;
-
+  let message = "";
+  
   const schema = Joi.object({
     name: Joi.string().max(40).required(),
     username: Joi.string().alphanum().max(20).required(),
@@ -195,6 +198,7 @@ app.post("/signup/submitUser", async (req, res) => {
     res.redirect("/signup");
     return;
   }
+
 
   var hashedPassword = await bcrypt.hash(password, saltRounds);
 
@@ -267,7 +271,7 @@ app.post("/login/logging", async (req, res) => {
 });
 
 // PASSWORD RESET
-app.get("/login/resetPassword", sessionValidation, async (req, res) => {
+app.get("/login/resetPassword", async (req, res) => {
   res.render("login/resetPassword");
 });
 
@@ -910,7 +914,7 @@ app.post("/newPost/posts", upload.single("photo"), async (req, res) => {
     commentsUser: []
   };
   
-  await database.db(mongodb_database).collection("gardens").updateOne({gardenName: "Elizabeth Garden"}, {$set: {photo: req.file.buffer}});
+  await database.db(mongodb_database).collection("posts").insertOne(photoData);
   res.redirect("/community");
 });
 
@@ -924,7 +928,7 @@ app.get("/logout", (req, res) => {
 //Catches routes that don't exist 404
 app.get("*", (req, res) => {
   res.status(404);
-  res.render("404");
+  res.render("404/404");
 });
 
 // PORT

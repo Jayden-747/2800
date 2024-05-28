@@ -14,8 +14,8 @@
     <div class="section">
 
       <% for(let i=0; i < favGardens.length; i++) { %>
-      <div style="background-image: url('/img/garden.jpeg')" class="gardenGroup">
-
+        <div style="background-image: url('data:image/jpeg;base64,<%= image[i] %>');" class="gardenGroup">
+          
         <a href="/community/<%=gardenRef[i] %>">
           <div class="garden-inner"><%= favGardens[i] %></div>
         </a>

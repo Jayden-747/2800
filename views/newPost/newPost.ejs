@@ -9,14 +9,15 @@
   <div>
     <form id="form1" action="posts" method="post" enctype="multipart/form-data">
       <div class="main-content">
-        <div class="heading">Select a garden to post to:</div>
+        <div class="heading">Select a garden to post to:*</div>
         <select name="garden">
           <% for (let i = 0; i < garden.length; i++) { %>
           <option value="garden<%- [i + 1] %>"><%= garden[i] %></option>
           <% } %>
         </select>
-        <div class="heading">Photo
+        <div class="heading">Photo*
           <input type="file" id="photo" name="photo">
+          
         </div>
         <img id="post-photo" src="" alt="Post Photo">
         <div class="heading">Description</div>
@@ -27,28 +28,6 @@
       </div>
     </form>
   </div>
-
-  <!-- . -->
-
-  <!-- <a>Cancel</a> -->
-
-  <!-- <div>
-    <form id="form1" action="posts" method="post" enctype="multipart/form-data">
-      <div class="main-content">
-        <div class="heading">Photo</div>
-        <input type="file" id="photo" name="photo">
-        <div class="heading">Garden</div>
-        <input type="text" name="garden" placeholder="Select Garden">
-        <div class="heading">Description</div>
-      </div>
-      <textarea type="text" id="description" name="description" placeholder="..."></textarea>
-      <div class="submit">
-        <button type="submit" class="btn btn-success">Submit</button>
-      </div>
-    </form>
-
-    <a>Cancel</a>
-  </div> -->
 
 </body>
 
