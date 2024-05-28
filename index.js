@@ -84,7 +84,10 @@ app.use("/garden", express.static("./views/garden"));
 app.use("/profile", express.static("./views/profile"));
 app.use("/explore", express.static("./views/explore"));
 app.use("/reservation", express.static("./views/reservation"));
-app.use("/reservationForm", express.static("./views/reservation"));
+app.use("/reservedPlot", express.static("./views/reservedPlot"));
+// ↓ Unknown code
+app.use("/reservationForm", express.static("./views/reservation")); // ← Noodle code
+// ↑ Pasta code
 
 //session
 app.use(
@@ -188,7 +191,7 @@ app.post("/signup/submitUser", async (req, res) => {
 
   const validationResult = schema.validate({ name, username, password, email });
   if (validationResult.error != null) {
-    console.log(validationResult.error);
+    // console.log(validationResult.error);
     res.redirect("/signup");
     return;
   }
@@ -206,14 +209,14 @@ app.post("/signup/submitUser", async (req, res) => {
     .find({ email: email })
     .project({ email: 1, password: 1, _id: 1, username: 1, name: 1 })
     .toArray();
-  console.log("user submitted" + result);
+  // console.log("user submitted" + result);
   req.session.authenticated = true;
   req.session.username = result[0].username;
   req.session.email = result[0].email;
   req.session.cookie.maxAge = expireTime;
   res.redirect("/");
-  console.log(username);
-  console.log(email);
+  // console.log(username);
+  // console.log(email);
 });
 
 //LOGIN PAGE
@@ -234,7 +237,7 @@ app.post("/login/logging", async (req, res) => {
   const validationResult = schema.validate({ email, password });
 
   if (validationResult.error != null) {
-    console.log(validationResult.error);
+    // console.log(validationResult.error);
     res.redirect("/login");
     return;
   }
@@ -245,7 +248,7 @@ app.post("/login/logging", async (req, res) => {
 
   if (result.length != 1) {
     res.redirect("/login");
-    console.log("no email");
+    // console.log("no email");
     return;
   }
 
@@ -255,7 +258,7 @@ app.post("/login/logging", async (req, res) => {
     req.session.email = email;
     req.session.cookie.maxAge = expireTime;
     res.redirect("/");
-    console.log("logged in");
+    // console.log("logged in");
     return;
   } else {
     res.redirect("/login");
@@ -394,7 +397,7 @@ app.post(
         { plant_name: "Cherry Tomato" },
         { $set: { image: resizingImage } }
       );
-    console.log("Photo saved perfectly");
+    // console.log("Photo saved perfectly");
     res.redirect("/plantepediaSummary");
   }
 );
@@ -544,7 +547,18 @@ app.post("/reservationForm/submitReservation", async (req, res) => {
   const { reservationStartDate, reservationEndDate, reservationName, reservationEmail, gardenName, plotName } = req.body;
   const startDate = new Date(reservationStartDate);
   const endDate = new Date(reservationEndDate);
-  console.log(reservationEmail);
+
+  /**
+  * I got an idea of using 'toISOString()' by performing serach on ChatGPT 4.O
+  * 
+  * @author https://chatgpt.com/?model=gpt-4o&oai-dm=1
+  */
+  const reformatStartDate = startDate.toISOString().split('T')[0];
+  const reformatEndDate = endDate.toISOString().split('T')[0];
+
+  // console.log(reformatStartDate);
+  // console.log(reservationEmail);
+
   const updateAvailability = await gardensCollection.findOneAndUpdate(
     {
       gardenName: gardenName,
@@ -554,8 +568,8 @@ app.post("/reservationForm/submitReservation", async (req, res) => {
       { 
         $set: {
           "plots.$.availability": "Unavailable", 
-          "plots.$.startingDate": startDate, 
-          "plots.$.endingData": endDate, 
+          "plots.$.startingDate": reformatStartDate, 
+          "plots.$.endingData": reformatEndDate, 
           "plots.$.reserveeName": reservationName, 
           "plots.$.email": reservationEmail
           // email: reservationEmail
@@ -565,28 +579,28 @@ app.post("/reservationForm/submitReservation", async (req, res) => {
           returnOriginal: false
           // returnNewDocument: true   
   });
-  console.log(gardenName);
-  console.log(updateAvailability);
-  res.render("reservation/afterSubmit", { garden: gardenName, startDate: startDate, endDate: endDate, reserveeName: reservationName, plotName: plotName });
+  // console.log(gardenName);
+  // console.log(updateAvailability);
+  res.render("reservation/afterSubmit", { garden: gardenName, startDate: reformatStartDate, endDate: reformatEndDate, reserveeName: reservationName, plotName: plotName });
 
   // I'm so sorry for being unavailble to help you brother me dumb me no logic I sincerly apolosise to you for everything
   // nono im sorry i keep breaking the codeLMAOOOO ALL GOOD BRUDA
 
   // * Update the number of available plots ('plotsAvailable') in garden collection
   const garden = req.body.gardenName;
-  console.log("garden name: " + garden);
+  // console.log("garden name: " + garden);
 
   // Queries a list of plots of the specified garden
   const allPlots = await gardensCollection
     .find({ gardenName: garden })
     .project({ plots: 1 })
     .toArray();
-  console.log("array of ALL plots in garden " + garden + ": " + allPlots[0].plots);
+  // console.log("array of ALL plots in garden " + garden + ": " + allPlots[0].plots);
 
   // Filters the plots by availabilty
   const availPlotsOnly = allPlots[0].plots.filter(plot => plot.availability === "Available");
-  console.log("array of avail plots: " + availPlotsOnly);
-  console.log("length of available plots: " + availPlotsOnly.length);
+  // console.log("array of avail plots: " + availPlotsOnly);
+  // console.log("length of available plots: " + availPlotsOnly.length);
 
   // Set this garden's plotsAvailable fieldset to updated list of available plots (availPlotsOnly array)
   const updatePlotsAvail = await gardensCollection
@@ -598,8 +612,29 @@ app.post("/reservationForm/submitReservation", async (req, res) => {
 // After submission for reserving plot PAGE
 app.get("/afterSubmit", sessionValidation, async (req, res) => {
   
-  console.log("Reservee Info: " + reserveeInfo);
+  // console.log("Reservee Info: " + reserveeInfo);
   res.render("reservation/afterSubmit");
+});
+
+//! Add sessionValidation lata
+app.get("/reservation", async (req,res) => {
+  const userEmail = req.session.email;
+  const emailArray = [];
+
+  const result = await gardensCollection.find({ gardenName: "Elmo's Garden", "plots.email": userEmail }).project().toArray();
+  console.log("What is your output?", result[0]);
+  // if(plots.email === userEamil) {
+  //   console.log("ya grabbing?");
+  // }
+  result.forEach(singleGarden => {
+    singleGarden.plots.forEach(singlePlot => {
+      if (singlePlot.email === userEmail) {
+        emailArray.push({ gardenName: singleGarden.gardenName, ...singlePlot });
+      }
+    });
+    console.log(emailArray);
+    res.render("reservedPlot/cancelReso");
+  });
 });
 
 // COMUNITY PAGE that shows all posts
@@ -883,5 +918,5 @@ app.get("*", (req, res) => {
 
 // PORT
 app.listen(port, () => {
-  console.log(`app listening on port ${port}`);
+  // console.log(`app listening on port ${port}`);
 });

@@ -1,0 +1,28 @@
+<%- include("../templates/header") %>
+<link rel="stylesheet" href="/reservedPlot/cancelReso.css" />
+</head>
+
+<body>
+  <!-- NAVBAR TOP -->
+  <%- include("../templates/top-navbar", {pageName: "Reservation"}) %>
+  <%- include("../templates/hamburger") %>
+  <div class="border">
+    <div>Garden Name: <%# gardenName %> </div>
+    <div>Plot Name: <%# plotName %></div>
+    <div>Start Date: <%# startDate %></div>
+    <div>End Date: <%# endDate %></div>
+    <div>Registered email: <%# reservations.email %></div>
+    <!--! make a form for the button -->
+    <a type="button" class="btn btn-success">Cancel Reservation</a>
+  </div>
+
+
+  <!-- NAVBAR BOTTOM -->
+  <%- include("../templates/bottom-navbar") %>
+
+  <!-- SCRIPTS -->
+  <script type="module" src="/modules/navigations.js"></script>
+  <script type="module" src="/modules/customizations.js"></script>
+  <script type="module" src="/views/universal.js"></script>
+
+  <%- include("../templates/footer") %>
