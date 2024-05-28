@@ -640,38 +640,71 @@ app.get("/afterSubmit", sessionValidation, async (req, res) => {
 });
 
 //! Add sessionValidation lata
-app.get("/reservation", async (req,res) => {
+// Checking reservation information with cancellation button
+app.get("/reservation", sessionValidation, async (req, res) => {
   const userEmail = req.session.email;
   const emailArray = [];
-  const gardenArray = []
+  const gardenArray = [];
 
   const resultN = await gardensCollection.find().project().toArray();
-  
+
   for (let k = 0; k < resultN.length; k++) {
-    gardenArray.push(resultN[k].gardenName)
+    gardenArray.push(resultN[k].gardenName);
   }
-  
-  
-
-
   for (let j = 0; j < gardenArray.length; j++) {
-    const result = await gardensCollection.find({ gardenName: gardenArray[j], "plots.email": userEmail }).project().toArray();
-    
-
-    for(let i = 0; i < result[0].plots.length; i++){
-      if(result[0].plots[i].email === userEmail) {
-        emailArray.push({garden: gardenArray[j], info: result[0].plots[i]})
+    const result = await gardensCollection
+      .find({ gardenName: gardenArray[j], "plots.email": userEmail })
+      .project()
+      .toArray();
+    try {
+      for (let i = 0; i < result[0].plots.length; i++) {
+        if (result[0].plots[i].email === userEmail) {
+          emailArray.push({ garden: gardenArray[j], info: result[0].plots[i] });
+        }
       }
+    } catch (error) {
+      console.error(error);
     }
-
-    
   }
- 
-    res.render("reservedPlot/cancelReso", {email: emailArray});
-  });
+  res.render("reservedPlot/cancelReso", { email: emailArray });
+});
 
+app.post("/cancelReservation", async (req, res) => {
+  const { email, gardenName, plotName } = req.body;
+  const updateReservationStatus = await gardensCollection.findOneAndUpdate(
+    {
+      gardenName: gardenName,
+      "plots.plotName": plotName,
+      "plots.email": email,
+    },
+    {
+      $set: {
+        "plots.$.availability": "Available",
+        "plots.$.startingDate": null,
+        "plots.$.endingData": null,
+        "plots.$.reserveeName": null,
+        "plots.$.email": null
+      },
+    },
+    {
+      returnOriginal: false,
+    }
+  );
+  console.log("Please work!!!!!", updateReservationStatus);
 
-app.post("/cancelReservation", )
+  const updatedGarden = await gardensCollection.findOne({ gardenName: gardenName });
+  const availPlotsOnly = updatedGarden.plots.filter(
+    plot => plot.availability === "Available"
+  );
+
+  console.log("work work work please ", availPlotsOnly);
+
+  await gardensCollection.updateOne(
+    { gardenName: gardenName },
+    { $set: { plotsAvailable: availPlotsOnly.length } }
+  );
+  res.redirect("/reservation");
+});
 
 // COMUNITY PAGE that shows all posts
 app.get("/community", sessionValidation, async (req, res) => {

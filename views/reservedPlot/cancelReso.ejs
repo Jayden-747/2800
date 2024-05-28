@@ -13,9 +13,12 @@
     <div>Start Date: <%= email[i].info.startingDate %></div>
     <div>End Date: <%= email[i].info.endingData %></div>
     <div>Registered email: <%= email[i].info.email %></div>
-    
-    <a type="button" class="btn btn-success">Cancel Reservation</a>
-
+    <form action="/cancelReservation" method="post">
+      <input type="hidden" name="gardenName" value="<%= email[i].garden %>">
+      <input type="hidden" name="plotName" value="<%= email[i].info.plotName %>">
+      <input type="hidden" name="email" value="<%= email[i].info.email %>">
+      <button type="submit" class="btn btn-success">Cancel Reservation</button>
+    </form>
     <% } %>
   </div>
 
