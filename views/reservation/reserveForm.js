@@ -139,7 +139,7 @@ function validDates() {
   } else if (startDate.getTime() > endDate.getTime()) {
 
     resetDates(startDate, endDate);
-    displayError(`Start date cannot be set after end date!`)
+    displayError(`Start date must be before end date!`)
     // alert('Error: Start date cannot be set after end date!');
 
   } else {
