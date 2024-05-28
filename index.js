@@ -85,6 +85,7 @@ app.use("/profile", express.static("./views/profile"));
 app.use("/explore", express.static("./views/explore"));
 app.use("/reservation", express.static("./views/reservation"));
 app.use("/reservationForm", express.static("./views/reservation"));
+app.use("/404", express.static("./views/404"));
 
 //session
 app.use(
@@ -155,6 +156,7 @@ app.get("/", async (req, res) => {
     const imageData = Buffer.from(gardenDoc.photo.buffer).toString("base64");
     backImage.push(imageData);
     }
+
     res.render("home/home", {
       username: username,
       favGardens: favGardens,
@@ -178,7 +180,8 @@ app.post("/signup/submitUser", async (req, res) => {
   var username = req.body.username;
   var password = req.body.password;
   var email = req.body.email;
-
+  let message = "";
+  
   const schema = Joi.object({
     name: Joi.string().max(40).required(),
     username: Joi.string().alphanum().max(20).required(),
@@ -192,6 +195,7 @@ app.post("/signup/submitUser", async (req, res) => {
     res.redirect("/signup");
     return;
   }
+
 
   var hashedPassword = await bcrypt.hash(password, saltRounds);
 
@@ -878,7 +882,7 @@ app.get("/logout", (req, res) => {
 //Catches routes that don't exist 404
 app.get("*", (req, res) => {
   res.status(404);
-  res.render("404");
+  res.render("404/404");
 });
 
 // PORT
