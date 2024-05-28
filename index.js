@@ -268,7 +268,7 @@ app.post("/login/logging", async (req, res) => {
 });
 
 // PASSWORD RESET
-app.get("/login/resetPassword", sessionValidation, async (req, res) => {
+app.get("/login/resetPassword", async (req, res) => {
   res.render("login/resetPassword");
 });
 
