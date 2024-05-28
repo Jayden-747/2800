@@ -84,7 +84,7 @@ app.use("/garden", express.static("./views/garden"));
 app.use("/profile", express.static("./views/profile"));
 app.use("/explore", express.static("./views/explore"));
 app.use("/reservation", express.static("./views/reservation"));
-app.use("/reservationForm", express.static("./views/reservation"));
+// app.use("/reservationForm", express.static("./views/reservation"));
 app.use("/404", express.static("./views/404"));
 
 //session

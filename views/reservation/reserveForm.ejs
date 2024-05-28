@@ -20,11 +20,12 @@
       <h3>Duration</h3>
       <div class="inputs">
         <label for="reservationStartDate" class="form-label">Start</label>
-        <input type="date" class="form-control" id="reservationStartDate" name="reservationStartDate" onchange="validDates()">
+        <input type="date" class="form-control" id="reservationStartDate" name="reservationStartDate" onchange="validDates()" onkeydown="return false" required="true">
         <label for="reservationEndDate" class="form-label">End</label>
-        <input type="date" class="form-control" id="reservationEndDate" name="reservationEndDate" onchange="validDates()">
+        <input type="date" class="form-control" id="reservationEndDate" name="reservationEndDate" onchange="validDates()" onkeydown="return false" required="true">
         <div class="reservationDuration">
-          Total: <span id="reservationTotal">this is where the length will be</span>
+          <div id="total">Total: <span id="reservationTotal"></span></div>
+          <div id="error-messages"></div>
         </div>
       </div>
     </div>
@@ -36,9 +37,9 @@
       <h3>Confirm Info</h3>
       <div class="inputs">
         <label for="contactName" class="form-label">Name</label>
-        <input type="text" class="form-control input" id="contactName" name="reservationName" value="<%= user.name %>">
+        <input type="text" class="form-control input" id="contactName" name="reservationName" value="<%= user.name %>" required="true">
         <label for="contactEmail" class="form-label">Email</label>
-        <input type="text" class="form-control input" id="contactEmail" name="reservationEmail" value="<%= user.email %>">
+        <input type="text" class="form-control input" id="contactEmail" name="reservationEmail" value="<%= user.email %>" required="true">
       </div>
     </div>
     <!-- Changed type from 'submit' to 'button'. Modal requires button -->
