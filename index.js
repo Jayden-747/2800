@@ -639,6 +639,37 @@ app.get("/afterSubmit", sessionValidation, async (req, res) => {
   res.render("reservation/afterSubmit");
 });
 
+//! Add sessionValidation lata
+app.get("/reservation", async (req,res) => {
+  const userEmail = req.session.email;
+  const emailArray = [];
+  const gardenArray = []
+
+  const resultN = await gardensCollection.find().project().toArray();
+  
+  for (let k = 0; k < resultN.length; k++) {
+    gardenArray.push(resultN[k].gardenName)
+  }
+  
+  
+
+
+  for (let j = 0; j < gardenArray.length; j++) {
+    const result = await gardensCollection.find({ gardenName: gardenArray[j], "plots.email": userEmail }).project().toArray();
+    
+
+    for(let i = 0; i < result[0].plots.length; i++){
+      if(result[0].plots[i].email === userEmail) {
+        emailArray.push({garden: gardenArray[j], info: result[0].plots[i]})
+      }
+    }
+
+    
+  }
+ 
+    res.render("reservedPlot/cancelReso", {email: emailArray});
+  });
+
 
 app.post("/cancelReservation", )
 
