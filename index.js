@@ -669,7 +669,6 @@ app.get("/reservation", sessionValidation, async (req, res) => {
         }
       }
     } catch (error) {
-      console.error(error);
     }
   }
   res.render("reservedPlot/cancelReso", { email: emailArray });
