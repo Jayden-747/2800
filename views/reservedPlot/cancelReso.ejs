@@ -1,0 +1,33 @@
+<%- include("../templates/header") %>
+<link rel="stylesheet" href="/reservedPlot/cancelReso.css" />
+</head>
+
+<body>
+  <!-- NAVBAR TOP -->
+  <%- include("../templates/top-navbar", {pageName: "Reservation"}) %>
+  <%- include("../templates/hamburger") %>
+  <div class="border">
+    <% for(let i = 0; i < email.length; i++) { %>
+    <div>Garden Name: <%= email[i].garden %> </div>
+    <div>Plot Name: <%= email[i].info.plotName %></div>
+    <div>Start Date: <%= email[i].info.startingDate %></div>
+    <div>End Date: <%= email[i].info.endingData %></div>
+    <div>Registered email: <%= email[i].info.email %></div>
+    <form action="/cancelReservation" method="post">
+      <input type="hidden" name="gardenName" value="<%= email[i].garden %>">
+      <input type="hidden" name="plotName" value="<%= email[i].info.plotName %>">
+      <input type="hidden" name="email" value="<%= email[i].info.email %>">
+      <button type="submit" class="btn btn-success">Cancel Reservation</button>
+    </form>
+    <% } %>
+  </div>
+  <button onclick="history.back()">Go Back</button>
+  <!-- NAVBAR BOTTOM -->
+  <%- include("../templates/bottom-navbar") %>
+
+  <!-- SCRIPTS -->
+  <script type="module" src="/modules/navigations.js"></script>
+  <script type="module" src="/modules/customizations.js"></script>
+  <script type="module" src="/views/universal.js"></script>
+
+  <%- include("../templates/footer") %>

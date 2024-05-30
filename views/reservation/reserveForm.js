@@ -1,75 +1,154 @@
+/**
+ * min is the minimum amount of days a user can reserve the plot for
+ */
+const min = 21;
+
+/**
+ * max is the maxiumum amount of days a user can reserve the plot for
+ */
+const max = 365;
+
+// Today's date
+const today = new Date();
+console.log('📌Actually today: ' + today);
+
+// Subtract one day from today's date due to timezone conversions
+const yesterday = new Date(today);
+yesterday.setDate(today.getDate() - 1);
+
+// ! Format yesterday's date as YYYY-MM-DD ... BUT IT PRINTS OUT AS TODAY'S DATE IDK WHY
+const yesterdayFormatted = yesterday.toISOString().split('T')[0];
+console.log('📍Today (but as an object it was yesterday): ' + yesterdayFormatted);
+
+// Greys out current day and prior days on the calendar: Earliest date to choose is 'tomorrow'
+$(document).ready(function () {
+
+  const startInput = $('#reservationStartDate');
+  startInput.attr('min', yesterdayFormatted);
+
+  const endInput = $('#reservationEndDate');
+  endInput.attr('min', yesterdayFormatted);
+})
+
+
+/**
+ * resetDates resets the dates to be 21 days apart (minimum reservation period)
+ * @param {*} start is a Date object representing the the start date entered
+ * @param {*} end is a Date object representing the end date entered
+ */
+function resetDates(start, end) {
+
+  // Initialize newStartDate as a Date object
+  // Set newStartDate to day before end date
+  let newEndDate = new Date(start);
+  newEndDate.setDate(newEndDate.getDate() + min);
+
+  // ** FORMATS START DATE TO YYYY-MM-DD (chatGPT) **
+  // Get year
+  // Get 0-based month, convert to 1-based month, convert to String then pad with 0's if needed 
+  // Get day of month, pad with 0's if needed
+  const startYear = start.getFullYear();
+  const startMonth = String(start.getMonth() + 1).padStart(2, '0');
+  const startDay = String(start.getDate()).padStart(2, '0');
+  const formattedStartDate = `${startYear}-${startMonth}-${startDay}`;
+
+  // ** FORMATS END DATE TO YYYY-MM-DD (chatGPT) **
+  const year = newEndDate.getFullYear();
+  const month = String(newEndDate.getMonth() + 1).padStart(2, '0');
+  const day = String(newEndDate.getDate()).padStart(2, '0');
+  const formattedEndDate = `${year}-${month}-${day}`;
+
+  // Replaces start date input to new start date (1 day prior end date)
+  document.getElementById('reservationStartDate').value = formattedStartDate;
+  document.getElementById('reservationEndDate').value = formattedEndDate;
+  displayTotal(newEndDate, start);
+};
+
+/**
+ * calculateTotal calculates the days from start to end dates
+ * @param {*} end is a Date object representing the end date
+ * @param {*} start is a Date object representing the start date
+ */
+function calculateTotal(end, start) {
+  let length = end - start;
+  let convertedLength = length / (1000 * 60 * 60 * 24);
+  return convertedLength;
+
+};
+
+/**
+ * displayTotal displays the total amount of days 
+ * @param {*} end is a Date object representing the end date
+ * @param {*} start is a Date object representing the start date
+ */
+function displayTotal(end, start) {
+  const total = calculateTotal(end, start);
+  // Only display length if 1 day or greater
+  if (total > 0) {
+    document.getElementById('reservationTotal').innerHTML = total + " days ! 🌱";
+  };
+  // };
+};
+
+/**
+ * displayError displays error message msg.
+ * @param {*} msg is the error message to be printed out.
+ */
+function displayError(msg) {
+  $('#error-messages').html(`<div class="error">${msg}</div>`);
+}
+
+/**
+ * validDates() warns the user if they inputted invalid dates: Error if user selects the same start and end dates; Error if start date is after end date; then calls resetDates() to adjust the dates to valid dates.
+ */
 function validDates() {
-    let startDateValue = document.getElementById('reservationStartDate').value;
-    let endDateValue = document.getElementById('reservationEndDate').value;
-    console.log('startDateValue: ' + startDateValue);
-    console.log('endDateValue: ' + endDateValue);
 
-    // * NOTE: using Date constructor converts to ONE DAY BEHIND
-    const startDate = new Date(startDateValue);
-    const endDate = new Date(endDateValue);
-    console.log('startDate: ' + startDate);
-    console.log('endDate: ' + endDate);
+  // Clear error messages if any
+  displayError("");
 
+  let startDateValue = document.getElementById('reservationStartDate').value;
+  let endDateValue = document.getElementById('reservationEndDate').value;
 
-    // If dates are equal
-    if (startDate.getTime() === endDate.getTime()) {
-        alert("Error: Dates selected are the same!");
+  // * NOTE: using Date constructor converts to ONE DAY BEHIND
+  const startDate = new Date(startDateValue);
+  const endDate = new Date(endDateValue);
 
-    } else if (startDate.getTime() > endDate.getTime()) {
-        // **** SETS 'START-DATE' TO 1 DAY BEFORE 'END-DATE' ****
-        // Initialize newStartDate as a Date object
-        const newStartDate = new Date(startDate);
-        // Set newStartDate to day before end date
-        // ! WORKAROUND: I dont need subtract a day because Date constructor changes the original date to the day before 
-        newStartDate.setDate(endDate.getDate());
+  // If total days is less than the minimum reservation period (21 days)
+  if ((calculateTotal(endDate, startDate) < min) && calculateTotal(endDate, startDate) > 0) {
+    displayError(`Minimum ${min} days to reserve a plot!`);
+    resetDates(startDate, endDate);
 
-        // ** FORMATS START DATE TO YYYY-MM-DD (chatGPT) **
-        const year = newStartDate.getFullYear();
-        // Get 0-based month, convert to 1-based month, convert to String then pad with 0's if needed 
-        const month = String(newStartDate.getMonth() + 1).padStart(2, '0');
-        // Get day of month, pad with 0's if needed
-        const day = String(newStartDate.getDate()).padStart(2, '0');
-        const formattedStartDate = `${year}-${month}-${day}`;
+    // If chosen dates are the same days (logical error)
+  } else if (startDate.getTime() === endDate.getTime()) {
+    resetDates(startDate, endDate);
+    displayError(`Dates selected are the same!`);
 
-        // Replaces start date input to new start date (1 day prior end date)
-        document.getElementById('reservationStartDate').value = formattedStartDate;
-        alert('Error: Start date cannot be set after end date!');
+    // If start date comes after end date (logical error)
+  } else if (startDate.getTime() > endDate.getTime()) {
 
-    } else if (endDate.getTime() > startDate.getTime()) {
-        // **** SETS 'END-DATE' TO 1 DAY AFTER 'START-DATE' ****
-        // Initialize newEndDate as a Date object
-        const endStartDate = new Date(endDate);
-        // Set endStartDate to day after start date
-        // ! WORKAROUND: I add TWO DAYS because Date constructor changes the original date to the day before 
-        endStartDate.setDate(startDate.getDate() + 2);
+    resetDates(startDate, endDate);
+    displayError(`Start date must be before end date!`)
 
-        // ** FORMATS END DATE TO YYYY-MM-DD (chatGPT) **
-        const year = endStartDate.getFullYear();
-        // Get 0-based month, convert to 1-based month, convert to String then pad with 0's if needed 
-        const month = String(endStartDate.getMonth() + 1).padStart(2, '0');
-        // Get day of month, pad with 0's if needed
-        const day = String(endStartDate.getDate()).padStart(2, '0');
-        const formattedEndDate = `${year}-${month}-${day}`;
+    // Otherwise display the chosen days and calculate total
+  } else {
+    displayTotal(endDate, startDate);
+  }
+}
 
-        // Replaces end date input to new end date (1 day after start date)
-        document.getElementById('reservationStartDate').value = formattedEndDate;
-        alert('Error: End date cannot be set before start date!');
+// Function for confirmation modal and submitting a form
+$(document).ready(function () {
+
+  $('#positive').on('click', function (event) {
+
+    let startInput = document.getElementById('reservationStartDate').value;
+    let endInput = document.getElementById('reservationEndDate').value;
+
+    // Validates for empty fields
+    if (!startInput || !endInput) {
+      alert('All fields are required.');
+      event.preventDefault();
+    } else {
+      $('#reservationFormId').submit();
     }
-}
-
-// ! when i select start date FIRST then select end date as any day prior, the start date changes to the last day of the month 
-
-async function populateForm() {
-    document.getElementById('contactName').value = user;
-}
-
-//Function for conformation modal and submitting a form
-$(document).ready(function(){
-
-    console.log("why not working?");
-
-    $('#positive').on('click', function() {
-        console.log('is this function working?');
-        $('#reservationFormId').submit();
-    });
+  });
 });

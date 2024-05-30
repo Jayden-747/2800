@@ -9,40 +9,48 @@
 
 
   <div class="reservation-title">
-    <h2 class="reservation-garden"><%= nameOfGarden %></h2>
-    <h4 class="reservation-gardenPlot"><%= plotName %></h4>
+    <h2 class="reservation-garden"><b><%= nameOfGarden %></b></h2>
+    <h4 class="reservation-gardenPlot"><b><%= plotName %></b></h4>
   </div>
 
-  <form class="reservationForm" action="/submitReservation" method="post" id="reservationFormId">
+  <!-- *FORM FOR RESERVING A PLOT -->
+  <form class="reservationForm" action="/reservationForm/submitReservation" method="post" id="reservationFormId">
     <!-- Reservation Dates -->
     <div class="mb-3">
-      <h3>Reservation Duration</h3>
-      <label for="reservationStartDate" class="form-label">Start</label>
-      <input type="date" class="form-control" id="reservationStartDate" onchange="validDates()">
-      <label for="reservationEndDate" class="form-label">End</label>
-      <input type="date" class="form-control" id="reservationEndDate" onchange="validDates()">
-      <div class="reservationDuration">
-        Total:<span>this is where the length will be</span>
+      <h3>Duration</h3>
+      <div class="inputs">
+        <label for="reservationStartDate" class="form-label">Start</label>
+        <input type="date" class="form-control" id="reservationStartDate" name="reservationStartDate" onchange="validDates()" onkeydown="return false" required="true">
+        <label for="reservationEndDate" class="form-label">End</label>
+        <input type="date" class="form-control" id="reservationEndDate" name="reservationEndDate" onchange="validDates()" onkeydown="return false" required="true">
+        <div class="reservationDuration">
+          <div id="total">Total: <span id="reservationTotal"></span></div>
+          <div id="error-messages"></div>
+        </div>
       </div>
     </div>
 
-    <!-- Contact Information (will autopopulate user's info) -->
-    <!-- TODO: decide if they can edit it or not -->
+
+    <!-- Contact Information (will autopopulate user's info, readonly) -->
     <div class="mb-3">
-      <h3>Confirm your Contact Info</h3>
-      <label for="contactName" class="form-label">Name</label>
-      <input type="text" class="form-control" id="contactName" onload="populateForm(JSON.stringify('<%= user %>'))">
-      <label for="contactEmail" class="form-label">Email</label>
-      <input type="text" class="form-control" id="contactEmail" onload="populateForm(JSON.stringify('<%= email %>'))">
-      <label for="contactPhone" class="form-label">Phone Number</label>
-      <input type="text" class="form-control" id="contactPhone">
+      <h3>Your Information</h3>
+      <div class="inputs">
+        <label for="contactName" class="form-label">Name</label>
+        <input type="text" class="form-control input" id="contactName" name="reservationName" value="<%= user.name %>" required="true" readonly>
+        <label for="contactEmail" class="form-label">Email</label>
+        <input type="text" class="form-control input" id="contactEmail" name="reservationEmail" value="<%= user.email %>" required="true" readonly>
+      </div>
     </div>
     <!-- Changed type from 'submit' to 'button'. Modal requires button -->
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmModal">Reserve a Plot</button>
+    <input type="hidden" class="input" name="gardenName" value="<%= nameOfGarden %>">
+    <input type="hidden" class="input" name="plotName" value="<%= plotName %>">
+    <div class="button">
+      <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#confirmModal">Reserve Plot</button>
+    </div>
   </form>
 
 
-  <!-- Displaying confirmation modal -->
+  <!-- *DISPLAYING CONFIRMATION MODAL -->
   <!-- I found this code on Bootstrap -->
   <!-- see https://getbootstrap.com/docs/5.3/examples/modals/ -->
   <div class="modal fade" tabindex="-1" role="dialog" id="confirmModal" aria-labelledby="modalLabel" aria-hidden="true">
@@ -51,16 +59,19 @@
         <div class="modal-body p-4 text-center">
           <h5 class="mb-0 changeFontColour">Reserve this plot?</h5>
         </div>
-        <div class="modal-footer flex-nowrap p-0">          
+        <div class="modal-footer flex-nowrap p-0">
           <button type="button" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 py-3 m-0 rounded-0 border-end no-padding" id="positive">Yes, please</button>
           <button type="button" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 py-3 m-0 rounded-0 no-padding" data-bs-dismiss="modal">No, thanks</button>
         </div>
       </div>
     </div>
   </div>
-
+  <div class="back-button" style="padding: 30px 0;">
+    <button class="btn btn-success" onclick="history.back()">Go Back</button>
+  </div>
   <!-- NAVBAR BOTTOM -->
   <%- include("../templates/bottom-navbar") %>
+
 
   <script src="/views/reservation/reserveForm.js"></script>
   <script type="module" src="/modules/navigations.js"></script>

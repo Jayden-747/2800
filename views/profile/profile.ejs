@@ -57,7 +57,7 @@
         <% } %>
 
 
-3
+
 
 
         <span class="material-icons-round">
@@ -73,16 +73,19 @@
         <aside class="date"><small><%= date[i] %></small></aside>
       </div>
     </div>
-        <% } %>
-      </div>
+    <% } %>
+  </div>
 
-      <!-- NAVBAR BOTTOM -->
-      <%- include("../templates/bottom-navbar") %>
+  <div class="back-button">
+    <button class="btn btn-success" onclick="history.back()">Go Back</button>
+  </div>
+  <!-- NAVBAR BOTTOM -->
+  <%- include("../templates/bottom-navbar") %>
 
-      <!-- SCRIPTS -->
-      <script type="module" src="/modules/navigations.js"></script>
-      <script type="module" src="/modules/customizations.js"></script>
-      <script type="module" src="/profile/profile.js"></script>
-      <script type="module" src="/views/universal.js"></script>
+  <!-- SCRIPTS -->
+  <script type="module" src="/modules/navigations.js"></script>
+  <script type="module" src="/modules/customizations.js"></script>
+  <script type="module" src="/profile/profile.js"></script>
+  <script type="module" src="/views/universal.js"></script>
 
-      <%- include("../templates/footer") %>
+  <%- include("../templates/footer") %>

@@ -4,14 +4,14 @@
    see https://codepen.io/maryj25/pen/axBNVO
 */
 body {
-  padding-top: 80px;
+  padding-top: 65px;
   padding-bottom: 60px;
   /* CSS for body in plantInfo.ejs */
   box-sizing: border-box;
 }
 
 .badges {
-  margin-bottom: 16px;
+  margin-bottom: 50px;
   display: flex;
   gap: 10px;
 }
@@ -32,20 +32,11 @@ see https://codepen.io/russbeye/pen/MYeroq
 .blog-container {
   background: #fff;
   border-radius: 5px;
-  box-shadow: hsla(0, 0, 0, .2) 0 4px 2px -2px;
+  box-shadow: hsla(0, 0, 0, 0.2) 0 4px 2px -2px;
   font-family: "adelle-sans", sans-serif;
   font-weight: 100;
-  margin: 48px auto;
-  width: 20rem;
-  @media screen and (min-width: 480px) {
-    width: 28rem;
-  }
-  @media screen and (min-width: 767px) {
-    width: 40rem;
-  }
-  @media screen and (min-width: 959px) {
-    width: 50rem;
-  }
+  width: 100%;
+  background-color: rgb(27, 27, 27);
 }
 
 .card-img-top {
@@ -54,9 +45,27 @@ see https://codepen.io/russbeye/pen/MYeroq
 }
 
 .blog-body {
-  margin: 0 auto;
-  width: 80%;
-  padding: 20px;
+  padding: 20px 0 50px 0;
+  margin: 0 20px;
+
+  margin-bottom: 20px;
+  border-bottom: 1px solid white;
+
+  background-color: rgb(27, 27, 27);
+  border-bottom: solid 1px rgb(51, 51, 51);
+}
+
+.blog-summary,
+.h1Font {
+  color: rgb(216, 216, 216) !important;
+}
+
+.blog-summary {
+  font-family: Roboto;
+}
+
+.h1Font {
+  font-family: Ubuntu;
 }
 
 /* This class applies in both plantInfo.ejs and plantepediaAllPlants.ejs*/
@@ -67,4 +76,28 @@ see https://codepen.io/russbeye/pen/MYeroq
 
 .blog-summary {
   color: #333;
+}
+
+.card-body {
+  background-color: rgb(27, 27, 27);
+  color: rgb(216, 216, 216);
+  padding: 20px 0 50px 0;
+  margin: 0 20px;
+  border-bottom: solid 1px rgb(51, 51, 51);
+}
+
+.card {
+  border: none;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  background-color: rgb(27, 27, 27);
+}
+
+.mb-4 {
+  margin-bottom: 50px !important;
+  padding: 0;
+}
+
+.card-text {
+  margin-bottom: 25px;
 }

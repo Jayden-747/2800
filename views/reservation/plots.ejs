@@ -1,5 +1,5 @@
 <%- include("../templates/header") %>
-<link rel="stylesheet" href="/reservation/reservation.css" />
+<link rel="stylesheet" href="/reservation/plots.css" />
 </head>
 
 <body>
@@ -11,17 +11,32 @@
 
   <!-- I found this code on getbootstrap.com in border section -->
   <!-- @author https://getbootstrap.com/docs/5.3/components/card/#about -->
-  <div class="centerCard">
+  <div>
     <div class="card">
       <div class="card-body">
         <h5 class="card-title"><b><%= creatingPlots[i].plotName %></b></h5>
-        <p class="card-text">Dimensions: <%= creatingPlots[i].dimensions %><br>Availability: <%= creatingPlots[i].availability %></p>
-        <a class="btn btn-primary" href="/reservationForm/<%= encodeURIComponent(garden) %>/<%= encodeURIComponent(creatingPlots[i].plotName) %>">Reserve</a>
+        <div class="card-text">
+          <p>Dimensions:<span> <%= creatingPlots[i].dimensions %></span></p>
+
+          <p>Availability: <%= creatingPlots[i].availability %></p>
+        </div>
+        <!-- Renders clickable button if and only if plot is 'available' -->
+        <% if (creatingPlots[i].availability === 'Unavailable') { %>
+        <div id="button">
+          <a class="btn btn-secondary" id="<%= creatingPlots[i].plotName %> Button" style="pointer-events: none; cursor: default;">Reserve</a>
+        </div>
+        <% } else { %>
+        <div id="button">
+          <a class="btn btn-success" href="/reservationForm/<%= encodeURIComponent(garden) %>/<%= encodeURIComponent(creatingPlots[i].plotName) %>">Reserve</a>
+        </div>
+        <% } %>
       </div>
     </div>
   </div>
   <% } %>
-
+  <div class="back-button" style="padding: 20px 0;">
+    <button class="btn btn-success" onclick="history.back()">Go Back</button>
+  </div>
   <!-- NAVBAR BOTTOM -->
   <%- include("../templates/bottom-navbar") %>
 

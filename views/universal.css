@@ -151,7 +151,30 @@ a {
 button {
   all: unset;
   background-color: rgb(78, 116, 253);
-  padding: 8px 10px;
   border-radius: 5px;
   cursor: pointer;
+}
+
+.input {
+  border: none;
+  border-radius: 0;
+  color: white;
+
+  background-color: transparent;
+
+  border-bottom: 1px solid rgb(131, 131, 131);
+}
+
+.input:focus {
+  /* outline: none !important; */
+  background-color: transparent;
+  color: white;
+  box-shadow: none;
+  border-bottom: 1px solid white;
+}
+
+.back-button {
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }

@@ -10,12 +10,12 @@
   <div class="welcome">
     <h1 class="ubuntu welcome-message">Welcome <%- username %></h1>
 
-    <div class="section-header">Favourites</div>
-    <div id="gardens section">
+    <div class="section-header">Favourite Gardens</div>
+    <div class="section">
 
       <% for(let i=0; i < favGardens.length; i++) { %>
-      <div style="background-image: url('/img/garden.jpeg')" class="gardenGroup">
-        
+        <div style="background-image: url('data:image/jpeg;base64,<%= image[i] %>');" class="gardenGroup">
+          
         <a href="/community/<%=gardenRef[i] %>">
           <div class="garden-inner"><%= favGardens[i] %></div>
         </a>
@@ -24,11 +24,29 @@
       <% } %>
     </div>
 
+    <div class="section-header">My Plots</div>
+    <div class="section">
+      <div id="plantepedia-tag" class="tag">
+        <a href="/reservation"><button type="button" class="btn btn-success">Go to my reservation</button></a>
+      </div>
+    </div>
+
     <div class="section-header">View another page</div>
     <div class="home-links section">
-      <a class="home-link btn btn-success" href="/profile">Profile</a>
-      <a class="home-link btn btn-success" href="/plantepediaSummary">Plantepedia</a>
-      <a class="home-link btn btn-success" href="/explore">Find a Garden</a>
+      <div id="profile-link" class="home-link">
+        <span class="material-icons-round nav-button icon">
+          account_circle
+        </span>
+        <div class="tag">Profile</div>
+      </div>
+      <div id="plantepedia-link" class="home-link">
+        <span class="material-icons-round nav-button icon">library_books</span>
+        <div id="plantepedia-tag" class="tag">Plantepedia</div>
+      </div>
+      <div id="garden-link" class="home-link">
+        <span class="material-icons-round nav-button icon">explore</span>
+        <div class="tag">Find a Garden</div>
+      </div>
     </div>
   </div>
 
@@ -37,4 +55,5 @@
   <!-- SCRIPTS -->
   <script type="module" src="/modules/navigations.js"></script>
   <script type="module" src="/views/universal.js"></script>
+  <script type="module" src="/home/home.js"></script>
   <%- include("../templates/footer") %>

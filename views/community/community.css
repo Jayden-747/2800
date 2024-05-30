@@ -20,7 +20,6 @@ body {
   position: relative;
   width: 47%;
   height: 40px;
-
   object-position: center;
 
   border-radius: 0.5em;
@@ -101,7 +100,9 @@ h2 {
   width: 100%;
 
   font-family: Roboto;
-  padding: 0 20px;
+  padding: 0 20px 15px 20px;
+
+  border-bottom: 1px solid rgba(83, 83, 83, 0.315);
 
   word-break: break-all;
 }
@@ -123,10 +124,69 @@ small {
   font-size: 14px;
 }
 
-button{
+button {
   background: none;
 }
 
 .modal-content {
-  color: black;
+  width: 100% !important;
+  height: 100%;
+  bottom: 0;
+  background-color: rgb(27, 27, 27);
+}
+
+.modal-dialog {
+  width: 100%;
+  height: 60% !important;
+
+  margin: 0;
+
+  position: absolute;
+  bottom: 55px;
+}
+
+.modal-header {
+  height: 50px;
+
+  font-family: Ubuntu;
+  display: flex;
+  justify-content: center;
+
+  border-color: rgb(83, 83, 83);
+}
+
+.modal-body {
+  overflow-y: scroll;
+  padding: 20px;
+}
+
+.modal-title {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.comment-username {
+  font-family: Ubuntu;
+  font-weight: bold;
+  margin-right: 5px;
+  letter-spacing: 1px;
+}
+
+.comment {
+  font-family: Roboto;
+  letter-spacing: 1px;
+}
+
+.modal-footer {
+  height: 50px !important;
+  padding: 0 20px;
+
+  border-color: rgb(83, 83, 83);
+}
+
+.btn {
+  height: 25% !important;
+  padding: 2px 8px 7px 8px;
+  font-size: 12px;
 }

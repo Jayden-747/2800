@@ -16,27 +16,41 @@ body {
   margin-bottom: 50px;
 }
 
-.home-links {
-  width: 100%;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
+.icon {
+  width: fit-content;
+  height: fit-content;
+  font-size: 40px;
 }
 
 .home-link {
-  width: 100%;
-  padding: 6px 0;
+  width: 45%;
+  height: fit-content;
+
+  color: rgb(185, 185, 185);
+
+  padding: 10px 15px;
+  margin-bottom: 35px;
+
+  border-radius: 10px;
+  background-image: linear-gradient(
+    to left,
+    rgba(91, 240, 71, 0.281),
+    rgb(22, 34, 23)
+  );
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.473);
+
+  cursor: pointer;
 }
 
-#gardens {
-  padding: 0 20px;
+.tag {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 5px 0 0 5px;
+  letter-spacing: 1px;
+}
 
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 20px;
+#plantepedia-tag {
+  margin-left: 3px;
 }
 
 .garden-inner {
@@ -57,20 +71,28 @@ body {
 }
 
 .gardenGroup {
+  width: 45%;
+  height: 40px;
+  margin-top: 20px;
   background-size: 300px;
   position: relative;
-  width: 47%;
-  height: 40px;
 
   object-position: center;
 
   border-radius: 0.5em;
+
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.473);
 }
 
 .section-header {
-  margin-bottom: 12px;
+  margin-bottom: 20px;
 }
 
 .section {
-  margin-bottom: 25px;
+  display: flex;
+
+  margin-bottom: 45px;
+
+  flex-wrap: wrap;
+  gap: 10%;
 }
