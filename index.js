@@ -237,6 +237,7 @@ app.post("/login/logging", async (req, res) => {
   var email = req.body.email;
   var password = req.body.password;
 
+  //email format with 255 max char, and passowrd with 20 max char
   const schema = Joi.object({
     email: Joi.string().email().max(255).required(),
     password: Joi.string().max(20).required(),
@@ -279,17 +280,18 @@ app.get("/login/resetPassword", async (req, res) => {
   res.render("login/resetPassword");
 });
 
+// POST TO CHECK IF EMAIL IS PART OF THE DATABASE
 app.post("/login/reset", async (req, res) => {
   var email = req.body.email;
   var newPassword = req.body.newPassword;
 
   var newHashedPassword = await bcrypt.hash(newPassword, saltRounds);
-
+  //CHECKS EMAIL IF EXISTS
   const result = await userCollection
     .find({ email: email })
     .project({ email: 1, password: 1, _id: 1, username: 1 })
     .toArray();
-
+  //UPDATES PASSWORD
   for (let i = 0; i < result.length; i++) {
     if (result[i].email == email) {
       await userCollection.updateOne(
@@ -298,7 +300,6 @@ app.post("/login/reset", async (req, res) => {
       );
     }
   }
-
   res.redirect("/login");
 });
 
@@ -308,7 +309,6 @@ app.get("/settings", sessionValidation, (req, res) => {
 });
 
 // PROFILE PAGE
-
 app.get("/profile", sessionValidation, async (req, res) => {
   var username = req.session.username;
   var name = req.session.name;
@@ -712,6 +712,8 @@ app.post("/cancelReservation", async (req, res) => {
 });
 
 // COMUNITY PAGE that shows all posts
+//retrieves data from the posts collection and garden collection
+// outputs information for all posts needed
 app.get("/community", sessionValidation, async (req, res) => {
   const currentUser = req.session.username;
   const result = await database
@@ -767,15 +769,15 @@ app.get("/community", sessionValidation, async (req, res) => {
     posts: posts, //gives the image
     desc: descss, //gives the caption
     username: user, //gives the username of the post
-    gardens: gardenName,
+    gardens: gardenName, //provides garden array
     gardenP: gardenHeader, //for the page name
-    date: date,
+    date: date, // provdies array of date for the posts
     userLikes: likes, // gives array of likes with usernames
     currentUser: currentUser, //provides ejs with the current user
     postID: id, //gives the unique id of the post as a string
     postLikeRef: gardenHeader, //used for liking a post and redirecting to the correct page
-    commentsUser: commentsUser,
-    comments: comments,
+    commentsUser: commentsUser, //array of username of posts
+    comments: comments, //array of array of comments of the posts 
   });
 });
 
@@ -859,6 +861,9 @@ app.get("/community/:garden", async (req, res) => {
 });
 
 //When user want to like a post
+//inputs the id of post being liked
+//inserts the likers username into the post 
+//and redirects the to the page the user was previously on
 app.post("/community/favPost", async (req, res) => {
   var username = req.session.username;
   var postID = req.body.postID;
@@ -879,11 +884,13 @@ app.post("/community/favPost", async (req, res) => {
   }
 });
 //handles when users wants to unlike a post
+//inputs the postID
+//and removes the username from the specific document
 app.post("/community/unfavPost", async (req, res) => {
   var username = req.session.username;
   var postID = req.body.postID;
   var garden = req.body.garden;
-
+  //removes username from the like array of a post
   await database
     .db(mongodb_database)
     .collection("posts")
@@ -907,10 +914,12 @@ app.post("/community/submitComment", async (req, res) => {
   var username = req.session.username;
   var postID = new mongodb.ObjectId(req.body.postID);
   var garden = req.body.garden;
+  // comments into an array of the post document
   await database
     .db(mongodb_database)
     .collection("posts")
     .updateOne({ _id: postID }, { $push: { comments: comment } });
+    //username of the person who made the post into an array
   await database
     .db(mongodb_database)
     .collection("posts")
@@ -925,6 +934,7 @@ app.post("/community/submitComment", async (req, res) => {
 
 //routes to the new post page
 app.get("/newPost", sessionValidation, async (req, res) => {
+  //populates dropdown with gardens
   const garden = await database
     .db(mongodb_database)
     .collection("gardens")
@@ -942,12 +952,15 @@ app.get("/newPost", sessionValidation, async (req, res) => {
   });
 });
 //Adding a document to the post collection
+//inserts the user's post description, garden name, username, and the current date 
 app.post("/newPost/posts", upload.single("photo"), async (req, res) => {
   var key = req.body.keyword;
   var desc = req.body.description;
   var garden = req.body.garden;
   var username = req.session.username;
   var currentDate = new Date();
+  // create a string with only the day, month, and year
+  // chatgpt to help with the formatting of the date
   var dateOnly = currentDate.toISOString().split("T")[0];
   const photoData = {
     name: req.file.originalname,
@@ -961,7 +974,7 @@ app.post("/newPost/posts", upload.single("photo"), async (req, res) => {
     date: dateOnly,
     commentsUser: [],
   };
-  
+  //redirects to community page
   await database.db(mongodb_database).collection("posts").insertOne(photoData);
   res.redirect("/community");
 });

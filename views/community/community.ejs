@@ -6,9 +6,10 @@
   <!-- NAVBAR TOP -->
   <%- include("../templates/top-navbar") %>
   <%- include("../templates/hamburger") %>
-
+<!-- HEADING -->
   <h2 class="choose-garden">Choose a garden</h2>
 
+  <!-- GARDEN FILTER BANNERS -->
   <div id="gardens">
 
     <% for(let i=0; i < gardens.length; i++) { %>
@@ -22,7 +23,7 @@
     <% } %>
   </div>
   
-
+<!-- POST HEADING -->
   <h2>Posts from <%= gardenP %></h2>
   <div id="posts">
     <!-- BOOTSTRAP USED FOR POSTS -->
@@ -31,12 +32,10 @@
       <div class="username-container">
         <span><b class="username"><%= username[i] %></b></span>
       </div>
+      <!-- DISPLAY IMAGES -->
       <img class="post-img" src="data:image/jpeg;base64,<%= posts[i] %>" height="300" width="300" alt="my Image">
       <div class="post-actions">
-
-
-
-
+        <!-- LIKE DISPLAY FUNTIONALITY -->
         <% if (userLikes[i].includes(currentUser)) { %>
         <form action="/community/unfavPost" method="post" style="display: inline;">
           <input type="hidden" name="postID" value="<%= postID[i] %>">
@@ -55,10 +54,7 @@
         </form>
         <% } %>
 
-
-
-
-
+        <!-- COMMENT ICON -->
         <button class="material-icons-round" data-bs-toggle="modal" data-bs-target="#<%= postID[i] %>">
           chat_bubble_outline
         </button>
@@ -85,20 +81,17 @@
             </div>
           </div>
         </div>
-
+        <!-- LIKE NUMBERS -->
       </div>
       <div class="description">
         <aside class="likes"><small></small><small>&nbsp;<%= userLikes[i].length %> Likes</small></aside>
         <span><b class="username"><%= username[i] %>&nbsp;</b></span>
         <span id="description"><%= desc[i] %></span>
-
+        <!-- VIEW COMMENTS -->
         <aside class="comments" id="com">
-
-
-
           <button data-bs-toggle="modal" data-bs-target="#comments<%- [i] %>"><small>view all comments</small></button>
-
         </aside>
+        <!-- DATE -->
         <aside class="date"><small><%= date[i] %></small></aside>
       </div>
     </div>
