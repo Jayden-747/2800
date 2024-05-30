@@ -16,7 +16,6 @@ console.log('📌Actually today: ' + today);
 const yesterday = new Date(today);
 yesterday.setDate(today.getDate() - 1);
 
-// ! Format yesterday's date as YYYY-MM-DD ... BUT IT PRINTS OUT AS TODAY'S DATE IDK WHY
 const yesterdayFormatted = yesterday.toISOString().split('T')[0];
 console.log('📍Today (but as an object it was yesterday): ' + yesterdayFormatted);
 
