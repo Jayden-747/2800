@@ -198,7 +198,6 @@ app.post("/signup/submitUser", async (req, res) => {
 
   const validationResult = schema.validate({ name, username, password, email });
   if (validationResult.error != null) {
-    // console.log(validationResult.error);
     res.redirect("/signup");
     return;
   }
@@ -217,14 +216,11 @@ app.post("/signup/submitUser", async (req, res) => {
     .find({ email: email })
     .project({ email: 1, password: 1, _id: 1, username: 1, name: 1 })
     .toArray();
-  // console.log("user submitted" + result);
   req.session.authenticated = true;
   req.session.username = result[0].username;
   req.session.email = result[0].email;
   req.session.cookie.maxAge = expireTime;
   res.redirect("/");
-  // console.log(username);
-  // console.log(email);
 });
 
 //LOGIN PAGE
@@ -246,7 +242,6 @@ app.post("/login/logging", async (req, res) => {
   const validationResult = schema.validate({ email, password });
 
   if (validationResult.error != null) {
-    // console.log(validationResult.error);
     res.redirect("/login");
     return;
   }
@@ -257,7 +252,6 @@ app.post("/login/logging", async (req, res) => {
 
   if (result.length != 1) {
     res.redirect("/login");
-    // console.log("no email");
     return;
   }
 
@@ -267,7 +261,6 @@ app.post("/login/logging", async (req, res) => {
     req.session.email = email;
     req.session.cookie.maxAge = expireTime;
     res.redirect("/");
-    // console.log("logged in");
     return;
   } else {
     res.redirect("/login");
@@ -405,7 +398,6 @@ app.post(
         { plant_name: "Cherry Tomato" },
         { $set: { image: resizingImage } }
       );
-    // console.log("Photo saved perfectly");
     res.redirect("/plantepediaSummary");
   }
 );
@@ -577,9 +569,6 @@ app.post("/reservationForm/submitReservation", async (req, res) => {
   const reformatStartDate = startDate.toISOString().split("T")[0];
   const reformatEndDate = endDate.toISOString().split("T")[0];
 
-  // console.log(reformatStartDate);
-  // console.log(reservationEmail);
-
   const updateAvailability = await gardensCollection.findOneAndUpdate(
     {
       gardenName: gardenName,
@@ -601,8 +590,6 @@ app.post("/reservationForm/submitReservation", async (req, res) => {
       // returnNewDocument: true
     }
   );
-  // console.log(gardenName);
-  // console.log(updateAvailability);
   res.render("reservation/afterSubmit", {
     garden: gardenName,
     startDate: reformatStartDate,
@@ -616,21 +603,17 @@ app.post("/reservationForm/submitReservation", async (req, res) => {
 
   // * Update the number of available plots ('plotsAvailable') in garden collection
   const garden = req.body.gardenName;
-  // console.log("garden name: " + garden);
 
   // Queries a list of plots of the specified garden
   const allPlots = await gardensCollection
     .find({ gardenName: garden })
     .project({ plots: 1 })
     .toArray();
-  // console.log("array of ALL plots in garden " + garden + ": " + allPlots[0].plots);
 
   // Filters the plots by availabilty
   const availPlotsOnly = allPlots[0].plots.filter(
     (plot) => plot.availability === "Available"
   );
-  // console.log("array of avail plots: " + availPlotsOnly);
-  // console.log("length of available plots: " + availPlotsOnly.length);
 
   // Set this garden's plotsAvailable fieldset to updated list of available plots (availPlotsOnly array)
   const updatePlotsAvail = await gardensCollection.findOneAndUpdate(
@@ -641,7 +624,6 @@ app.post("/reservationForm/submitReservation", async (req, res) => {
 
 // After submission for reserving plot PAGE
 app.get("/afterSubmit", sessionValidation, async (req, res) => {
-  // console.log("Reservee Info: " + reserveeInfo);
   res.render("reservation/afterSubmit");
 });
 
@@ -669,6 +651,7 @@ app.get("/reservation", sessionValidation, async (req, res) => {
         }
       }
     } catch (error) {
+      console.log("Errorrrrrrrrr");
     }
   }
   res.render("reservedPlot/cancelReso", { email: emailArray });
@@ -695,14 +678,11 @@ app.post("/cancelReservation", async (req, res) => {
       returnOriginal: false,
     }
   );
-  console.log("Please work!!!!!", updateReservationStatus);
 
   const updatedGarden = await gardensCollection.findOne({ gardenName: gardenName });
   const availPlotsOnly = updatedGarden.plots.filter(
     plot => plot.availability === "Available"
   );
-
-  console.log("work work work please ", availPlotsOnly);
 
   await gardensCollection.updateOne(
     { gardenName: gardenName },
