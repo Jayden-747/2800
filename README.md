@@ -18,7 +18,7 @@ ejs | Jquery | Bootstrap | MongoDB | Express | Multer | Bcrypt | Joi | Google Ma
 3. Run `npm i` to install the dependancies
 4. Sign into MongoDB to be added to the project
 5. Get the required `.env` file to run the app
-6. https://trello.com/b/CQX2Wgft/2800-202410-bby04
+6. https://docs.google.com/spreadsheets/d/1ysWg5dtInXTSStTGYfXk8PQQDGRoo2Fknbn_fECkwm8/edit#gid=0
 <br><br>
 
 ## How we used AI
@@ -30,6 +30,7 @@ As well as creating structured data entries based on our predefined structure.
 ### Within the app
 We did not include AI as a feature of our app.
 ### *Limitations with AI*
+We found that in order for AI to be most affective you have to learn the best ways to prompt the ai. This creates the best responses and if you don't prompt it properly it may give the wrong information 
 <br><br>
 
 ## Contact
